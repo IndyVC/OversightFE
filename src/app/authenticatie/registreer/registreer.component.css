@@ -1,0 +1,92 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #1a237e;
+  font-family: Roboto, 'Open-sans', sans-serif;
+}
+
+h1 {
+  width: 100vw;
+  height: 5vh;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  font-size: 24px;
+  padding-top: 5vh;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 90vh;
+  background-color: white;
+  border-radius: 20px 20px 0 0;
+}
+
+.form .input {
+  width: 80vw;
+  margin-left: 10vw;
+  margin-top: 20px;
+}
+
+.button_blue {
+  margin-top: 20vh;
+  width: 50vw;
+  margin-left: 25vw;
+}
+
+#koopLink {
+  width: 100vw;
+  text-align: center;
+  margin-top: 30px;
+  color: #1a237e;
+  text-decoration: none;
+}
+
+#koopLink:hover {
+  color: #283593;
+}
+
+
+@media screen and (min-width: 500px) {
+  .container {
+    position: relative;
+  }
+
+  h1 {
+    color: white;
+    font-weight: bold;
+    font-size: 24px;
+    top: 10vh;
+    position: absolute;
+    left: 30vw;
+    width: 100px;
+  }
+
+  .form {
+    width: 40vw;
+    height: 60vh;
+    border-radius: 20px;
+    left: 30vw;
+    top: 20vh;
+    position: absolute;
+  }
+
+  .form .input {
+    width: 20vw;
+  }
+
+  .button_blue {
+    width: 20vw;
+    margin: 0;
+    margin-left: 10vw;
+    margin-top: 5vh;
+  }
+
+  #koopLink {
+    width: 20vw;
+    margin-left: 10vw;
+
+  }
+}

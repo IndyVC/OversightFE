@@ -1,0 +1,112 @@
+.container {
+  background-color: #f6f5f6;
+  width: 100%;
+  height: 100%;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.container_white {
+  width: 100vw;
+  background-color: white;
+  border-radius: 20px;
+  height: 70vh;
+}
+
+.tabs {
+  width: 80vw;
+  margin-left: 10vw;
+}
+
+.tab {
+  width: 40vw;
+  background-color: transparent;
+  border: 0;
+  border-top: 5px #E8E8E7 solid;
+  color: #E8E8E7;
+  font-weight: bold;
+}
+
+.graph {
+  background-color: white;
+  margin: 15px;
+}
+
+#selected {
+  color: #1F387E;
+  border-color: #1F387E;
+}
+
+.metadata {
+  margin-left: 20px;
+}
+
+.metadata p:nth-child(1) {
+  font-weight: bold;
+  color: #1F387E;
+  margin-bottom: 5px;
+}
+
+.transactions {
+  margin-top: 20px;
+}
+
+.transaction {
+  width: 100vw;
+  height: 80px;
+  position: relative;
+  background-color: white;
+}
+
+
+.icon {
+  background-color: #f6f5f6;
+  border-radius: 30px;
+  padding: 10px;
+  margin-top: 17.5px;
+  font-size: 25px;
+  margin-left: 5px;
+}
+
+
+.name {
+  position: absolute;
+  left: 20vw;
+  font-weight: bold;
+  top: 20px;
+}
+
+.amount {
+  position: absolute;
+  left: 20vw;
+  top: 40px;
+  color: #1F387E;
+  font-family: 'Open Sans', Roboto, sans-serif;
+
+}
+
+.date {
+  position: absolute;
+  right: 10px;
+  top: 17.5px;
+}
+
+.error {
+  text-align: center;
+}
+
+.options {
+  width: 100vw;
+  background-color: #E8E8E7;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
+  position: fixed;
+  bottom: 0;
+  padding-top: 10px;
+}
+
+.options .mat-form-field {
+  width: 40vw;
+
+}

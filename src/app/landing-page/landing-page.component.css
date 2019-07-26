@@ -1,0 +1,128 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: white;
+}
+
+h1 {
+  color: #1A237E;
+  font-size: 18px;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.container_logo {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+}
+
+#logo {
+  width: 90vw;
+  margin-top: 20px;
+}
+
+#logo2 {
+  display: none;
+}
+
+#titel {
+  padding: 20px;
+}
+
+.blue_container {
+  background-color: #1A237E;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  width: 100vw;
+}
+
+.button_blue,
+.button_white {
+  margin: 10px 27.5vw;
+}
+
+.uitleg_white {
+  color: white;
+  margin: 20px;
+}
+
+.uitleg_white b {
+  font-weight: bold;
+}
+
+.uitleg_white h1 {
+  color: white;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.uitleg_blue {
+  color: #283593;
+  margin: 20px;
+}
+
+.uitleg_blue h1 {
+  text-align: left;
+  margin-bottom: 10px;
+
+}
+
+.uitleg_blue b {
+  font-weight: bold;
+}
+
+@media screen and (min-width:500px) {
+  #br {
+    display: none;
+  }
+
+  #logo {
+    display: none;
+  }
+
+  #titel {
+    display: none;
+  }
+
+  .container {
+    position: relative;
+  }
+
+  #logo2 {
+    display: block;
+    height: 40vh;
+    position: absolute;
+    top: 20vh;
+    z-index: 10;
+  }
+
+  .blue_container {
+    height: 50vh;
+    position: absolute;
+    top: 40vh;
+    padding-top: 25vh;
+  }
+
+  .uitleg_blue {
+    position: absolute;
+    top: 115vh;
+  }
+
+}
+
+@media screen and (min-width:1000px) {
+  .button_blue {
+    width: 30vw;
+    margin-left: 35vw;
+  }
+
+  .button_white {
+    width: 30vw;
+    margin-left: 35vw;
+  }
+}

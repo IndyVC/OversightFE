@@ -1,0 +1,7 @@
+$my-theme-primary: mat-palette($mat-indigo, 800);
+$my-theme-accent: mat-palette($mat-indigo, 900);
+$my-theme-warn: mat-palette($mat-deep-orange, A200);
+
+$my-theme: mat-light-theme($my-theme-primary,
+  $my-theme-accent,
+  $my-theme-warn);

@@ -1,7 +1,13 @@
 <div class="container">
-  <div style="display: block" class="graph">
+  <div style="display: block" class="graph" *ngIf='!piechartActive && smallScreen() || !smallScreen()' (swipe)=swipe()>
     <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
       [legend]="barChartLegend" [chartType]="chartType">
+    </canvas>
+  </div>
+  <div style="display: block" class="graph" id="PIE" *ngIf='piechartActive && smallScreen() || !smallScreen()'
+    (swipe)=swipe()>
+    <canvas baseChart [datasets]="barChartDataP" [labels]="barChartLabelsP" [options]="barChartOptionsP"
+      [legend]="barChartLegendP" [chartType]="chartTypeP">
     </canvas>
   </div>
   <div class="container_white">
@@ -12,9 +18,12 @@
     <div class="metadata">
       <p>Oversight</p>
       <p> € {{getUser().calculateOversight()}}</p>
+      <div class="error" *ngIf="error!==''">
+        <p>{{error}}</p>
+      </div>
     </div>
-    <div class="transactions">
-      <div *ngFor='let transaction of getTransactions(); index as i'>
+    <cdk-virtual-scroll-viewport class="transactions" itemSize="20" style="height: 35vh">
+      <ng-container *cdkVirtualFor='let transaction of getTransactions(); index as i'>
         <div class="transaction" [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}">
           <mat-icon [ngStyle]="{'color': transaction.category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}"
             class="icon">{{transaction.category.icon}}
@@ -25,16 +34,32 @@
             {{transaction.date.toLocaleDateString()}}
           </p>
         </div>
-      </div>
-    </div>
-    <div class="error" *ngIf="error!==''">
-      <p>{{error}}</p>
-    </div>
+      </ng-container>
+    </cdk-virtual-scroll-viewport>
     <div class="options">
+      <div class="datepicker">
+        <div class="incomeDate" *ngIf=incomeActive>
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker1" placeholder="Vanaf wanneer"
+              (dateChange)='updateIncomeDate($event)' (dateInput)='updateIncomeDate($event)'>
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="outcomeDate" *ngIf=!incomeActive>
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker2" placeholder="Vanaf wanneer"
+              (dateChange)='updateOutcomeDate($event)' (dateInput)='updateOutcomeDate($event)'>
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+      </div>
       <div class="incomeCategory" *ngIf=incomeActive>
         <mat-form-field>
           <mat-label>Categorie</mat-label>
-          <mat-select (selectionChange)='updateIncomeCategory($event)'>
+          <mat-select (selectionChange)='updateIncomeCategory($event)' multiple>
             <mat-option *ngFor='let category of getUser().getIncomeCategories()' [value]='category.name'>
               {{category.name}}
             </mat-option>
@@ -47,7 +72,7 @@
       <div class="outcomeCategory" *ngIf=!incomeActive>
         <mat-form-field>
           <mat-label>Categorie</mat-label>
-          <mat-select (selectionChange)='updateOutcomeCategory($event)'>
+          <mat-select (selectionChange)='updateOutcomeCategory($event)' multiple>
             <mat-option *ngFor='let category of getUser().getOutcomeCategories()' [value]='category.name'>
               {{category.name}}
             </mat-option>

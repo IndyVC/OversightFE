@@ -10,7 +10,8 @@ import {
   MatSidenavModule,
   MatTabsModule,
   MatSelectModule,
-  MatDatepickerModule
+  MatDatepickerModule,
+  MatNativeDateModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -22,7 +23,7 @@ import { RegistreerComponent } from './authenticatie/registreer/registreer.compo
 import { TransactieComponent } from './finance/transacties/transactie.component';
 import { ChartsModule } from 'ng2-charts';
 import { AppRoutingModule } from './app-routing/app-routing.module';
-
+import { ScrollingModule } from '@angular/cdk/scrolling';
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,10 +44,12 @@ import { AppRoutingModule } from './app-routing/app-routing.module';
     MatSidenavModule,
     MatSelectModule,
     MatDatepickerModule,
+    MatNativeDateModule,
     AuthenticatieModule,
     ChartsModule,
     MatTabsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ScrollingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

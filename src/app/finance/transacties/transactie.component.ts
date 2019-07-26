@@ -4,6 +4,8 @@ import { User } from 'src/app/domain/user';
 import { Transaction } from 'src/app/domain/transaction';
 import { Outcome } from 'src/app/domain/outcome';
 import { Category } from 'src/app/domain/category';
+import { DateAdapter } from '@angular/material';
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-transactie',
@@ -13,9 +15,10 @@ import { Category } from 'src/app/domain/category';
 export class TransactieComponent implements OnInit {
   public user: User;
   public transactions: Transaction[];
-  public category: Category;
-  public incomeActive: boolean = true;
-  public error: string = '';
+  public categories: Category[];
+  public incomeActive = true;
+  public piechartActive = false;
+  public error = '';
   public date: Date;
   public chartType = 'bar';
   public barChartLegend = true;
@@ -24,6 +27,7 @@ export class TransactieComponent implements OnInit {
   public barChartOptions = {
     scaleShowVerticalLines: false,
     responsive: true,
+    maintainAspectRatio: true,
     scales: {
       yAxes: [
         {
@@ -32,17 +36,42 @@ export class TransactieComponent implements OnInit {
       ]
     }
   };
-
-  constructor(private _mock: MockService) {
+  public chartTypeP = 'pie';
+  public barChartLegendP = true;
+  public barChartLabelsP;
+  public barChartDataP;
+  public barChartOptionsP = {
+    scaleShowVerticalLines: false,
+    responsive: true,
+    maintainAspectRatio: true,
+    scales: {
+      yAxes: [
+        {
+          ticks: { suggestedMin: 0 }
+        }
+      ]
+    }
+  };
+  public screenHeight: any;
+  public screenWidth: any;
+  @HostListener('window:resize', ['$event'])
+  onResize(event?) {
+    this.screenHeight = window.innerHeight;
+    this.screenWidth = window.innerWidth;
+  }
+  // tslint:disable-next-line: variable-name
+  constructor(private _mock: MockService, private _adapter: DateAdapter<any>) {
     console.log(this._mock.getIndy());
     this.user = this._mock.getIndy();
     this.transactions = this.user.getAllIncomes();
-    this.category = null;
+    this.categories = null;
+    this._adapter.setLocale('nl');
+    this.onResize();
   }
 
   ngOnInit() {
     this.fillGraph(this.getTransactions(), 'Alle inkomsten');
-    console.log(this.user.getIncomeCategories());
+    this.fillPie(this.getTransactions(), 'Totale vergelijking');
   }
 
   switch(tab1, tab2) {
@@ -54,7 +83,7 @@ export class TransactieComponent implements OnInit {
     this.incomeActive
       ? (this.incomeActive = false)
       : (this.incomeActive = true);
-    this.category = null;
+    this.categories = null;
   }
 
   getUser(): User {
@@ -76,47 +105,146 @@ export class TransactieComponent implements OnInit {
       }
     ];
   }
+  fillPie(transactions: Transaction[], newLabel: string) {
+    const categories = new Set<string>();
+    const amounts = [];
 
-  getOutcomes() {
-    if (this.category == null) {
-      this.transactions = this.user.getAllOutcomes();
-    } else {
-      this.transactions = this.user
-        .getAllOutcomes()
-        .filter(outcome => outcome.category.name === this.category.name);
-    }
-    this.transactions.length === 0
-      ? (this.error = 'Er zijn geen transacties voor deze opties')
-      : (this.error = '');
-    this.fillGraph(this.getTransactions(), 'Alle uitkomsten');
+    transactions.map(trans => categories.add(trans.category.name));
+
+    Array.from(categories.values()).forEach(cat => {
+      amounts.push(
+        transactions
+          .filter(trans => trans.category.name === cat)
+          .map(trans => trans.amount)
+          .reduce((sum, current) => {
+            return sum + current;
+          }, 0)
+      );
+    });
+
+    this.barChartLabelsP = Array.from(categories.values());
+    this.barChartDataP = [
+      {
+        data: amounts,
+        label: newLabel
+      }
+    ];
   }
 
-  getIncomes() {
-    if (this.category == null) {
-      this.transactions = this.user.getAllIncomes();
-    } else {
+  getOutcomes() {
+    if (this.categories == null && this.date == null) {
+      this.transactions = this.user.getAllOutcomes();
+    } else if (this.categories == null && this.date) {
       this.transactions = this.user
-        .getAllIncomes()
-        .filter(income => income.category.name === this.category.name);
+        .getAllOutcomes()
+        .filter(outcome => outcome.date >= this.date);
+    } else if (this.categories[0] != null && this.date) {
+      this.transactions = this.user
+        .getAllOutcomes()
+        .filter(
+          outcome =>
+            this.categories
+              .map(cat => cat.name)
+              .includes(outcome.category.name) && outcome.date >= this.date
+        );
+    } else if (this.categories[0] != null && this.date == null) {
+      this.transactions = this.user.getAllOutcomes().filter(outcome => {
+        return this.categories
+          .map(cat => cat.name)
+          .includes(outcome.category.name);
+      });
     }
     this.transactions.length === 0
       ? (this.error = 'Er zijn geen transacties voor deze opties')
       : (this.error = '');
     this.fillGraph(this.getTransactions(), 'Alle inkomsten');
+    this.fillPie(this.getTransactions(), 'Per categorie');
+  }
+
+  getIncomes() {
+    if (this.categories == null && this.date == null) {
+      this.transactions = this.user.getAllIncomes();
+    } else if (this.categories == null && this.date) {
+      this.transactions = this.user
+        .getAllIncomes()
+        .filter(income => income.date >= this.date);
+    } else if (this.categories[0] != null && this.date) {
+      this.transactions = this.user
+        .getAllIncomes()
+        .filter(
+          income =>
+            this.categories
+              .map(cat => cat.name)
+              .includes(income.category.name) && income.date >= this.date
+        );
+    } else if (this.categories[0] != null && this.date == null) {
+      this.transactions = this.user.getAllIncomes().filter(income => {
+        return this.categories
+          .map(cat => cat.name)
+          .includes(income.category.name);
+      });
+    }
+    this.transactions.length === 0
+      ? (this.error = 'Er zijn geen transacties voor deze opties')
+      : (this.error = '');
+    this.fillGraph(this.getTransactions(), 'Alle inkomsten');
+    this.fillPie(this.getTransactions(), 'Per categorie');
   }
 
   updateIncomeCategory(event: any) {
     console.log(event.value);
-    event.value !== 'all'
-      ? (this.category = this.user.getCategoryByName(event.value))
-      : (this.category = null);
+    if (
+      Array.from(event.value).includes('all') ||
+      event.value == null ||
+      event.value == [] ||
+      event.value.length == 0
+    ) {
+      this.categories = null;
+    } else {
+      const cats: Category[] = [];
+      // tslint:disable-next-line: forin
+      for (const index in event.value) {
+        const name = event.value[index];
+        cats.push(this.user.getCategoryByName(name));
+      }
+      this.categories = cats;
+    }
     this.getIncomes();
   }
   updateOutcomeCategory(event: any) {
     console.log(event.value);
-    event.value !== 'all'
-      ? (this.category = this.user.getCategoryByName(event.value))
-      : (this.category = null);
+    if (Array.from(event.value).includes('all') || event.value == null) {
+      this.categories = null;
+    } else {
+      const cats: Category[] = [];
+      // tslint:disable-next-line: forin
+      for (const index in event.value) {
+        const name = event.value[index];
+        cats.push(this.user.getCategoryByName(name));
+      }
+      this.categories = cats;
+    }
     this.getOutcomes();
+  }
+
+  updateIncomeDate(event) {
+    console.log(event.value);
+    this.date = event.value;
+    this.getIncomes();
+  }
+  updateOutcomeDate(event) {
+    console.log(event.value);
+    this.date = event.value;
+    this.getOutcomes();
+  }
+
+  swipe() {
+    this.piechartActive
+      ? (this.piechartActive = false)
+      : (this.piechartActive = true);
+  }
+
+  smallScreen() {
+    return this.screenWidth < 1200;
   }
 }

@@ -22,10 +22,23 @@ export class MockService {
       'BPN Paribas',
       'overzicht'
     );
-    var cat1 = new Category(0, 'Eten', 'account_balance', '#36A2EB', 'outcome');
+    var cat1 = new Category(
+      0,
+      'Verhuur',
+      'account_balance',
+      '#36A2EB',
+      'income'
+    );
     var cat2 = new Category(
       1,
       'Tanken',
+      'account_balance',
+      '#36A2EB',
+      'outcome'
+    );
+    var cat4 = new Category(
+      1,
+      'Winkel',
       'account_balance',
       '#36A2EB',
       'outcome'
@@ -64,6 +77,7 @@ export class MockService {
       Period.DAILY,
       account
     );
+
     var trans4 = new Income(
       5,
       'Loon1',
@@ -77,9 +91,72 @@ export class MockService {
       5,
       'Loon2',
       200,
-      new Date('07-30-2019  00:03:44'),
+      new Date('07-31-2019  00:03:44'),
       cat3,
       Period.MONTHLY,
+      account
+    );
+    var trans6 = new Income(
+      16,
+      'Loon3',
+      200,
+      new Date('07-29-2019  00:03:44'),
+      cat1,
+      Period.MONTHLY,
+      account
+    );
+    var trans7 = new Income(
+      5,
+      'Loon4',
+      200,
+      new Date('07-25-2019  00:03:44'),
+      cat1,
+      Period.MONTHLY,
+      account
+    );
+    var trans8 = new Income(
+      5,
+      'Loon5',
+      200,
+      new Date('07-24-2019  00:03:44'),
+      cat3,
+      Period.MONTHLY,
+      account
+    );
+    var trans9 = new Income(
+      5,
+      'Loon6',
+      200,
+      new Date('07-23-2019  00:03:44'),
+      cat3,
+      Period.MONTHLY,
+      account
+    );
+    var trans10 = new Outcome(
+      4,
+      'Winkel1',
+      50.2,
+      new Date('07-30-2019  00:03:44'),
+      cat4,
+      Period.DAILY,
+      account
+    );
+    var trans11 = new Outcome(
+      4,
+      'Winkel2',
+      50.2,
+      new Date('07-31-2019  00:03:44'),
+      cat4,
+      Period.DAILY,
+      account
+    );
+    var trans12 = new Outcome(
+      4,
+      'Winkel3',
+      50.2,
+      new Date('08-01-2019  00:03:44'),
+      cat4,
+      Period.DAILY,
       account
     );
 
@@ -128,8 +205,21 @@ export class MockService {
       'indyvancanegem@hotmail.com',
       true,
       [account],
-      [trans1, trans2, trans3, trans4, trans5],
-      [cat1, cat2, cat3],
+      [
+        trans1,
+        trans2,
+        trans3,
+        trans4,
+        trans5,
+        trans6,
+        trans7,
+        trans8,
+        trans9,
+        trans10,
+        trans11,
+        trans12
+      ],
+      [cat1, cat2, cat3, cat4],
       [goal1, goal2],
       [investment1],
       [loan1]

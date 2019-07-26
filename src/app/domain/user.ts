@@ -92,7 +92,7 @@ export class User {
   }
 
   public calculateDebt(): number {
-    let debt: number = 0;
+    let debt = 0;
 
     this.loans.map(loan => {
       debt += loan.loan;
@@ -102,7 +102,7 @@ export class User {
     return debt;
   }
   public calculateOversight(): number {
-    let oversight: number = 0;
+    let oversight = 0;
 
     this._accounts.map(account => {
       oversight += account.balance;
@@ -116,19 +116,17 @@ export class User {
   }
 
   getAllTransactions(): Transaction[] {
-    return this.transactions
-      .sort((recent, old) => {
-        if (recent.date.getFullYear() !== old.date.getFullYear()) {
-          return recent.date.getFullYear() - old.date.getFullYear();
-        } else if (recent.date.getMonth() !== old.date.getMonth()) {
-          return recent.date.getMonth() - old.date.getMonth();
-        } else if (recent.date.getDate() !== old.date.getDate()) {
-          return recent.date.getDate() - old.date.getDate();
-        } else if (recent.date.getTime() !== old.date.getTime()) {
-          return recent.date.getMilliseconds() - old.date.getMilliseconds();
-        }
-      })
-      .reverse();
+    return this.transactions.sort((recent, old) => {
+      if (recent.date.getFullYear() !== old.date.getFullYear()) {
+        return recent.date.getFullYear() - old.date.getFullYear();
+      } else if (recent.date.getMonth() !== old.date.getMonth()) {
+        return recent.date.getMonth() - old.date.getMonth();
+      } else if (recent.date.getDate() !== old.date.getDate()) {
+        return recent.date.getDate() - old.date.getDate();
+      } else if (recent.date.getTime() !== old.date.getTime()) {
+        return recent.date.getMilliseconds() - old.date.getMilliseconds();
+      }
+    });
   }
   getTransactionById(ID: number): Transaction {
     return this.transactions.find(trans => trans.ID === ID);
@@ -137,12 +135,14 @@ export class User {
     return this.transactions.filter(trans => trans.name === name);
   }
   getAllOutcomes(): Transaction[] {
-    return this.transactions
+    return this.getAllTransactions()
       .filter(trans => trans instanceof Outcome)
       .reverse();
   }
   getAllIncomes(): Transaction[] {
-    return this.transactions.filter(trans => trans instanceof Income).reverse();
+    return this.getAllTransactions()
+      .filter(trans => trans instanceof Income)
+      .reverse();
   }
   createOutcome(name, amount, date, category, period) {
     return null;

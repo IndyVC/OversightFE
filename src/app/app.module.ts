@@ -11,7 +11,8 @@ import {
   MatTabsModule,
   MatSelectModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatCardModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -49,7 +50,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     ChartsModule,
     MatTabsModule,
     AppRoutingModule,
-    ScrollingModule
+    ScrollingModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

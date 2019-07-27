@@ -45,9 +45,23 @@ export class TransactieComponent implements OnInit {
     responsive: true,
     maintainAspectRatio: true,
     scales: {
+      xAxes: [
+        {
+          gridLines: {
+            drawOnChartArea: false,
+            display: false
+          },
+          display: false
+        }
+      ],
       yAxes: [
         {
-          ticks: { suggestedMin: 0 }
+          ticks: { suggestedMin: 0 },
+          gridLines: {
+            drawOnChartArea: false,
+            display: false
+          },
+          display: false
         }
       ]
     }

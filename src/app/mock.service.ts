@@ -90,7 +90,7 @@ export class MockService {
     var trans5 = new Income(
       5,
       'Loon2',
-      200,
+      120,
       new Date('07-31-2019  00:03:44'),
       cat3,
       Period.MONTHLY,
@@ -99,7 +99,7 @@ export class MockService {
     var trans6 = new Income(
       16,
       'Loon3',
-      200,
+      140,
       new Date('07-29-2019  00:03:44'),
       cat1,
       Period.MONTHLY,
@@ -108,7 +108,7 @@ export class MockService {
     var trans7 = new Income(
       5,
       'Loon4',
-      200,
+      178,
       new Date('07-25-2019  00:03:44'),
       cat1,
       Period.MONTHLY,
@@ -117,7 +117,7 @@ export class MockService {
     var trans8 = new Income(
       5,
       'Loon5',
-      200,
+      350,
       new Date('07-24-2019  00:03:44'),
       cat3,
       Period.MONTHLY,
@@ -126,7 +126,7 @@ export class MockService {
     var trans9 = new Income(
       5,
       'Loon6',
-      200,
+      168,
       new Date('07-23-2019  00:03:44'),
       cat3,
       Period.MONTHLY,
@@ -135,7 +135,7 @@ export class MockService {
     var trans10 = new Outcome(
       4,
       'Winkel1',
-      50.2,
+      38,
       new Date('07-30-2019  00:03:44'),
       cat4,
       Period.DAILY,
@@ -153,7 +153,7 @@ export class MockService {
     var trans12 = new Outcome(
       4,
       'Winkel3',
-      50.2,
+      42.7,
       new Date('08-01-2019  00:03:44'),
       cat4,
       Period.DAILY,

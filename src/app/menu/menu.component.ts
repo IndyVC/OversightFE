@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-menu',
@@ -7,7 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MenuComponent implements OnInit {
   showMenu: boolean = false;
-  constructor() {}
+  public screenHeight: any;
+  public screenWidth: any;
+  @HostListener('window:resize', ['$event'])
+  onResize(event?) {
+    this.screenHeight = window.innerHeight;
+    this.screenWidth = window.innerWidth;
+    if (this.screenWidth >= 560) {
+      this.showMenu = true;
+    }
+  }
+
+  constructor() {
+    this.onResize();
+  }
 
   ngOnInit() {}
 

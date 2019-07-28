@@ -1,28 +1,35 @@
 <div class="container">
+
   <div style="display: block" class="graph" *ngIf='!piechartActive && smallScreen() || !smallScreen()' (swipe)=swipe()>
     <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
       [legend]="barChartLegend" [chartType]="chartType">
     </canvas>
   </div>
+
   <div style="display: block" class="graph" id="PIE" *ngIf='piechartActive && smallScreen() || !smallScreen()'
     (swipe)=swipe()>
     <canvas baseChart [datasets]="barChartDataP" [labels]="barChartLabelsP" [options]="barChartOptionsP"
       [legend]="barChartLegendP" [chartType]="chartTypeP">
     </canvas>
   </div>
+
+
   <div class="container_white">
     <div class="tabs">
       <button #tab1 id="selected" class="tab" (click)='switch(tab1,tab2);getIncomes()'>Inkomen</button>
       <button #tab2 class="tab" (click)='switch(tab2,tab1);getOutcomes()'>Uitgave</button>
     </div>
+
     <div class="metadata">
       <p>Oversight</p>
       <p> € {{getUser().calculateOversight()}}</p>
+      <button class="addTransaction" (click)='openDialog()'>Voeg transactie toe</button>
       <div class="error" *ngIf="error!==''">
         <p>{{error}}</p>
       </div>
     </div>
-    <cdk-virtual-scroll-viewport class="transactions" itemSize="20" style="height: 35vh">
+
+    <cdk-virtual-scroll-viewport class="transactions" itemSize="20" style="height: 20vh">
       <ng-container *cdkVirtualFor='let transaction of getTransactions(); index as i'>
         <div class="transaction" [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}">
           <mat-icon [ngStyle]="{'color': transaction.category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}"
@@ -33,10 +40,13 @@
           <p class="date">
             {{transaction.date.toLocaleDateString()}}
           </p>
+          <mat-icon class="clear" [ngStyle]="{'background-color':i % 2 == 0?'white':'#f6f5f6'}">clear</mat-icon>
         </div>
       </ng-container>
     </cdk-virtual-scroll-viewport>
+
     <div class="options">
+
       <div class="datepicker">
         <div class="incomeDate" *ngIf=incomeActive>
           <mat-form-field>
@@ -46,6 +56,7 @@
             <mat-datepicker #picker1></mat-datepicker>
           </mat-form-field>
         </div>
+
         <div class="outcomeDate" *ngIf=!incomeActive>
           <mat-form-field>
             <input matInput [matDatepicker]="picker2" placeholder="Vanaf wanneer"
@@ -54,8 +65,8 @@
             <mat-datepicker #picker2></mat-datepicker>
           </mat-form-field>
         </div>
-
       </div>
+
       <div class="incomeCategory" *ngIf=incomeActive>
         <mat-form-field>
           <mat-label>Categorie</mat-label>
@@ -69,6 +80,7 @@
           </mat-select>
         </mat-form-field>
       </div>
+
       <div class="outcomeCategory" *ngIf=!incomeActive>
         <mat-form-field>
           <mat-label>Categorie</mat-label>
@@ -82,6 +94,7 @@
           </mat-select>
         </mat-form-field>
       </div>
+
     </div>
   </div>
 </div>

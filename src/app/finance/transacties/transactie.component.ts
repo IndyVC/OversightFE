@@ -4,8 +4,9 @@ import { User } from 'src/app/domain/user';
 import { Transaction } from 'src/app/domain/transaction';
 import { Outcome } from 'src/app/domain/outcome';
 import { Category } from 'src/app/domain/category';
-import { DateAdapter } from '@angular/material';
+import { DateAdapter, MatDialog, MatDialogConfig } from '@angular/material';
 import { HostListener } from '@angular/core';
+import { NewTransactionComponent } from '../dialogs/new-transaction/new-transaction.component';
 
 @Component({
   selector: 'app-transactie',
@@ -68,13 +69,13 @@ export class TransactieComponent implements OnInit {
   };
   public screenHeight: any;
   public screenWidth: any;
-  @HostListener('window:resize', ['$event'])
-  onResize(event?) {
-    this.screenHeight = window.innerHeight;
-    this.screenWidth = window.innerWidth;
-  }
+
   // tslint:disable-next-line: variable-name
-  constructor(private _mock: MockService, private _adapter: DateAdapter<any>) {
+  constructor(
+    private _mock: MockService,
+    private _adapter: DateAdapter<any>,
+    private dialog: MatDialog
+  ) {
     console.log(this._mock.getIndy());
     this.user = this._mock.getIndy();
     this.transactions = this.user.getAllIncomes();
@@ -88,6 +89,19 @@ export class TransactieComponent implements OnInit {
     this.fillPie(this.getTransactions(), 'Totale vergelijking');
   }
 
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.autoFocus = true;
+
+    const dialogRef = this.dialog.open(NewTransactionComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(data => console.log(data));
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event?) {
+    this.screenHeight = window.innerHeight;
+    this.screenWidth = window.innerWidth;
+  }
   switch(tab1, tab2) {
     tab1.style.color = '#1F387E';
     tab1.style.borderColor = '#1F387E';
@@ -171,7 +185,7 @@ export class TransactieComponent implements OnInit {
     this.transactions.length === 0
       ? (this.error = 'Er zijn geen transacties voor deze opties')
       : (this.error = '');
-    this.fillGraph(this.getTransactions(), 'Alle inkomsten');
+    this.fillGraph(this.getTransactions(), 'Alle uitkomsten');
     this.fillPie(this.getTransactions(), 'Per categorie');
   }
 

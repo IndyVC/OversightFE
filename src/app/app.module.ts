@@ -12,7 +12,8 @@ import {
   MatSelectModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatCardModule
+  MatCardModule,
+  MatDialogModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -25,6 +26,9 @@ import { TransactieComponent } from './finance/transacties/transactie.component'
 import { ChartsModule } from 'ng2-charts';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { NewTransactionComponent } from './finance/dialogs/new-transaction/new-transaction.component';
+import { FinanceModule } from './finance/finance.module';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +36,8 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     LandingPageComponent,
     LoginComponent,
     RegistreerComponent,
-    TransactieComponent
+    TransactieComponent,
+    NewTransactionComponent
   ],
   imports: [
     BrowserModule,
@@ -51,9 +56,14 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MatTabsModule,
     AppRoutingModule,
     ScrollingModule,
-    MatCardModule
+    MatCardModule,
+    FinanceModule,
+    MatDialogModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [NewTransactionComponent]
 })
 export class AppModule {}

@@ -1,12 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MockService } from 'src/app/mock.service';
 import { User } from 'src/app/domain/user';
 import { Transaction } from 'src/app/domain/transaction';
 import { Outcome } from 'src/app/domain/outcome';
 import { Category } from 'src/app/domain/category';
-import { DateAdapter, MatDialog, MatDialogConfig } from '@angular/material';
+import {
+  DateAdapter,
+  MatDialog,
+  MatDialogConfig,
+  MatDatepicker,
+  NativeDateAdapter
+} from '@angular/material';
 import { HostListener } from '@angular/core';
 import { NewTransactionComponent } from '../dialogs/new-transaction/new-transaction.component';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import * as _moment from 'moment';
+import { default as _rollupMoment } from 'moment';
+
+const moment = _rollupMoment || _moment;
+
+class CustomDateAdapter extends NativeDateAdapter {
+  format(date: Date, displayFormat: Object): string {
+    var formatString = 'MMMM YYYY';
+    return moment(date).format(formatString);
+  }
+}
 
 @Component({
   selector: 'app-transactie',
@@ -14,18 +32,19 @@ import { NewTransactionComponent } from '../dialogs/new-transaction/new-transact
   styleUrls: ['./transactie.component.css']
 })
 export class TransactieComponent implements OnInit {
+  @ViewChild(MatDatepicker, null) picker;
   public user: User;
   public transactions: Transaction[];
   public categories: Category[];
+  public date = new FormControl();
   public incomeActive = true;
-  public piechartActive = false;
+  public chartActive = 0;
   public error = '';
-  public date: Date;
-  public chartType = 'bar';
-  public barChartLegend = true;
-  public barChartLabels;
-  public barChartData;
-  public barChartOptions = {
+  public chart1Type = 'bar';
+  public chart1Legend = true;
+  public chart1Labels;
+  public chart1Data;
+  public chart1Options = {
     scaleShowVerticalLines: false,
     responsive: true,
     maintainAspectRatio: true,
@@ -37,11 +56,11 @@ export class TransactieComponent implements OnInit {
       ]
     }
   };
-  public chartTypeP = 'pie';
-  public barChartLegendP = true;
-  public barChartLabelsP;
-  public barChartDataP;
-  public barChartOptionsP = {
+  public chart2Type = 'pie';
+  public chart2Legend = true;
+  public chart2Labels;
+  public chart2Data;
+  public chart2Options = {
     scaleShowVerticalLines: false,
     responsive: true,
     maintainAspectRatio: true,
@@ -67,6 +86,22 @@ export class TransactieComponent implements OnInit {
       ]
     }
   };
+  public chart3Type = 'bar';
+  public chart3Legend = true;
+  public chart3Labels;
+  public chart3Data;
+  public chart3Options = {
+    scaleShowVerticalLines: false,
+    responsive: true,
+    maintainAspectRatio: true,
+    scales: {
+      yAxes: [
+        {
+          ticks: { suggestedMin: 0 }
+        }
+      ]
+    }
+  };
   public screenHeight: any;
   public screenWidth: any;
 
@@ -78,15 +113,16 @@ export class TransactieComponent implements OnInit {
   ) {
     console.log(this._mock.getIndy());
     this.user = this._mock.getIndy();
-    this.transactions = this.user.getAllIncomes();
+    this.transactions = this.user.getIncomesFromMonth(new Date());
     this.categories = null;
     this._adapter.setLocale('nl');
     this.onResize();
   }
 
   ngOnInit() {
-    this.fillGraph(this.getTransactions(), 'Alle inkomsten');
-    this.fillPie(this.getTransactions(), 'Totale vergelijking');
+    this.fillGraph1(this.getTransactions(), 'Alle inkomsten');
+    this.fillGraph2(this.getTransactions(), 'Totale vergelijking');
+    this.fillGraph3(new Date());
   }
 
   openDialog() {
@@ -102,6 +138,7 @@ export class TransactieComponent implements OnInit {
     this.screenHeight = window.innerHeight;
     this.screenWidth = window.innerWidth;
   }
+
   switch(tab1, tab2) {
     tab1.style.color = '#1F387E';
     tab1.style.borderColor = '#1F387E';
@@ -112,6 +149,8 @@ export class TransactieComponent implements OnInit {
       ? (this.incomeActive = false)
       : (this.incomeActive = true);
     this.categories = null;
+    this.date.setValue(null);
+    this.fillGraph3(new Date(this.date.value));
   }
 
   getUser(): User {
@@ -122,18 +161,39 @@ export class TransactieComponent implements OnInit {
     return this.transactions;
   }
 
-  fillGraph(transactions: Transaction[], newLabel: string) {
-    this.barChartLabels = transactions.map(trans =>
-      trans.date.toLocaleDateString()
-    );
-    this.barChartData = [
+  fillGraph1(transactions: Transaction[], newLabel: string) {
+    let gt28 = false;
+    const amounts = [0, 0, 0, 0, 0];
+    transactions.forEach(trans => {
+      if (trans.date.getDate() > 28) {
+        gt28 = true;
+      }
+    });
+    this.chart1Labels = gt28
+      ? ['Week 1', 'Week 2', ' Week 3', 'Week 4', 'Week 5']
+      : ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+    transactions.forEach(trans => {
+      const nrDay = trans.date.getDate();
+      if (nrDay <= 7) {
+        amounts[0] += trans.amount;
+      } else if (nrDay > 7 && nrDay <= 14) {
+        amounts[1] += trans.amount;
+      } else if (nrDay > 14 && nrDay <= 21) {
+        amounts[2] += trans.amount;
+      } else if (nrDay > 21 && nrDay <= 28) {
+        amounts[3] += trans.amount;
+      } else if (nrDay > 28) {
+        amounts[4] += trans.amount;
+      }
+    });
+    this.chart1Data = [
       {
-        data: transactions.map(trans => trans.amount),
+        data: amounts,
         label: newLabel
       }
     ];
   }
-  fillPie(transactions: Transaction[], newLabel: string) {
+  fillGraph2(transactions: Transaction[], newLabel: string) {
     const categories = new Set<string>();
     const amounts = [];
 
@@ -150,82 +210,136 @@ export class TransactieComponent implements OnInit {
       );
     });
 
-    this.barChartLabelsP = Array.from(categories.values());
-    this.barChartDataP = [
+    this.chart2Labels = Array.from(categories.values());
+    this.chart2Data = [
       {
         data: amounts,
         label: newLabel
       }
     ];
   }
+  fillGraph3(date: Date) {
+    let newDate: Date = new Date();
+    if (date.getFullYear() !== 1970) {
+      newDate = date;
+    }
+    let gt28 = false;
+    const incomes = [0, 0, 0, 0, 0];
+    const outcomes = [0, 0, 0, 0, 0];
+    this.user.getIncomesFromMonth(newDate).forEach(trans => {
+      if (trans.date.getDate() > 28) {
+        gt28 = true;
+      }
+    });
+    this.chart3Labels = gt28
+      ? ['Week 1', 'Week 2', ' Week 3', 'Week 4', 'Week 5']
+      : ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+    this.user.getIncomesFromMonth(newDate).forEach(trans => {
+      const nrDay = trans.date.getDate();
+      if (nrDay <= 7) {
+        incomes[0] += trans.amount;
+      } else if (nrDay > 7 && nrDay <= 14) {
+        incomes[1] += trans.amount;
+      } else if (nrDay > 14 && nrDay <= 21) {
+        incomes[2] += trans.amount;
+      } else if (nrDay > 21 && nrDay <= 28) {
+        incomes[3] += trans.amount;
+      } else if (nrDay > 28) {
+        incomes[4] += trans.amount;
+      }
+    });
+    this.user.getOutcomesFromMonth(newDate).forEach(trans => {
+      const nrDay = trans.date.getDate();
+      if (nrDay <= 7) {
+        outcomes[0] -= trans.amount;
+      } else if (nrDay > 7 && nrDay <= 14) {
+        outcomes[1] -= trans.amount;
+      } else if (nrDay > 14 && nrDay <= 21) {
+        outcomes[2] -= trans.amount;
+      } else if (nrDay > 21 && nrDay <= 28) {
+        outcomes[3] -= trans.amount;
+      } else if (nrDay > 28) {
+        outcomes[4] -= trans.amount;
+      }
+    });
+    this.chart3Data = [
+      {
+        data: incomes,
+        label: 'Inkomen'
+      },
+      {
+        data: outcomes,
+        label: 'Uitgaven'
+      }
+    ];
+  }
 
   getOutcomes() {
-    if (this.categories == null && this.date == null) {
-      this.transactions = this.user.getAllOutcomes();
+    if (this.categories == null && this.date.value == null) {
+      this.transactions = this.user.getOutcomesFromMonth(new Date());
     } else if (this.categories == null && this.date) {
+      this.transactions = this.user.getOutcomesFromMonth(
+        new Date(this.date.value)
+      );
+    } else if (this.categories[0] != null && this.date.value) {
       this.transactions = this.user
-        .getAllOutcomes()
-        .filter(outcome => outcome.date >= this.date);
-    } else if (this.categories[0] != null && this.date) {
-      this.transactions = this.user
-        .getAllOutcomes()
-        .filter(
-          outcome =>
-            this.categories
-              .map(cat => cat.name)
-              .includes(outcome.category.name) && outcome.date >= this.date
+        .getOutcomesFromMonth(new Date(this.date.value))
+        .filter(outcome =>
+          this.categories.map(cat => cat.name).includes(outcome.category.name)
         );
-    } else if (this.categories[0] != null && this.date == null) {
-      this.transactions = this.user.getAllOutcomes().filter(outcome => {
-        return this.categories
-          .map(cat => cat.name)
-          .includes(outcome.category.name);
-      });
+    } else if (this.categories[0] != null && this.date.value == null) {
+      this.transactions = this.user
+        .getOutcomesFromMonth(new Date())
+        .filter(outcome => {
+          return this.categories
+            .map(cat => cat.name)
+            .includes(outcome.category.name);
+        });
     }
     this.transactions.length === 0
       ? (this.error = 'Er zijn geen transacties voor deze opties')
       : (this.error = '');
-    this.fillGraph(this.getTransactions(), 'Alle uitkomsten');
-    this.fillPie(this.getTransactions(), 'Per categorie');
+    this.fillGraph1(this.getTransactions(), 'Totaal uitgaven');
+    this.fillGraph2(this.getTransactions(), 'Per categorie');
+    this.fillGraph3(new Date(this.date.value));
   }
 
   getIncomes() {
-    if (this.categories == null && this.date == null) {
-      this.transactions = this.user.getAllIncomes();
+    if (this.categories == null && this.date.value == null) {
+      this.transactions = this.user.getIncomesFromMonth(new Date());
     } else if (this.categories == null && this.date) {
+      this.transactions = this.user.getIncomesFromMonth(
+        new Date(this.date.value)
+      );
+    } else if (this.categories[0] != null && this.date.value) {
       this.transactions = this.user
-        .getAllIncomes()
-        .filter(income => income.date >= this.date);
-    } else if (this.categories[0] != null && this.date) {
-      this.transactions = this.user
-        .getAllIncomes()
-        .filter(
-          income =>
-            this.categories
-              .map(cat => cat.name)
-              .includes(income.category.name) && income.date >= this.date
+        .getIncomesFromMonth(new Date(this.date.value))
+        .filter(income =>
+          this.categories.map(cat => cat.name).includes(income.category.name)
         );
-    } else if (this.categories[0] != null && this.date == null) {
-      this.transactions = this.user.getAllIncomes().filter(income => {
-        return this.categories
-          .map(cat => cat.name)
-          .includes(income.category.name);
-      });
+    } else if (this.categories[0] != null && this.date.value == null) {
+      this.transactions = this.user
+        .getIncomesFromMonth(new Date())
+        .filter(income => {
+          return this.categories
+            .map(cat => cat.name)
+            .includes(income.category.name);
+        });
     }
     this.transactions.length === 0
       ? (this.error = 'Er zijn geen transacties voor deze opties')
       : (this.error = '');
-    this.fillGraph(this.getTransactions(), 'Alle inkomsten');
-    this.fillPie(this.getTransactions(), 'Per categorie');
+    this.fillGraph1(this.getTransactions(), 'Alle inkomsten');
+    this.fillGraph2(this.getTransactions(), 'Per categorie');
+    this.fillGraph3(new Date(this.date.value));
   }
 
   updateIncomeCategory(event: any) {
-    console.log(event.value);
     if (
       Array.from(event.value).includes('all') ||
       event.value == null ||
-      event.value == [] ||
-      event.value.length == 0
+      event.value === [] ||
+      event.value.length === 0
     ) {
       this.categories = null;
     } else {
@@ -240,8 +354,12 @@ export class TransactieComponent implements OnInit {
     this.getIncomes();
   }
   updateOutcomeCategory(event: any) {
-    console.log(event.value);
-    if (Array.from(event.value).includes('all') || event.value == null) {
+    if (
+      Array.from(event.value).includes('all') ||
+      event.value == null ||
+      event.value === [] ||
+      event.value.length === 0
+    ) {
       this.categories = null;
     } else {
       const cats: Category[] = [];
@@ -255,24 +373,36 @@ export class TransactieComponent implements OnInit {
     this.getOutcomes();
   }
 
-  updateIncomeDate(event) {
-    console.log(event.value);
-    this.date = event.value;
+  updateIncomeDate(params) {
+    this.date.setValue(params);
+    this.picker.close();
     this.getIncomes();
   }
-  updateOutcomeDate(event) {
-    console.log(event.value);
-    this.date = event.value;
+  updateOutcomeDate(params) {
+    this.date.setValue(params);
+    this.picker.close();
     this.getOutcomes();
   }
 
   swipe() {
-    this.piechartActive
-      ? (this.piechartActive = false)
-      : (this.piechartActive = true);
+    this.chartActive = (this.chartActive + 1) % 3;
+  }
+  clearOptionsIncome() {
+    this.date.setValue(null);
+    this.categories = null;
+    this.getIncomes();
+  }
+  clearOptionsOutcome() {
+    this.date.setValue(null);
+    this.categories = null;
+    this.getOutcomes();
   }
 
   smallScreen() {
     return this.screenWidth < 1200;
+  }
+
+  noError() {
+    return this.error == null || this.error === '';
   }
 }

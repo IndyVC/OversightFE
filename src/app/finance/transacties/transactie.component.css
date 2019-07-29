@@ -109,11 +109,8 @@
 
 .clear {
   position: absolute;
-  bottom: 10px;
+  bottom: 5px;
   right: 10px;
-  border-radius: 30px;
-  padding: 5px;
-  font-size: 25px;
 }
 
 .error {
@@ -131,10 +128,22 @@
   border-radius: 0 0 20px 20px;
   padding-top: 20px;
   padding-bottom: 10px;
+  position: relative;
+}
+
+.removeFilter {
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }
 
 .options .mat-form-field {
   width: 100%;
+}
+
+.noGraph {
+  padding: 50px;
+  text-align: center;
 }
 
 @media screen and (min-width: 560px) {

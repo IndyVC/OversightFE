@@ -26,7 +26,6 @@ export class MenuComponent implements OnInit {
   ngOnInit() {}
 
   toggleMenu() {
-    console.log('check');
     this.showMenu ? (this.showMenu = false) : (this.showMenu = true);
   }
 }

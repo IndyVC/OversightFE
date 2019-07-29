@@ -10,7 +10,7 @@ import { BankAccount } from './account';
 export class User {
   private _oversight: number;
   private _debt: number;
-
+  private _shortOversight: number;
   constructor(
     private _ID: number,
     private _firstname: string,
@@ -31,6 +31,7 @@ export class User {
     this._loans.map(loans => Loan.fromJSON(loans));
     this._debt = this.calculateDebt();
     this._oversight = this.calculateOversight();
+    this._shortOversight = this.calculateShortOversight();
   }
 
   get ID(): number {
@@ -115,6 +116,18 @@ export class User {
     return oversight - this.debt;
   }
 
+  public calculateShortOversight(): number {
+    let shortOversight = 0;
+    this.getIncomesFromMonth(new Date()).forEach(
+      income => (shortOversight += income.amount)
+    );
+    this.getOutcomesFromMonth(new Date()).forEach(
+      outcome => (shortOversight -= outcome.amount)
+    );
+
+    return shortOversight;
+  }
+
   getAllTransactions(): Transaction[] {
     return this.transactions.sort((recent, old) => {
       if (recent.date.getFullYear() !== old.date.getFullYear()) {
@@ -156,21 +169,26 @@ export class User {
   deleteIncome(ID: number) {
     return null;
   }
-  getTransactionsBetweenDates(start: Date, end: Date) {
-    return this.getAllTransactions().filter(
-      trans => trans.date >= start && trans.date <= end
-    );
-  }
-  getOutcomesBetweenDates(start: Date, end: Date) {
+  getTransactionsFromMonth(date: Date) {
     return this.getAllTransactions().filter(
       trans =>
-        trans.date >= start && trans.date <= end && trans instanceof Outcome
+        trans.date.getMonth() === date.getMonth() &&
+        trans.date.getFullYear() === trans.date.getFullYear()
     );
   }
-  getIncomesBetweenDates(start: Date, end: Date) {
-    return this.getAllTransactions().filter(
+
+  getIncomesFromMonth(date: Date) {
+    return this.getAllIncomes().filter(
       trans =>
-        trans.date >= start && trans.date <= end && trans instanceof Income
+        trans.date.getMonth() === date.getMonth() &&
+        trans.date.getFullYear() === trans.date.getFullYear()
+    );
+  }
+  getOutcomesFromMonth(date: Date) {
+    return this.getAllOutcomes().filter(
+      trans =>
+        trans.date.getMonth() === date.getMonth() &&
+        trans.date.getFullYear() === trans.date.getFullYear()
     );
   }
 

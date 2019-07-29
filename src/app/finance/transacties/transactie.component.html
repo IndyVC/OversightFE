@@ -1,26 +1,28 @@
 <div class="container">
+  <div class="graphs">
+    <div style="display: block" class="graph" *ngIf='chartActive===0 && smallScreen() || !smallScreen()'
+      (swipe)=swipe()>
+      <canvas baseChart [datasets]="chart1Data" [labels]="chart1Labels" [options]="chart1Options"
+        [legend]="chart1Legend" [chartType]="chart1Type" *ngIf='noError();'>
+      </canvas>
+      <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
+    </div>
 
-  <div style="display: block" class="graph" *ngIf='chartActive===0 && smallScreen() || !smallScreen()' (swipe)=swipe()>
-    <canvas baseChart [datasets]="chart1Data" [labels]="chart1Labels" [options]="chart1Options" [legend]="chart1Legend"
-      [chartType]="chart1Type" *ngIf='noError();'>
-    </canvas>
-    <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
+    <div style="display: block" class="graph" id="graph2" *ngIf='chartActive===1 && smallScreen() || !smallScreen()'
+      (swipe)=swipe()>
+      <canvas baseChart [datasets]="chart2Data" [labels]="chart2Labels" [options]="chart2Options"
+        [legend]="chart2Legend" [chartType]="chart2Type" *ngIf='noError();'>
+      </canvas>
+      <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
+    </div>
+
+    <div style="display: block" class="graph" *ngIf='chartActive===2 && smallScreen() || !smallScreen()'
+      (swipe)=swipe()>
+      <canvas baseChart [datasets]="chart3Data" [labels]="chart3Labels" [options]="chart3Options"
+        [legend]="chart3Legend" [chartType]="chart3Type">
+      </canvas>
+    </div>
   </div>
-
-  <div style="display: block" class="graph" id="PIE" *ngIf='chartActive===1 && smallScreen() || !smallScreen()'
-    (swipe)=swipe()>
-    <canvas baseChart [datasets]="chart2Data" [labels]="chart2Labels" [options]="chart2Options" [legend]="chart2Legend"
-      [chartType]="chart2Type" *ngIf='noError();'>
-    </canvas>
-    <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
-  </div>
-
-  <div style="display: block" class="graph" *ngIf='chartActive===2 && smallScreen() || !smallScreen()' (swipe)=swipe()>
-    <canvas baseChart [datasets]="chart3Data" [labels]="chart3Labels" [options]="chart3Options" [legend]="chart3Legend"
-      [chartType]="chart3Type">
-    </canvas>
-  </div>
-
 
   <div class="container_white">
     <div class="tabs">
@@ -37,7 +39,7 @@
       </div>
     </div>
 
-    <cdk-virtual-scroll-viewport class="transactions" itemSize="20" style="height: 20vh">
+    <cdk-virtual-scroll-viewport class="transactions" itemSize="20" style="height: 25vh">
       <ng-container *cdkVirtualFor='let transaction of getTransactions(); index as i'>
         <div class="transaction" [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}">
           <mat-icon [ngStyle]="{'color': transaction.category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}"

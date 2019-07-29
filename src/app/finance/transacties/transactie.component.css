@@ -67,7 +67,6 @@
 
 .transactions {
   margin-top: 20px;
-  margin-bottom: 80px;
 }
 
 .transaction {
@@ -210,25 +209,26 @@
     .container_white {
       margin-left: 20vw;
       margin-top: 20px;
-      position: absolute;
+      position: fixed;
 
+    }
+
+    .graphs {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      right: 20px;
+      top: 20px;
     }
 
     .graph {
       width: 45vw;
-      margin-left: 48vw;
-      position: absolute;
-      display: block !important;
-      margin-top: 20px;
+      margin: 0;
+      margin-bottom: 20px;
     }
 
     .transactions {
       height: 65vh !important;
-    }
-
-    #PIE {
-      bottom: 20px;
-      position: absolute;
     }
   }
 }

@@ -102,6 +102,42 @@ export class TransactieComponent implements OnInit {
       ]
     }
   };
+  public chart4Type = 'line';
+  public chart4Legend = true;
+  public chart4Labels;
+  public chart4Data;
+  public chart4Options = {
+    scaleShowVerticalLines: false,
+    responsive: true,
+    maintainAspectRatio: true,
+    scales: {
+      yAxes: [
+        {
+          ticks: { suggestedMin: 0 }
+        }
+      ]
+    }
+  };
+  public chartColors: Array<any> = [
+    {
+      // first color
+      backgroundColor: 'rgba(225,10,24,0.2)',
+      borderColor: 'rgba(225,10,24,0.2)',
+      pointBackgroundColor: 'rgba(225,10,24,0.2)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(225,10,24,0.2)'
+    },
+    {
+      // second color
+      backgroundColor: 'rgba(225,10,24,0.2)',
+      borderColor: 'rgba(225,10,24,0.2)',
+      pointBackgroundColor: 'rgba(225,10,24,0.2)',
+      pointBorderColor: '#fff',
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: 'rgba(225,10,24,0.2)'
+    }
+  ];
   public screenHeight: any;
   public screenWidth: any;
 
@@ -123,6 +159,7 @@ export class TransactieComponent implements OnInit {
     this.fillGraph1(this.getTransactions(), 'Alle inkomsten');
     this.fillGraph2(this.getTransactions(), 'Totale vergelijking');
     this.fillGraph3(new Date());
+    this.fillGraph4(new Date());
   }
 
   openDialog() {
@@ -273,6 +310,46 @@ export class TransactieComponent implements OnInit {
       }
     ];
   }
+  fillGraph4(date: Date) {
+    let newDate: Date = new Date();
+    if (date.getFullYear() !== 1970) {
+      newDate = date;
+    }
+    const incomes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    const outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    this.chart4Labels = [
+      'Januari',
+      'Februari',
+      'Maart',
+      'April',
+      'Mei',
+      'Juni',
+      'Juli',
+      'Augustus',
+      'September',
+      'Oktober',
+      'November',
+      'December'
+    ];
+    this.user.getIncomesFromYear(newDate).forEach(trans => {
+      const nrMonth = trans.date.getMonth();
+      incomes[nrMonth] += trans.amount;
+    });
+    this.user.getOutcomesFromYear(newDate).forEach(trans => {
+      const nrMonth = trans.date.getMonth();
+      outcomes[nrMonth] += trans.amount;
+    });
+    this.chart4Data = [
+      {
+        data: incomes,
+        label: 'Inkomen'
+      },
+      {
+        data: outcomes,
+        label: 'Uitgaven'
+      }
+    ];
+  }
 
   getOutcomes() {
     if (this.categories == null && this.date.value == null) {
@@ -385,7 +462,7 @@ export class TransactieComponent implements OnInit {
   }
 
   swipe() {
-    this.chartActive = (this.chartActive + 1) % 3;
+    this.chartActive = (this.chartActive + 1) % 4;
   }
   clearOptionsIncome() {
     this.date.setValue(null);

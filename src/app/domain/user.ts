@@ -184,11 +184,22 @@ export class User {
         trans.date.getFullYear() === trans.date.getFullYear()
     );
   }
+  getIncomesFromYear(date: Date) {
+    return this.getAllIncomes().filter(
+      trans => trans.date.getFullYear() === trans.date.getFullYear()
+    );
+  }
   getOutcomesFromMonth(date: Date) {
     return this.getAllOutcomes().filter(
       trans =>
         trans.date.getMonth() === date.getMonth() &&
         trans.date.getFullYear() === trans.date.getFullYear()
+    );
+  }
+
+  getOutcomesFromYear(date: Date) {
+    return this.getAllOutcomes().filter(
+      trans => trans.date.getFullYear() === trans.date.getFullYear()
     );
   }
 

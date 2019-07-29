@@ -2,14 +2,16 @@
   <div class="graphs">
     <div style="display: block" class="graph" *ngIf='chartActive===0 && smallScreen() || !smallScreen()'
       (swipe)=swipe()>
+      <p class="graphTitel">Wekelijkse transactie</p>
       <canvas baseChart [datasets]="chart1Data" [labels]="chart1Labels" [options]="chart1Options"
-        [legend]="chart1Legend" [chartType]="chart1Type" *ngIf='noError();'>
+        [legend]="chart1Legend" [chartType]="chart1Type" [colors]="chartColors" *ngIf='noError();'>
       </canvas>
       <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
     </div>
 
     <div style="display: block" class="graph" id="graph2" *ngIf='chartActive===1 && smallScreen() || !smallScreen()'
       (swipe)=swipe()>
+      <p class="graphTitel">Verhouding categorieën</p>
       <canvas baseChart [datasets]="chart2Data" [labels]="chart2Labels" [options]="chart2Options"
         [legend]="chart2Legend" [chartType]="chart2Type" *ngIf='noError();'>
       </canvas>
@@ -18,8 +20,17 @@
 
     <div style="display: block" class="graph" *ngIf='chartActive===2 && smallScreen() || !smallScreen()'
       (swipe)=swipe()>
+      <p class="graphTitel">Wekelijks totaaloverzicht</p>
       <canvas baseChart [datasets]="chart3Data" [labels]="chart3Labels" [options]="chart3Options"
         [legend]="chart3Legend" [chartType]="chart3Type">
+      </canvas>
+    </div>
+
+    <div style="display: block" class="graph" *ngIf='chartActive===3 && smallScreen() || !smallScreen()'
+      (swipe)=swipe()>
+      <p class="graphTitel">Jaarlijks totaaloverzicht</p>
+      <canvas baseChart [datasets]="chart4Data" [labels]="chart4Labels" [options]="chart4Options"
+        [legend]="chart4Legend" [chartType]="chart4Type">
       </canvas>
     </div>
   </div>

@@ -6,6 +6,7 @@ import { Loan } from './loan';
 import { Income } from './income';
 import { Outcome } from './outcome';
 import { BankAccount } from './account';
+import { FormGroup } from '@angular/forms';
 
 export class User {
   private _oversight: number;
@@ -157,11 +158,18 @@ export class User {
       .filter(trans => trans instanceof Income)
       .reverse();
   }
-  createOutcome(name, amount, date, category, period) {
+  createOutcome(form: FormGroup) {
     return null;
   }
-  createIncome(name, amount, date, category, period) {
-    return null;
+  createIncome(form: FormGroup) {
+    const income = new Income(
+      form.value.name,
+      form.value.amount,
+      form.value.date,
+      form.value.category,
+      form.value.account
+    );
+    console.log(income);
   }
   deleteOutcome(ID: number) {
     return null;
@@ -255,5 +263,15 @@ export class User {
   }
   createLoan(name, loan, dateStart, dateEnd, description, period) {
     return null;
+  }
+
+  getAllYears(): number[] {
+    let years = new Set<number>();
+    this.getAllTransactions().map(trans => years.add(trans.date.getFullYear()));
+    return Array.from(years.values());
+  }
+
+  getAllPeriods(): string[] {
+    return ['daily', 'weekly', 'monthly', 'yearly'];
   }
 }

@@ -151,6 +151,13 @@
   text-align: center;
 }
 
+.updateTotalYear {
+  display: inline-block;
+  text-align: center;
+  width: 50%;
+  margin-left: 25%;
+}
+
 @media screen and (min-width: 560px) {
   .container {
     margin: 0;

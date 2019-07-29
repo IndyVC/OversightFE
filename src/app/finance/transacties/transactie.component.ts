@@ -121,23 +121,24 @@ export class TransactieComponent implements OnInit {
   public chartColors: Array<any> = [
     {
       // first color
-      backgroundColor: 'rgba(225,10,24,0.2)',
-      borderColor: 'rgba(225,10,24,0.2)',
-      pointBackgroundColor: 'rgba(225,10,24,0.2)',
+      backgroundColor: 'rgba(26,35,126,0.5)',
+      borderColor: 'rgba(26,35,126,1)',
+      pointBackgroundColor: 'rgba(26,35,126,1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(225,10,24,0.2)'
+      pointHoverBorderColor: 'rgba(26,35,126,0.2)'
     },
     {
       // second color
-      backgroundColor: 'rgba(225,10,24,0.2)',
-      borderColor: 'rgba(225,10,24,0.2)',
-      pointBackgroundColor: 'rgba(225,10,24,0.2)',
+      backgroundColor: 'rgba(242,125,10,0.6)',
+      borderColor: 'rgba(242,125,10,1)',
+      pointBackgroundColor: 'rgba(242,125,10,1)',
       pointBorderColor: '#fff',
       pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(225,10,24,0.2)'
+      pointHoverBorderColor: 'rgba(242,125,10,0.2)'
     }
   ];
+  public pieColors: Array<any> = [];
   public screenHeight: any;
   public screenWidth: any;
 
@@ -156,7 +157,7 @@ export class TransactieComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.fillGraph1(this.getTransactions(), 'Alle inkomsten');
+    this.fillGraph1(this.getTransactions(), 'Totaal inkomsten');
     this.fillGraph2(this.getTransactions(), 'Totale vergelijking');
     this.fillGraph3(new Date());
     this.fillGraph4(new Date());
@@ -167,35 +168,12 @@ export class TransactieComponent implements OnInit {
     dialogConfig.autoFocus = true;
 
     const dialogRef = this.dialog.open(NewTransactionComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(data => console.log(data));
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event?) {
     this.screenHeight = window.innerHeight;
     this.screenWidth = window.innerWidth;
-  }
-
-  switch(tab1, tab2) {
-    tab1.style.color = '#1F387E';
-    tab1.style.borderColor = '#1F387E';
-
-    tab2.style.color = '#E8E8E7';
-    tab2.style.borderColor = '#E8E8E7';
-    this.incomeActive
-      ? (this.incomeActive = false)
-      : (this.incomeActive = true);
-    this.categories = null;
-    this.date.setValue(null);
-    this.fillGraph3(new Date(this.date.value));
-  }
-
-  getUser(): User {
-    return this.user;
-  }
-
-  getTransactions() {
-    return this.transactions;
   }
 
   fillGraph1(transactions: Transaction[], newLabel: string) {
@@ -233,10 +211,11 @@ export class TransactieComponent implements OnInit {
   fillGraph2(transactions: Transaction[], newLabel: string) {
     const categories = new Set<string>();
     const amounts = [];
-
+    const colors = [];
     transactions.map(trans => categories.add(trans.category.name));
 
     Array.from(categories.values()).forEach(cat => {
+      colors.push(this.user.getCategoryByName(cat).color);
       amounts.push(
         transactions
           .filter(trans => trans.category.name === cat)
@@ -246,12 +225,16 @@ export class TransactieComponent implements OnInit {
           }, 0)
       );
     });
-
     this.chart2Labels = Array.from(categories.values());
     this.chart2Data = [
       {
         data: amounts,
         label: newLabel
+      }
+    ];
+    this.pieColors = [
+      {
+        backgroundColor: colors
       }
     ];
   }
@@ -351,66 +334,30 @@ export class TransactieComponent implements OnInit {
     ];
   }
 
-  getOutcomes() {
-    if (this.categories == null && this.date.value == null) {
-      this.transactions = this.user.getOutcomesFromMonth(new Date());
-    } else if (this.categories == null && this.date) {
-      this.transactions = this.user.getOutcomesFromMonth(
-        new Date(this.date.value)
-      );
-    } else if (this.categories[0] != null && this.date.value) {
-      this.transactions = this.user
-        .getOutcomesFromMonth(new Date(this.date.value))
-        .filter(outcome =>
-          this.categories.map(cat => cat.name).includes(outcome.category.name)
-        );
-    } else if (this.categories[0] != null && this.date.value == null) {
-      this.transactions = this.user
-        .getOutcomesFromMonth(new Date())
-        .filter(outcome => {
-          return this.categories
-            .map(cat => cat.name)
-            .includes(outcome.category.name);
-        });
-    }
-    this.transactions.length === 0
-      ? (this.error = 'Er zijn geen transacties voor deze opties')
-      : (this.error = '');
-    this.fillGraph1(this.getTransactions(), 'Totaal uitgaven');
-    this.fillGraph2(this.getTransactions(), 'Per categorie');
-    this.fillGraph3(new Date(this.date.value));
+  smallScreen() {
+    return this.screenWidth < 1200;
   }
 
-  getIncomes() {
-    if (this.categories == null && this.date.value == null) {
-      this.transactions = this.user.getIncomesFromMonth(new Date());
-    } else if (this.categories == null && this.date) {
-      this.transactions = this.user.getIncomesFromMonth(
-        new Date(this.date.value)
-      );
-    } else if (this.categories[0] != null && this.date.value) {
-      this.transactions = this.user
-        .getIncomesFromMonth(new Date(this.date.value))
-        .filter(income =>
-          this.categories.map(cat => cat.name).includes(income.category.name)
-        );
-    } else if (this.categories[0] != null && this.date.value == null) {
-      this.transactions = this.user
-        .getIncomesFromMonth(new Date())
-        .filter(income => {
-          return this.categories
-            .map(cat => cat.name)
-            .includes(income.category.name);
-        });
-    }
-    this.transactions.length === 0
-      ? (this.error = 'Er zijn geen transacties voor deze opties')
-      : (this.error = '');
-    this.fillGraph1(this.getTransactions(), 'Alle inkomsten');
-    this.fillGraph2(this.getTransactions(), 'Per categorie');
-    this.fillGraph3(new Date(this.date.value));
+  clearOptionsIncome() {
+    this.date.setValue(null);
+    this.categories = null;
+    this.getIncomes();
   }
 
+  clearOptionsOutcome() {
+    this.date.setValue(null);
+    this.categories = null;
+    this.getOutcomes();
+  }
+
+  noError() {
+    return this.error == null || this.error === '';
+  }
+
+  updateTotalYear(event) {
+    console.log(new Date('01-01-' + event.value));
+    this.fillGraph4(new Date(event.value));
+  }
   updateIncomeCategory(event: any) {
     if (
       Array.from(event.value).includes('all') ||
@@ -449,7 +396,6 @@ export class TransactieComponent implements OnInit {
     }
     this.getOutcomes();
   }
-
   updateIncomeDate(params) {
     this.date.setValue(params);
     this.picker.close();
@@ -461,25 +407,91 @@ export class TransactieComponent implements OnInit {
     this.getOutcomes();
   }
 
-  swipe() {
+  getOutcomes() {
+    if (this.categories == null && this.date.value == null) {
+      this.transactions = this.user.getOutcomesFromMonth(new Date());
+    } else if (this.categories == null && this.date) {
+      this.transactions = this.user.getOutcomesFromMonth(
+        new Date(this.date.value)
+      );
+    } else if (this.categories[0] != null && this.date.value) {
+      this.transactions = this.user
+        .getOutcomesFromMonth(new Date(this.date.value))
+        .filter(outcome =>
+          this.categories.map(cat => cat.name).includes(outcome.category.name)
+        );
+    } else if (this.categories[0] != null && this.date.value == null) {
+      this.transactions = this.user
+        .getOutcomesFromMonth(new Date())
+        .filter(outcome => {
+          return this.categories
+            .map(cat => cat.name)
+            .includes(outcome.category.name);
+        });
+    }
+    this.transactions.length === 0
+      ? (this.error = 'Er zijn geen transacties voor deze opties')
+      : (this.error = '');
+    this.fillGraph1(this.getTransactions(), 'Totaal uitgaven');
+    this.fillGraph2(this.getTransactions(), 'Per categorie');
+    this.fillGraph3(new Date(this.date.value));
+  }
+  getIncomes() {
+    if (this.categories == null && this.date.value == null) {
+      this.transactions = this.user.getIncomesFromMonth(new Date());
+    } else if (this.categories == null && this.date) {
+      this.transactions = this.user.getIncomesFromMonth(
+        new Date(this.date.value)
+      );
+    } else if (this.categories[0] != null && this.date.value) {
+      this.transactions = this.user
+        .getIncomesFromMonth(new Date(this.date.value))
+        .filter(income =>
+          this.categories.map(cat => cat.name).includes(income.category.name)
+        );
+    } else if (this.categories[0] != null && this.date.value == null) {
+      this.transactions = this.user
+        .getIncomesFromMonth(new Date())
+        .filter(income => {
+          return this.categories
+            .map(cat => cat.name)
+            .includes(income.category.name);
+        });
+    }
+    this.transactions.length === 0
+      ? (this.error = 'Er zijn geen transacties voor deze opties')
+      : (this.error = '');
+    this.fillGraph1(this.getTransactions(), 'Alle inkomsten');
+    this.fillGraph2(this.getTransactions(), 'Per categorie');
+    this.fillGraph3(new Date(this.date.value));
+  }
+  getUser(): User {
+    return this.user;
+  }
+  getTransactions() {
+    return this.transactions;
+  }
+
+  switch(tab1, tab2) {
+    tab1.style.color = '#1F387E';
+    tab1.style.borderColor = '#1F387E';
+
+    tab2.style.color = '#E8E8E7';
+    tab2.style.borderColor = '#E8E8E7';
+    this.incomeActive
+      ? (this.incomeActive = false)
+      : (this.incomeActive = true);
+    this.categories = null;
+    this.date.setValue(null);
+    this.fillGraph3(new Date(this.date.value));
+  }
+  swipeLeft() {
     this.chartActive = (this.chartActive + 1) % 4;
   }
-  clearOptionsIncome() {
-    this.date.setValue(null);
-    this.categories = null;
-    this.getIncomes();
-  }
-  clearOptionsOutcome() {
-    this.date.setValue(null);
-    this.categories = null;
-    this.getOutcomes();
-  }
-
-  smallScreen() {
-    return this.screenWidth < 1200;
-  }
-
-  noError() {
-    return this.error == null || this.error === '';
+  swipeRight() {
+    this.chartActive =
+      this.chartActive - 1 < 0
+        ? (this.chartActive = 3)
+        : (this.chartActive -= 1);
   }
 }

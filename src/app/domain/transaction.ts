@@ -1,16 +1,14 @@
 import { Category } from './category';
-import { Period } from './period.enum';
 import { BankAccount } from './account';
 
 export class Transaction {
   constructor(
-    private _ID: number,
     private _name: string,
     private _amount: number,
     private _date: Date,
     private _category: Category,
-    private _period: Period,
-    private _account: BankAccount
+    private _account: BankAccount,
+    private _ID?: number
   ) {
     this._category = Category.fromJSON(this._category);
   }
@@ -30,22 +28,18 @@ export class Transaction {
   get category(): Category {
     return this._category;
   }
-  get period(): Period {
-    return this._period;
-  }
   get account(): BankAccount {
     return this._account;
   }
 
   static fromJSON(json: any): Transaction {
     return new Transaction(
-      json.ID,
       json.name,
       json.amount,
       json.date,
       json.category,
-      json.period,
-      json.account
+      json.account,
+      json.ID
     );
   }
 }

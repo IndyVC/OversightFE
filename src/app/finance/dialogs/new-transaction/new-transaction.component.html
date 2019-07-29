@@ -1,14 +1,43 @@
 <h2 mat-dialog-title>Nieuwe transactie</h2>
 
-<mat-dialog-content>
+<form [formGroup]='form'>
+  <mat-dialog-content>
+    <mat-radio-group aria-label="Select an option" formControlName="type">
+      <mat-radio-button value="income" class="radio">Inkomst</mat-radio-button>
+      <mat-radio-button value="outcome">Uitgave</mat-radio-button>
+    </mat-radio-group>
+    <mat-form-field>
+      <input matInput placeholder="Naam transactie" formControlName="name">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput placeholder="Bedrag" formControlName="amount">
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker1" placeholder="Datum" formControlName="date">
+      <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+      <mat-datepicker #picker1>
+      </mat-datepicker>
+    </mat-form-field>
+    <mat-form-field #cat1>
+      <mat-label>Categorie</mat-label>
+      <mat-select formControlName="category">
+        <mat-option *ngFor='let category of user.getAllCategories()' [value]='category.name'>
+          {{category.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Bankaccount</mat-label>
+      <mat-select formControlName="account">
+        <mat-option *ngFor='let account of user.accounts' [value]='account'>
+          {{account.accountNumber}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </mat-dialog-content>
 
-  <mat-form-field>
-    <input matInput placeholder="Naam transactie" formControlName="name">
-  </mat-form-field>
-
-</mat-dialog-content>
-
-<mat-dialog-actions>
-  <button class="mat-raised-button" (click)="close()">Sluit</button>
-  <button class="mat-raised-button mat-primary" (click)="save()">Toevoegen</button>
-</mat-dialog-actions>
+  <mat-dialog-actions>
+    <button class="mat-raised-button" (click)="close()">Annuleer</button>
+    <button class="mat-raised-button mat-primary" (click)="save()">Toevoegen</button>
+  </mat-dialog-actions>
+</form>

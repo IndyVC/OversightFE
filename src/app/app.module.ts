@@ -13,7 +13,8 @@ import {
   MatDatepickerModule,
   MatNativeDateModule,
   MatCardModule,
-  MatDialogModule
+  MatDialogModule,
+  MatRadioModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -60,7 +61,8 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     FinanceModule,
     MatDialogModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent],

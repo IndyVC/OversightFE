@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Category } from './domain/category';
 import { Outcome } from './domain/outcome';
-import { Period } from './domain/period.enum';
 import { Income } from './domain/income';
 import { Goal } from './domain/goal';
 import { Investment } from './domain/investment';
@@ -40,126 +39,158 @@ export class MockService {
       1,
       'Winkel',
       'account_balance',
-      '#36A2EB',
+      '#F6800D',
       'outcome'
     );
     var cat3 = new Category(
       500,
       'Loon',
       'account_balance',
-      '#36A2EB',
+      '#F6800D',
       'income'
     );
-    var trans1 = new Outcome(
-      2,
-      'Tanken1',
-      60,
-      new Date(),
-      cat2,
-      Period.DAILY,
-      account
-    );
+    var trans1 = new Outcome('Tanken1', 60, new Date(), cat2, account);
     var trans2 = new Outcome(
-      3,
       'Tanken2',
       150,
       new Date('07-28-2019  00:03:44'),
       cat2,
-      Period.DAILY,
       account
     );
     var trans3 = new Outcome(
-      4,
       'Tanken3',
       50.2,
       new Date('07-29-2019  00:03:44'),
       cat2,
-      Period.DAILY,
       account
     );
 
     var trans4 = new Income(
-      5,
       'Loon1',
       78.4,
       new Date('07-30-2019  00:03:44'),
       cat3,
-      Period.MONTHLY,
       account
     );
     var trans5 = new Income(
-      5,
       'Loon2',
       120,
       new Date('07-31-2019  00:03:44'),
       cat3,
-      Period.MONTHLY,
       account
     );
     var trans6 = new Income(
-      16,
       'Loon3',
       140,
       new Date('07-29-2019  00:03:44'),
       cat1,
-      Period.MONTHLY,
       account
     );
     var trans7 = new Income(
-      5,
       'Loon4',
       178,
       new Date('07-25-2019  00:03:44'),
       cat1,
-      Period.MONTHLY,
       account
     );
     var trans8 = new Income(
-      5,
       'Loon5',
       350,
       new Date('07-24-2019  00:03:44'),
       cat3,
-      Period.MONTHLY,
       account
     );
     var trans9 = new Income(
-      5,
       'Loon6',
       168,
       new Date('07-23-2019  00:03:44'),
       cat3,
-      Period.MONTHLY,
       account
     );
     var trans10 = new Outcome(
-      4,
       'Winkel1',
       38,
       new Date('07-30-2019  00:03:44'),
       cat4,
-      Period.DAILY,
       account
     );
     var trans11 = new Outcome(
-      4,
       'Winkel2',
       50.2,
       new Date('07-31-2019  00:03:44'),
       cat4,
-      Period.DAILY,
       account
     );
     var trans12 = new Outcome(
-      4,
       'Winkel3',
       42.7,
       new Date('08-01-2019  00:03:44'),
       cat4,
-      Period.DAILY,
       account
     );
-
+    var ex1 = new Outcome(
+      'Tanken',
+      150,
+      new Date('09-20-2019  00:03:44'),
+      cat2,
+      account
+    );
+    var ex2 = new Outcome(
+      'Tanken',
+      878,
+      new Date('09-25-2019  00:03:44'),
+      cat2,
+      account
+    );
+    var ex3 = new Outcome(
+      'Tanken',
+      186,
+      new Date('10-25-2019  00:03:44'),
+      cat2,
+      account
+    );
+    var ex4 = new Outcome(
+      'Tanken',
+      584,
+      new Date('04-25-2019  00:03:44'),
+      cat2,
+      account
+    );
+    var ex5 = new Outcome(
+      'Tanken',
+      813,
+      new Date('03-25-2019  00:03:44'),
+      cat2,
+      account
+    );
+    var ex6 = new Outcome(
+      'Tanken',
+      483,
+      new Date('02-25-2019  00:03:44'),
+      cat2,
+      account
+    );
+    var ex7 = new Outcome(
+      'Tanken',
+      1056,
+      new Date('01-25-2019  00:03:44'),
+      cat2,
+      account
+    );
+    var ex8 = new Outcome(
+      'Tanken',
+      236,
+      new Date('12-25-2019  00:03:44'),
+      cat2,
+      account
+    );
+    var ex9 = new Outcome(
+      'Tanken',
+      105,
+      new Date('11-25-2019  00:03:44'),
+      cat2,
+      account
+    );
     var goal1 = new Goal(
       15648,
       'Auto',
@@ -194,7 +225,7 @@ export class MockService {
       new Date(),
       new Date('15/05/2050'),
       'Kwil een niev uiske',
-      Period.MONTHLY,
+      'monthly',
       null
     );
 
@@ -217,7 +248,16 @@ export class MockService {
         trans9,
         trans10,
         trans11,
-        trans12
+        trans12,
+        ex1,
+        ex2,
+        ex3,
+        ex4,
+        ex5,
+        ex6,
+        ex7,
+        ex8,
+        ex9
       ],
       [cat1, cat2, cat3, cat4],
       [goal1, goal2],

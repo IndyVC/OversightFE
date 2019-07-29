@@ -1,4 +1,3 @@
-import { Period } from './period.enum';
 import { Audit } from './audit';
 
 export class Loan {
@@ -11,10 +10,10 @@ export class Loan {
     private _dateStart: Date,
     private _dateEnd: Date,
     private _description: string,
-    private _period: Period,
+    private _period: string,
     private _audits: Audit[]
   ) {
-    if(this._audits!=null)this._audits.map(audit => Audit.fromJSON(audit));
+    if (this._audits != null) this._audits.map(audit => Audit.fromJSON(audit));
   }
 
   get ID(): number {
@@ -41,7 +40,7 @@ export class Loan {
   get description(): string {
     return this._description;
   }
-  get period(): Period {
+  get period(): string {
     return this._period;
   }
 

@@ -10,7 +10,7 @@
     </div>
 
     <div style="display: block" class="graph" id="graph2" *ngIf='chartActive===1 && smallScreen() || !smallScreen()'
-    (swipeleft)=swipeLeft()  (swiperight)=swipeRight()>
+      (swipeleft)=swipeLeft() (swiperight)=swipeRight()>
       <p class="graphTitel">Verhouding categorieën</p>
       <canvas baseChart [datasets]="chart2Data" [labels]="chart2Labels" [options]="chart2Options"
         [legend]="chart2Legend" [chartType]="chart2Type" [colors]="pieColors" *ngIf='noError();'>
@@ -19,7 +19,7 @@
     </div>
 
     <div style="display: block" class="graph" *ngIf='chartActive===2 && smallScreen() || !smallScreen()'
-    (swipeleft)=swipeLeft()  (swiperight)=swipeRight()>
+      (swipeleft)=swipeLeft() (swiperight)=swipeRight()>
       <p class="graphTitel">Wekelijks totaaloverzicht</p>
       <canvas baseChart [datasets]="chart3Data" [labels]="chart3Labels" [options]="chart3Options"
         [legend]="chart3Legend" [chartType]="chart3Type" [colors]="chartColors">
@@ -27,7 +27,7 @@
     </div>
 
     <div style="display: block" class="graph" *ngIf='chartActive===3 && smallScreen() || !smallScreen()'
-    (swipeleft)=swipeLeft()  (swiperight)=swipeRight() id="totalYearChart">
+      (swipeleft)=swipeLeft() (swiperight)=swipeRight() id="totalYearChart">
       <p class="graphTitel">Jaarlijks totaaloverzicht</p>
       <mat-form-field class="updateTotalYear">
         <mat-label>Jaartal</mat-label>

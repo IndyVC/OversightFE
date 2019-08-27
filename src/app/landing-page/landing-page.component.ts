@@ -7,9 +7,8 @@ import { MockService } from '../mock.service';
   styleUrls: ['./landing-page.component.css']
 })
 export class LandingPageComponent implements OnInit {
-  constructor(private _mock: MockService) {}
+  constructor() {}
 
   ngOnInit() {
-    console.log(this._mock.getIndy());
   }
 }

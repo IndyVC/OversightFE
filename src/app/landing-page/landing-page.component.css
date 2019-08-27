@@ -44,6 +44,8 @@ h1 {
 .button_blue,
 .button_white {
   margin: 10px 27.5vw;
+  text-align: center;
+  text-decoration: none;
 }
 
 .uitleg_white {

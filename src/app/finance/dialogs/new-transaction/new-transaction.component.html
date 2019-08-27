@@ -1,6 +1,6 @@
 <h2 mat-dialog-title>Nieuwe transactie</h2>
 
-<form [formGroup]='form'>
+<form [formGroup]='form' (ngSubmit)='onSubmit()'>
   <mat-dialog-content>
     <mat-radio-group aria-label="Select an option" formControlName="type">
       <mat-radio-button value="income" class="radio">Inkomst</mat-radio-button>
@@ -38,6 +38,6 @@
 
   <mat-dialog-actions>
     <button class="mat-raised-button" (click)="close()">Annuleer</button>
-    <button class="mat-raised-button mat-primary" (click)="save()">Toevoegen</button>
+    <button class="mat-raised-button mat-primary" (click)="onSubmit()">Toevoegen</button>
   </mat-dialog-actions>
 </form>

@@ -30,6 +30,11 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NewTransactionComponent } from './finance/dialogs/new-transaction/new-transaction.component';
 import { FinanceModule } from './finance/finance.module';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { environment } from "src/environments/environment";
+import { AngularFireModule } from "@angular/fire";
+import { AngularFirestoreModule } from "@angular/fire/firestore";
+import { UserService } from './services/user/user.service';
+import { TransactionService } from './services/transaction/transaction.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -62,9 +67,11 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
     MatDialogModule,
     ReactiveFormsModule,
     FormsModule,
-    MatRadioModule
+    MatRadioModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFirestoreModule
   ],
-  providers: [],
+  providers: [UserService,TransactionService],
   bootstrap: [AppComponent],
   entryComponents: [NewTransactionComponent]
 })

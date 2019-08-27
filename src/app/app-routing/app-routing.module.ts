@@ -7,10 +7,16 @@ import {
   PreloadAllModules
 } from '@angular/router';
 import { TransactieComponent } from '../finance/transacties/transactie.component';
+import { LoginComponent } from '../authenticatie/login/login.component';
+import { RegistreerComponent } from '../authenticatie/registreer/registreer.component';
+import { LandingPageComponent } from '../landing-page/landing-page.component';
 
 const routes: Routes = [
+  { path: 'landingPage',component:LandingPageComponent},
+  { path: 'register',component: RegistreerComponent},
+  { path: 'login',component:LoginComponent},
   { path: 'transacties', component: TransactieComponent },
-  { path: '', pathMatch: 'full', redirectTo: 'transacties' }
+  { path: '', pathMatch: 'full', redirectTo: 'landingPage' }
 ];
 @NgModule({
   declarations: [],

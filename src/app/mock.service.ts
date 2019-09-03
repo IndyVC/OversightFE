@@ -230,11 +230,11 @@ export class MockService {
     );
 
     var INDY = new User(
-      100,
       'Indy',
       'Van Canegem',
       'indyvancanegem@hotmail.com',
       true,
+      '1234',
       [account],
       [
         trans1,

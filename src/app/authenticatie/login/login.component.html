@@ -1,12 +1,14 @@
 <div class="container">
   <h1>Log in</h1>
-  <form class="form">
+  <form class="form" [formGroup]='login' (ngSubmit)="onSubmit()">
     <mat-form-field class="input">
-      <input matInput placeholder="Email">
+      <input matInput placeholder="Email" formControlName="email">
+      <mat-error *ngIf='login.get("email").invalid'>{{getErrorMessage("email")}}</mat-error>
     </mat-form-field>
     <mat-form-field class="input">
-      <input matInput placeholder="Wachtwoord">
+      <input matInput placeholder="Pincode" formControlName="pincode">
+      <mat-error *ngIf='login.get("pincode").invalid'>{{getErrorMessage("pincode")}}</mat-error>
     </mat-form-field>
-    <button class="button_blue">LOG IN</button>
+    <button class="button_blue" type="submit">LOG IN</button>
   </form>
 </div>

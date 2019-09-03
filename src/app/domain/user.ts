@@ -9,16 +9,16 @@ import { BankAccount } from './account';
 import { FormGroup } from '@angular/forms';
 
 export class User {
-  private _oversight: number;
-  private _debt: number;
-  private _shortOversight: number;
+  private _oversight?: number;
+  private _debt?: number;
+  private _shortOversight?: number;
   constructor(
-    private _ID: number,
     private _firstname: string,
     private _lastname: string,
     private _email: string,
     private _active: boolean,
-    private _accounts: BankAccount[],
+    private _pincode:string,
+    private _accounts?: BankAccount[],
     private _transactions?: Transaction[],
     private _categories?: Category[],
     private _goals?: Goal[],
@@ -34,23 +34,38 @@ export class User {
     this._oversight = this.calculateOversight();
     this._shortOversight = this.calculateShortOversight();
   }
+  
 
-  get ID(): number {
-    return this._ID;
-  }
   get firstname(): string {
     return this._firstname;
+  }
+  set firstname(value:string){
+    this._firstname = value;
   }
   get lastname(): string {
     return this._lastname;
   }
+  set lastname(value:string){
+    this._lastname = value;
+  }
   get email(): string {
     return this._email;
+  }
+  set email(value:string){
+    this._email= value;
   }
   get active(): boolean {
     return this._active;
   }
-
+  set active(value:boolean){
+    this._active = value;
+  }
+  get pincode():string{
+    return this._pincode;
+  }
+  set pincode(value:string){
+    this._pincode = value;
+  }
   get oversight(): number {
     return this._oversight;
   }
@@ -60,30 +75,47 @@ export class User {
   get accounts(): BankAccount[] {
     return this._accounts;
   }
+  set accounts(value:BankAccount[]){
+    this._accounts = value;
+  }
   get transactions(): Transaction[] {
     return this._transactions;
+  }
+  set transactions(value:Transaction[]){
+    this._transactions = value;
   }
   get categories(): Category[] {
     return this._categories;
   }
+  set categories(value:Category[]){
+    this._categories = value;
+  }
   get goals(): Goal[] {
     return this._goals;
   }
-
+  set goals(value:Goal[]){
+    this._goals = value;
+  }
   get investments(): Investment[] {
     return this._investments;
+  }
+  set investments(value:Investment[]){
+    this._investments = value;
   }
   get loans(): Loan[] {
     return this._loans;
   }
+  set loans(value:Loan[]){
+    this._loans = value;
+  }
 
   public static fromJSON(json: any): User {
     return new User(
-      json.ID,
       json.firstname,
       json.lastname,
       json.email,
       json.active,
+      json.pincode,
       json.accounts,
       json.transactions,
       json.categories,

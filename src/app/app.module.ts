@@ -35,6 +35,8 @@ import { AngularFireModule } from "@angular/fire";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
 import { UserService } from './services/user/user.service';
 import { TransactionService } from './services/transaction/transaction.service';
+import { sha256, sha224 } from 'js-sha256';
+
 @NgModule({
   declarations: [
     AppComponent,

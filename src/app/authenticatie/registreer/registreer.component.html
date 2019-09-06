@@ -7,8 +7,8 @@
       <mat-error *ngIf='register.get("email").invalid'>{{getErrorMessage("email")}}</mat-error>
     </mat-form-field>
     <mat-form-field class="input">
-      <input matInput placeholder="Pincode" formControlName='pincode' type="password">
-      <mat-error *ngIf='register.get("pincode").invalid'>{{getErrorMessage("pincode")}}</mat-error>
+      <input matInput placeholder="Wachtwoord" formControlName='password' type="password">
+      <mat-error *ngIf='register.get("password").invalid'>{{getErrorMessage("password")}}</mat-error>
     </mat-form-field>
     <mat-form-field class="input">
       <input matInput placeholder="Voornaam" formControlName='firstname'>
@@ -24,12 +24,6 @@
       <mat-datepicker #picker></mat-datepicker>
       <mat-error *ngIf='register.get("age").invalid'>{{getErrorMessage("age")}}</mat-error>
     </mat-form-field>
-    <mat-form-field class="input">
-      <input matInput placeholder="Verificatie nummer" formControlName="verificationNumber">
-      <mat-error *ngIf='register.get("verificationNumber").invalid'>{{getErrorMessage("verificationNumber")}}
-      </mat-error>
-    </mat-form-field>
     <button class="button_blue" type="submit">REGISTREER</button>
-    <a mat-button >KOOP VERIFICATIE NUMMER</a>
   </form>
 </div>

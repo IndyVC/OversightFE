@@ -6,8 +6,8 @@
       <mat-error *ngIf='login.get("email").invalid'>{{getErrorMessage("email")}}</mat-error>
     </mat-form-field>
     <mat-form-field class="input">
-      <input matInput placeholder="Pincode" formControlName="pincode">
-      <mat-error *ngIf='login.get("pincode").invalid'>{{getErrorMessage("pincode")}}</mat-error>
+      <input matInput placeholder="Wachtwoord" formControlName="password" type="password">
+      <mat-error *ngIf='login.get("password").invalid'>{{getErrorMessage("password")}}</mat-error>
     </mat-form-field>
     <button class="button_blue" type="submit">LOG IN</button>
   </form>

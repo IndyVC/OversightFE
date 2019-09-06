@@ -1,5 +1,5 @@
-<h2 mat-dialog-title>Nieuwe transactie</h2>
-
+<mat-card>
+<mat-card-title>Nieuwe transactie</mat-card-title>
 <form [formGroup]='form' (ngSubmit)='onSubmit()'>
   <mat-dialog-content>
     <mat-radio-group aria-label="Select an option" formControlName="type">
@@ -41,3 +41,4 @@
     <button class="mat-raised-button mat-primary" (click)="onSubmit()">Toevoegen</button>
   </mat-dialog-actions>
 </form>
+</mat-card>

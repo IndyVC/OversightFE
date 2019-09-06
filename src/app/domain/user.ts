@@ -17,7 +17,7 @@ export class User {
     private _lastname: string,
     private _email: string,
     private _active: boolean,
-    private _pincode:string,
+    private _password:string,
     private _accounts?: BankAccount[],
     private _transactions?: Transaction[],
     private _categories?: Category[],
@@ -34,7 +34,7 @@ export class User {
     this._oversight = this.calculateOversight();
     this._shortOversight = this.calculateShortOversight();
   }
-  
+
 
   get firstname(): string {
     return this._firstname;
@@ -60,11 +60,11 @@ export class User {
   set active(value:boolean){
     this._active = value;
   }
-  get pincode():string{
-    return this._pincode;
+  get password():string{
+    return this._password;
   }
-  set pincode(value:string){
-    this._pincode = value;
+  set password(value:string){
+    this._password = value;
   }
   get oversight(): number {
     return this._oversight;

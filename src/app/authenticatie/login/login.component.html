@@ -10,5 +10,7 @@
       <mat-error *ngIf='login.get("password").invalid'>{{getErrorMessage("password")}}</mat-error>
     </mat-form-field>
     <button class="button_blue" type="submit">LOG IN</button>
+    <button class="button_blue" onclick='resetPassword()'>Wachtwoord vergeten</button>
+
   </form>
 </div>

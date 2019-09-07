@@ -15,58 +15,36 @@ export class UserService {
 
   createUser(user: User, uid) {
     console.log(uid + user);
-    this.firestore.collection('usersOversight').doc(uid).set(Object.assign({},user));
+    this.firestore
+      .collection("users")
+      .doc(uid)
+      .set(Object.assign({}, user));
   }
 
   readUsers() {
     return this.firestore
-      .collection("/users")
+      .collection("users")
       .snapshotChanges()
       .pipe(map(changes => changes.map(c => ({ ...c.payload.doc.data() }))));
   }
 
-  readLoginUser() {
-    return this.firestore
-      .collection("/users")
-      .snapshotChanges()
-      .pipe(
-        map(changes =>
-          changes.map(c => ({
-            email: c.payload.doc.get("_email"),
-            pincode: c.payload.doc.get("_pincode")
-          }))
-        )
-      );
-  }
-
-  readEmails() {
-    return this.firestore
-      .collection("/users")
-      .snapshotChanges()
-      .pipe(
-        map(changes =>
-          changes.map(c => ({ email: c.payload.doc.get("_email") }))
-        )
-      );
-  }
-
   updateUser(key: string, value: any): Promise<void> {
     return this.firestore
-      .collection("/users")
+      .collection("users")
       .doc(key)
       .update(value);
   }
 
   deleteUser(key: string): Promise<void> {
     return this.firestore
-      .collection("/users")
+      .collection("users")
       .doc(key)
       .delete();
   }
 
   deleteAll() {
     this.firestore
-      .collection("/users")
+      .collection("users")
       .get()
       .subscribe(
         querySnapshot => {

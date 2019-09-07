@@ -35,11 +35,8 @@ export class AuthenticationService {
       .createUserWithEmailAndPassword(email, password)
       .then(result => {
         this.createUserDoc(user);
-        // this.SendVerificationMail(); // Sending email verification notification, when new user registers
+        this.SendVerificationMail(); // Sending email verification notification, when new user registers
         this.router.navigate(["login"]);
-      })
-      .catch(e => {
-        console.log(e);
       });
   }
 
@@ -48,14 +45,6 @@ export class AuthenticationService {
     return this.angularFireAuth.auth
       .signInWithEmailAndPassword(email, password)
       .then(result => {
-        if (result.user.emailVerified !== true) {
-          window.alert("Bevestig je account!");
-        } else {
-          this.router.navigate(["transacties"]);
-        }
-      })
-      .catch(error => {
-        window.alert(error.message);
       });
   }
 
@@ -69,4 +58,14 @@ export class AuthenticationService {
     const uid = this.angularFireAuth.auth.currentUser.uid;
     this.userService.createUser(user, uid);
   }
+
+  // resetPassword(){
+  //   email = this.
+  //   this.angularFireAuth.auth.sendPasswordResetEmail(email).then(function() {
+  //     // Email sent.
+  //   }).catch(function(error) {
+  //     // An error happened.
+  //   });
+  // }
+
 }

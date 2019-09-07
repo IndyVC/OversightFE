@@ -24,8 +24,6 @@ export class RegistreerComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private userService: UserService,
-    private router: Router,
     private authService: AuthenticationService,
     private dialog: MatDialog
   ) {}

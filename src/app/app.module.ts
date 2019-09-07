@@ -22,6 +22,8 @@ import { UserService } from "./services/user/user.service";
 import { TransactionService } from "./services/transaction/transaction.service";
 import { MaterialModule } from "./material/material.module";
 import { UsedEmailComponent } from './authenticatie/dialogs/used-email/used-email.component';
+import { EmailNotVerifiedComponent } from './authenticatie/dialogs/email-not-verified/email-not-verified.component';
+import { NoValidCombinationComponent } from './authenticatie/dialogs/no-valid-combination/no-valid-combination.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,7 @@ import { UsedEmailComponent } from './authenticatie/dialogs/used-email/used-emai
     LoginComponent,
     RegistreerComponent,
     TransactieComponent,
-    NewTransactionComponent
+    NewTransactionComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +52,6 @@ import { UsedEmailComponent } from './authenticatie/dialogs/used-email/used-emai
   ],
   providers: [UserService, TransactionService, MaterialModule],
   bootstrap: [AppComponent],
-  entryComponents: [NewTransactionComponent, UsedEmailComponent]
+  entryComponents: [NewTransactionComponent, UsedEmailComponent, EmailNotVerifiedComponent, NoValidCombinationComponent]
 })
 export class AppModule {}

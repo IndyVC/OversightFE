@@ -44,8 +44,7 @@ export class AuthenticationService {
   SignIn(email, password) {
     return this.angularFireAuth.auth
       .signInWithEmailAndPassword(email, password)
-      .then(result => {
-      });
+      .then(result => {});
   }
 
   /* Sign out */
@@ -59,13 +58,14 @@ export class AuthenticationService {
     this.userService.createUser(user, uid);
   }
 
-  // resetPassword(){
-  //   email = this.
-  //   this.angularFireAuth.auth.sendPasswordResetEmail(email).then(function() {
-  //     // Email sent.
-  //   }).catch(function(error) {
-  //     // An error happened.
-  //   });
-  // }
-
+  resetPassword(email: string) {
+    this.angularFireAuth.auth
+      .sendPasswordResetEmail(email)
+      .then(function() {
+        console.log("email reset password is verstuurd");
+      })
+      .catch(function(error) {
+        // An error happened.
+      });
+  }
 }

@@ -1,16 +1,63 @@
+<!--small screen-->
 <div class="container">
   <h1>Log in</h1>
-  <form class="form" [formGroup]='login' (ngSubmit)="onSubmit()">
+  <form class="form" [formGroup]="login" (ngSubmit)="onSubmit()">
     <mat-form-field class="input">
-      <input matInput placeholder="Email" formControlName="email">
-      <mat-error *ngIf='login.get("email").invalid'>{{getErrorMessage("email")}}</mat-error>
+      <input matInput placeholder="Email" formControlName="email" />
+      <mat-error *ngIf="login.get('email').invalid">{{
+        getErrorMessage("email")
+      }}</mat-error>
     </mat-form-field>
     <mat-form-field class="input">
-      <input matInput placeholder="Wachtwoord" formControlName="password" type="password">
-      <mat-error *ngIf='login.get("password").invalid'>{{getErrorMessage("password")}}</mat-error>
+      <input
+        matInput
+        placeholder="Wachtwoord"
+        formControlName="password"
+        type="password"
+      />
+      <mat-error *ngIf="login.get('password').invalid">{{
+        getErrorMessage("password")
+      }}</mat-error>
     </mat-form-field>
-    <button class="button_blue" type="submit">LOG IN</button>
-    <button class="button_blue" onclick='resetPassword()'>Wachtwoord vergeten</button>
-
+    <button mat-raised-button class="button_blue" type="submit">Log in</button>
+    <button mat-raised-button class="button_white" (click)="resetPassword()">
+      Wachtwoord vergeten
+    </button>
   </form>
+</div>
+<!--large screen-->
+<div class="container_lg">
+  <div class="container_left">
+    <div class="content_left">
+        <h1>Log in</h1>
+        <form class="form" [formGroup]="login" (ngSubmit)="onSubmit()">
+          <mat-form-field class="input">
+            <input matInput placeholder="Email" formControlName="email" />
+            <mat-error *ngIf="login.get('email').invalid">{{
+              getErrorMessage("email")
+            }}</mat-error>
+          </mat-form-field>
+          <mat-form-field class="input">
+            <input
+              matInput
+              placeholder="Wachtwoord"
+              formControlName="password"
+              type="password"
+            />
+            <mat-error *ngIf="login.get('password').invalid">{{
+              getErrorMessage("password")
+            }}</mat-error>
+          </mat-form-field>
+          <button mat-raised-button class="button_blue" type="submit">Log in</button>
+          <button mat-raised-button class="button_white" (click)="resetPassword()">
+            Wachtwoord vergeten
+          </button>
+        </form>
+    </div>
+  </div>
+  <div class="container_right">
+    <div class="content_right">
+      <img src="../../../assets/Oversight.png">
+    </div>
+  </div>
 </div>

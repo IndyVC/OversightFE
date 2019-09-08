@@ -87,7 +87,6 @@ export class RegistreerComponent implements OnInit {
       fg.get("lastname").value,
       fg.get("email").value,
       fg.get("active").value,
-      sha256(fg.get("password").value),
       [],
       [],
       [],

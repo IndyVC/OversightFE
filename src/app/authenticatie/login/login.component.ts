@@ -12,6 +12,7 @@ import { MatDialog, MatDialogConfig } from "@angular/material";
 import { EmailNotVerifiedComponent } from "../dialogs/email-not-verified/email-not-verified.component";
 import { Router } from "@angular/router";
 import { NoValidCombinationComponent } from "../dialogs/no-valid-combination/no-valid-combination.component";
+import { ResetPasswordComponent } from "../dialogs/reset-password/reset-password.component";
 
 @Component({
   selector: "app-login",
@@ -51,14 +52,17 @@ export class LoginComponent implements OnInit {
         }
       })
       .catch(e => {
-        this.openNoValidCombinationDialog();
+        if (e.code === "auth/wrong-password" || e.code === "auth/user-not-found") {
+          this.openNoValidCombinationDialog();
+        }
+        console.log(e);
       });
   }
 
   resetPassword() {
-
-    // this.authenticationService.resetPassword();
+    this.openResetPasswordDialog();
   }
+
   openEmailNotVerifiedDialog() {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
@@ -68,6 +72,18 @@ export class LoginComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     this.dialog.open(NoValidCombinationComponent, dialogConfig);
+  }
+
+  openResetPasswordDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    const dialogRef = this.dialog.open(ResetPasswordComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(data => {
+      console.log(data);
+      console.log(data.get("email").value);
+      this.authenticationService.resetPassword(data.get("email").value);
+    });
   }
 
   getErrorMessage(field: string) {

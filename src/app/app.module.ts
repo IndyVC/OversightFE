@@ -21,9 +21,10 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 import { UserService } from "./services/user/user.service";
 import { TransactionService } from "./services/transaction/transaction.service";
 import { MaterialModule } from "./material/material.module";
-import { UsedEmailComponent } from './authenticatie/dialogs/used-email/used-email.component';
-import { EmailNotVerifiedComponent } from './authenticatie/dialogs/email-not-verified/email-not-verified.component';
-import { NoValidCombinationComponent } from './authenticatie/dialogs/no-valid-combination/no-valid-combination.component';
+import { UsedEmailComponent } from "./authenticatie/dialogs/used-email/used-email.component";
+import { EmailNotVerifiedComponent } from "./authenticatie/dialogs/email-not-verified/email-not-verified.component";
+import { NoValidCombinationComponent } from "./authenticatie/dialogs/no-valid-combination/no-valid-combination.component";
+import { ResetPasswordComponent } from './authenticatie/dialogs/reset-password/reset-password.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import { NoValidCombinationComponent } from './authenticatie/dialogs/no-valid-co
     LoginComponent,
     RegistreerComponent,
     TransactieComponent,
-    NewTransactionComponent,
+    NewTransactionComponent
   ],
   imports: [
     BrowserModule,
@@ -52,6 +53,12 @@ import { NoValidCombinationComponent } from './authenticatie/dialogs/no-valid-co
   ],
   providers: [UserService, TransactionService, MaterialModule],
   bootstrap: [AppComponent],
-  entryComponents: [NewTransactionComponent, UsedEmailComponent, EmailNotVerifiedComponent, NoValidCombinationComponent]
+  entryComponents: [
+    NewTransactionComponent,
+    UsedEmailComponent,
+    EmailNotVerifiedComponent,
+    NoValidCombinationComponent,
+    ResetPasswordComponent
+  ]
 })
 export class AppModule {}

@@ -17,7 +17,6 @@ export class User {
     private _lastname: string,
     private _email: string,
     private _active: boolean,
-    private _password:string,
     private _accounts?: BankAccount[],
     private _transactions?: Transaction[],
     private _categories?: Category[],
@@ -59,12 +58,6 @@ export class User {
   }
   set active(value:boolean){
     this._active = value;
-  }
-  get password():string{
-    return this._password;
-  }
-  set password(value:string){
-    this._password = value;
   }
   get oversight(): number {
     return this._oversight;
@@ -115,7 +108,6 @@ export class User {
       json.lastname,
       json.email,
       json.active,
-      json.pincode,
       json.accounts,
       json.transactions,
       json.categories,

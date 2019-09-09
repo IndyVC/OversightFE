@@ -49,7 +49,7 @@ import { ResetPasswordComponent } from './authenticatie/dialogs/reset-password/r
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    MaterialModule
+    MaterialModule,
   ],
   providers: [UserService, TransactionService, MaterialModule],
   bootstrap: [AppComponent],

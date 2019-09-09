@@ -21,19 +21,30 @@ import { ResetPasswordComponent } from "../dialogs/reset-password/reset-password
 })
 export class LoginComponent implements OnInit {
   login: FormGroup;
+  pictures = [
+    "../../../assets/dash01.png",
+    "../../../assets/dash02.png",
+    "../../../assets/dash03.png",
+    "../../../assets/dash04.png"
+  ];
+  pictureIndex = 0;
+  picture = "../../../assets/dash01.png";
 
   constructor(
     private fb: FormBuilder,
     public authenticationService: AuthenticationService,
     private dialog: MatDialog,
-    private router: Router
-  ) {}
+    private router: Router,
+  ) {
+
+  }
 
   ngOnInit() {
     this.login = this.fb.group({
       email: ["", [Validators.required, Validators.email]],
       password: ["", [Validators.required]]
     });
+    this.getPicture();
   }
 
   onSubmit() {
@@ -52,7 +63,10 @@ export class LoginComponent implements OnInit {
         }
       })
       .catch(e => {
-        if (e.code === "auth/wrong-password" || e.code === "auth/user-not-found") {
+        if (
+          e.code === "auth/wrong-password" ||
+          e.code === "auth/user-not-found"
+        ) {
           this.openNoValidCombinationDialog();
         }
         console.log(e);
@@ -98,5 +112,13 @@ export class LoginComponent implements OnInit {
         return "Wachtwoord is verplicht.";
       }
     }
+  }
+
+  getPicture() {
+    const val = this.pictures[this.pictureIndex];
+    this.pictureIndex++;
+    this.pictureIndex = this.pictureIndex % this.pictures.length;
+    this.picture = val;
+    setTimeout(this.getPicture,3500);
   }
 }

@@ -13,9 +13,10 @@ import {
   MatNativeDateModule,
   MatCardModule,
   MatDialogModule,
-  MatRadioModule,
-
+  MatRadioModule
 } from "@angular/material";
+import { ColorPickerModule } from 'ngx-color-picker';
+
 @NgModule({
   declarations: [],
   imports: [
@@ -32,8 +33,8 @@ import {
     MatTabsModule,
     MatDialogModule,
     MatRadioModule,
-    MatCardModule
-
+    MatCardModule,
+    ColorPickerModule
   ],
   exports: [
     CommonModule,
@@ -49,8 +50,8 @@ import {
     MatTabsModule,
     MatDialogModule,
     MatRadioModule,
-    MatCardModule
-
+    MatCardModule,
+    ColorPickerModule
   ]
 })
 export class MaterialModule {}

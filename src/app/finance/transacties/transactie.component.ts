@@ -1,35 +1,35 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MockService } from 'src/app/mock.service';
-import { User } from 'src/app/domain/user';
-import { Transaction } from 'src/app/domain/transaction';
-import { Outcome } from 'src/app/domain/outcome';
-import { Category } from 'src/app/domain/category';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { MockService } from "src/app/mock.service";
+import { User } from "src/app/domain/user";
+import { Transaction } from "src/app/domain/transaction";
+import { Outcome } from "src/app/domain/outcome";
+import { Category } from "src/app/domain/category";
 import {
   DateAdapter,
   MatDialog,
   MatDialogConfig,
   MatDatepicker,
   NativeDateAdapter
-} from '@angular/material';
-import { HostListener } from '@angular/core';
-import { NewTransactionComponent } from '../dialogs/new-transaction/new-transaction.component';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import * as _moment from 'moment';
-import { default as _rollupMoment } from 'moment';
+} from "@angular/material";
+import { HostListener } from "@angular/core";
+import { NewTransactionComponent } from "../dialogs/new-transaction/new-transaction.component";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import * as _moment from "moment";
+import { default as _rollupMoment } from "moment";
 
 const moment = _rollupMoment || _moment;
 
 class CustomDateAdapter extends NativeDateAdapter {
   format(date: Date, displayFormat: Object): string {
-    var formatString = 'MMMM YYYY';
+    var formatString = "MMMM YYYY";
     return moment(date).format(formatString);
   }
 }
 
 @Component({
-  selector: 'app-transactie',
-  templateUrl: './transactie.component.html',
-  styleUrls: ['./transactie.component.css']
+  selector: "app-transactie",
+  templateUrl: "./transactie.component.html",
+  styleUrls: ["./transactie.component.css"]
 })
 export class TransactieComponent implements OnInit {
   @ViewChild(MatDatepicker, null) picker;
@@ -39,8 +39,8 @@ export class TransactieComponent implements OnInit {
   public date = new FormControl();
   public incomeActive = true;
   public chartActive = 0;
-  public error = '';
-  public chart1Type = 'bar';
+  public error = "";
+  public chart1Type = "bar";
   public chart1Legend = true;
   public chart1Labels;
   public chart1Data;
@@ -56,7 +56,7 @@ export class TransactieComponent implements OnInit {
       ]
     }
   };
-  public chart2Type = 'pie';
+  public chart2Type = "pie";
   public chart2Legend = true;
   public chart2Labels;
   public chart2Data;
@@ -86,7 +86,7 @@ export class TransactieComponent implements OnInit {
       ]
     }
   };
-  public chart3Type = 'bar';
+  public chart3Type = "bar";
   public chart3Legend = true;
   public chart3Labels;
   public chart3Data;
@@ -102,7 +102,7 @@ export class TransactieComponent implements OnInit {
       ]
     }
   };
-  public chart4Type = 'line';
+  public chart4Type = "line";
   public chart4Legend = true;
   public chart4Labels;
   public chart4Data;
@@ -121,21 +121,21 @@ export class TransactieComponent implements OnInit {
   public chartColors: Array<any> = [
     {
       // first color
-      backgroundColor: 'rgba(26,35,126,0.5)',
-      borderColor: 'rgba(26,35,126,1)',
-      pointBackgroundColor: 'rgba(26,35,126,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(26,35,126,0.2)'
+      backgroundColor: "rgba(26,35,126,0.5)",
+      borderColor: "rgba(26,35,126,1)",
+      pointBackgroundColor: "rgba(26,35,126,1)",
+      pointBorderColor: "#fff",
+      pointHoverBackgroundColor: "#fff",
+      pointHoverBorderColor: "rgba(26,35,126,0.2)"
     },
     {
       // second color
-      backgroundColor: 'rgba(242,125,10,0.6)',
-      borderColor: 'rgba(242,125,10,1)',
-      pointBackgroundColor: 'rgba(242,125,10,1)',
-      pointBorderColor: '#fff',
-      pointHoverBackgroundColor: '#fff',
-      pointHoverBorderColor: 'rgba(242,125,10,0.2)'
+      backgroundColor: "rgba(242,125,10,0.6)",
+      borderColor: "rgba(242,125,10,1)",
+      pointBackgroundColor: "rgba(242,125,10,1)",
+      pointBorderColor: "#fff",
+      pointHoverBackgroundColor: "#fff",
+      pointHoverBorderColor: "rgba(242,125,10,0.2)"
     }
   ];
   public pieColors: Array<any> = [];
@@ -152,13 +152,13 @@ export class TransactieComponent implements OnInit {
     this.user = this._mock.getIndy();
     this.transactions = this.user.getIncomesFromMonth(new Date());
     this.categories = null;
-    this._adapter.setLocale('nl');
+    this._adapter.setLocale("nl");
     this.onResize();
   }
 
   ngOnInit() {
-    this.fillGraph1(this.getTransactions(), 'Totaal inkomsten');
-    this.fillGraph2(this.getTransactions(), 'Totale vergelijking');
+    this.fillGraph1(this.getTransactions(), "Totaal inkomsten");
+    this.fillGraph2(this.getTransactions(), "Totale vergelijking");
     this.fillGraph3(new Date());
     this.fillGraph4(new Date());
   }
@@ -170,7 +170,7 @@ export class TransactieComponent implements OnInit {
     const dialogRef = this.dialog.open(NewTransactionComponent, dialogConfig);
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener("window:resize", ["$event"])
   onResize(event?) {
     this.screenHeight = window.innerHeight;
     this.screenWidth = window.innerWidth;
@@ -185,8 +185,8 @@ export class TransactieComponent implements OnInit {
       }
     });
     this.chart1Labels = gt28
-      ? ['Week 1', 'Week 2', ' Week 3', 'Week 4', 'Week 5']
-      : ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+      ? ["Week 1", "Week 2", " Week 3", "Week 4", "Week 5"]
+      : ["Week 1", "Week 2", "Week 3", "Week 4"];
     transactions.forEach(trans => {
       const nrDay = trans.date.getDate();
       if (nrDay <= 7) {
@@ -252,8 +252,8 @@ export class TransactieComponent implements OnInit {
       }
     });
     this.chart3Labels = gt28
-      ? ['Week 1', 'Week 2', ' Week 3', 'Week 4', 'Week 5']
-      : ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+      ? ["Week 1", "Week 2", " Week 3", "Week 4", "Week 5"]
+      : ["Week 1", "Week 2", "Week 3", "Week 4"];
     this.user.getIncomesFromMonth(newDate).forEach(trans => {
       const nrDay = trans.date.getDate();
       if (nrDay <= 7) {
@@ -285,11 +285,11 @@ export class TransactieComponent implements OnInit {
     this.chart3Data = [
       {
         data: incomes,
-        label: 'Inkomen'
+        label: "Inkomen"
       },
       {
         data: outcomes,
-        label: 'Uitgaven'
+        label: "Uitgaven"
       }
     ];
   }
@@ -301,18 +301,18 @@ export class TransactieComponent implements OnInit {
     const incomes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     const outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     this.chart4Labels = [
-      'Januari',
-      'Februari',
-      'Maart',
-      'April',
-      'Mei',
-      'Juni',
-      'Juli',
-      'Augustus',
-      'September',
-      'Oktober',
-      'November',
-      'December'
+      "Januari",
+      "Februari",
+      "Maart",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Augustus",
+      "September",
+      "Oktober",
+      "November",
+      "December"
     ];
     this.user.getIncomesFromYear(newDate).forEach(trans => {
       const nrMonth = trans.date.getMonth();
@@ -325,11 +325,11 @@ export class TransactieComponent implements OnInit {
     this.chart4Data = [
       {
         data: incomes,
-        label: 'Inkomen'
+        label: "Inkomen"
       },
       {
         data: outcomes,
-        label: 'Uitgaven'
+        label: "Uitgaven"
       }
     ];
   }
@@ -351,16 +351,16 @@ export class TransactieComponent implements OnInit {
   }
 
   noError() {
-    return this.error == null || this.error === '';
+    return this.error == null || this.error === "";
   }
 
   updateTotalYear(event) {
-    console.log(new Date('01-01-' + event.value));
+    console.log(new Date("01-01-" + event.value));
     this.fillGraph4(new Date(event.value));
   }
   updateIncomeCategory(event: any) {
     if (
-      Array.from(event.value).includes('all') ||
+      Array.from(event.value).includes("all") ||
       event.value == null ||
       event.value === [] ||
       event.value.length === 0
@@ -379,7 +379,7 @@ export class TransactieComponent implements OnInit {
   }
   updateOutcomeCategory(event: any) {
     if (
-      Array.from(event.value).includes('all') ||
+      Array.from(event.value).includes("all") ||
       event.value == null ||
       event.value === [] ||
       event.value.length === 0
@@ -430,10 +430,10 @@ export class TransactieComponent implements OnInit {
         });
     }
     this.transactions.length === 0
-      ? (this.error = 'Er zijn geen transacties voor deze opties')
-      : (this.error = '');
-    this.fillGraph1(this.getTransactions(), 'Totaal uitgaven');
-    this.fillGraph2(this.getTransactions(), 'Per categorie');
+      ? (this.error = "Er zijn geen transacties voor deze opties")
+      : (this.error = "");
+    this.fillGraph1(this.getTransactions(), "Totaal uitgaven");
+    this.fillGraph2(this.getTransactions(), "Per categorie");
     this.fillGraph3(new Date(this.date.value));
   }
   getIncomes() {
@@ -459,10 +459,10 @@ export class TransactieComponent implements OnInit {
         });
     }
     this.transactions.length === 0
-      ? (this.error = 'Er zijn geen transacties voor deze opties')
-      : (this.error = '');
-    this.fillGraph1(this.getTransactions(), 'Alle inkomsten');
-    this.fillGraph2(this.getTransactions(), 'Per categorie');
+      ? (this.error = "Er zijn geen transacties voor deze opties")
+      : (this.error = "");
+    this.fillGraph1(this.getTransactions(), "Alle inkomsten");
+    this.fillGraph2(this.getTransactions(), "Per categorie");
     this.fillGraph3(new Date(this.date.value));
   }
   getUser(): User {
@@ -473,11 +473,11 @@ export class TransactieComponent implements OnInit {
   }
 
   switch(tab1, tab2) {
-    tab1.style.color = '#1F387E';
-    tab1.style.borderColor = '#1F387E';
+    tab1.style.color = "#1F387E";
+    tab1.style.borderColor = "#1F387E";
 
-    tab2.style.color = '#E8E8E7';
-    tab2.style.borderColor = '#E8E8E7';
+    tab2.style.color = "#E8E8E7";
+    tab2.style.borderColor = "#E8E8E7";
     this.incomeActive
       ? (this.incomeActive = false)
       : (this.incomeActive = true);

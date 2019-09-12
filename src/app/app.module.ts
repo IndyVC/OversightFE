@@ -25,6 +25,7 @@ import { UsedEmailComponent } from "./authenticatie/dialogs/used-email/used-emai
 import { EmailNotVerifiedComponent } from "./authenticatie/dialogs/email-not-verified/email-not-verified.component";
 import { NoValidCombinationComponent } from "./authenticatie/dialogs/no-valid-combination/no-valid-combination.component";
 import { ResetPasswordComponent } from './authenticatie/dialogs/reset-password/reset-password.component';
+import { CategoriesComponent } from './finance/categories/categories.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { ResetPasswordComponent } from './authenticatie/dialogs/reset-password/r
     LoginComponent,
     RegistreerComponent,
     TransactieComponent,
-    NewTransactionComponent
+    NewTransactionComponent,
+    CategoriesComponent
   ],
   imports: [
     BrowserModule,

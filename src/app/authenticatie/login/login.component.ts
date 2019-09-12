@@ -21,14 +21,7 @@ import { ResetPasswordComponent } from "../dialogs/reset-password/reset-password
 })
 export class LoginComponent implements OnInit {
   login: FormGroup;
-  pictures = [
-    "../../../assets/dash01.png",
-    "../../../assets/dash02.png",
-    "../../../assets/dash03.png",
-    "../../../assets/dash04.png"
-  ];
-  pictureIndex = 0;
-  picture = "../../../assets/dash01.png";
+
 
   constructor(
     private fb: FormBuilder,
@@ -44,7 +37,6 @@ export class LoginComponent implements OnInit {
       email: ["", [Validators.required, Validators.email]],
       password: ["", [Validators.required]]
     });
-    this.getPicture();
   }
 
   onSubmit() {
@@ -112,13 +104,5 @@ export class LoginComponent implements OnInit {
         return "Wachtwoord is verplicht.";
       }
     }
-  }
-
-  getPicture() {
-    const val = this.pictures[this.pictureIndex];
-    this.pictureIndex++;
-    this.pictureIndex = this.pictureIndex % this.pictures.length;
-    this.picture = val;
-    setTimeout(this.getPicture,3500);
   }
 }

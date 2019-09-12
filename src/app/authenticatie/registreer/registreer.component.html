@@ -27,3 +27,41 @@
     <button class="button_blue" type="submit">REGISTREER</button>
   </form>
 </div>
+<!--large screen-->
+<div class="container_lg">
+  <div class="container_left">
+    <div class="content_left">
+      <h1>Registreer</h1>
+      <form class="form" [formGroup]='register' (ngSubmit)="onSubmit()">
+        <mat-error class="error_email" *ngIf='!uniqueEmail'>{{getErrorMessage("uniqueEmail")}}</mat-error>
+        <mat-form-field class="input">
+          <input matInput placeholder="Email" formControlName='email'>
+          <mat-error *ngIf='register.get("email").invalid'>{{getErrorMessage("email")}}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="input">
+          <input matInput placeholder="Wachtwoord" formControlName='password' type="password">
+          <mat-error *ngIf='register.get("password").invalid'>{{getErrorMessage("password")}}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="input">
+          <input matInput placeholder="Voornaam" formControlName='firstname'>
+          <mat-error *ngIf='register.get("firstname").invalid'>{{getErrorMessage("firstname")}}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="input">
+          <input matInput placeholder="Familienaam" formControlName='lastname'>
+          <mat-error *ngIf='register.get("lastname").invalid'>{{getErrorMessage("lastname")}}</mat-error>
+        </mat-form-field>
+        <mat-form-field class="input">
+          <input matInput [matDatepicker]="picker2" placeholder="Leeftijd" formControlName="age">
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+          <mat-error *ngIf='register.get("age").invalid'>{{getErrorMessage("age")}}</mat-error>
+        </mat-form-field>
+        <button class="button_blue" type="submit">REGISTREER</button>
+      </form>
+    </div>
+  </div>
+  <div class="container_right">
+    <div class="content_right">
+    </div>
+  </div>
+</div>

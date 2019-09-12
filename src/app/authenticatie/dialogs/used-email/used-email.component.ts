@@ -11,7 +11,7 @@ export class UsedEmailComponent implements OnInit {
 
   ngOnInit() {}
 
-  close(){
+  close() {
     this.dialogRef.close();
   }
 }

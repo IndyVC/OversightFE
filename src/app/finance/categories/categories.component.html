@@ -1,0 +1,81 @@
+<div class="container">
+
+  <mat-card style="display: block" class="graph" *ngIf='chartActive===0 && smallScreen() || !smallScreen()'
+    (swipeleft)=swipeLeft() (swiperight)=swipeRight()>
+    <p class="name">{{currentCategory.name}}</p>
+    <mat-icon [ngStyle]="{'color': currentCategory.color, 'background-color':'#f6f5f6'}" class="icon">
+      {{currentCategory.icon}}
+    </mat-icon>
+    <p class="type">Totaal uitgegeven deze maand: <br> € {{calculateTotalSpendOnCategory()}}</p>
+  </mat-card>
+
+  <mat-card style="display: block" class="graph" *ngIf='chartActive===1 && smallScreen() || !smallScreen()'
+    (swipeleft)=swipeLeft() (swiperight)=swipeRight() id="totalYearChart">
+    <p class="graphTitel">Jaarlijks totaaloverzicht</p>
+    <mat-form-field class="updateTotalYear">
+      <mat-label>Jaartal</mat-label>
+      <mat-select (selectionChange)='updateTotalYear($event)'>
+        <mat-option *ngFor='let year of getUser().getAllYears()' [value]='year'>
+          {{year}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <canvas baseChart [datasets]="data" [labels]="labels" [options]="options" [legend]="legend" [chartType]="chart"
+      [colors]="chartColors">
+    </canvas>
+    <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
+  </mat-card>
+
+  <mat-card *ngIf='showCreate' class="graph">
+    <mat-card-title>Categorie aanmaken</mat-card-title>
+    <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
+      <mat-radio-group aria-label="Select an option" formControlName="type">
+        <mat-radio-button value="income" class="radio">Inkomst</mat-radio-button>
+        <mat-radio-button value="outcome">Uitgave</mat-radio-button>
+      </mat-radio-group>
+      <mat-form-field>
+        <input matInput placeholder="Naam transactie" formControlName="name">
+        <mat-error *ngIf="form.get('name').invalid">
+          {{getErrorMessage("name")}}
+        </mat-error>
+      </mat-form-field>
+        <input [value]="form.get('color').value" (colorPickerSelect)='changeColor($event)'[cpOutputFormat]='auto' [style.background]="form.get('color').value" [(colorPicker)]="form.get('color').value" formControlName="color" id="colorpicker"/>
+
+      <mat-dialog-actions>
+        <button id='Toevoegen' mat-raised-button mat-primary type="submit">Toevoegen</button>
+        <button mat-raised-button (click)="close()">Annuleer</button>
+      </mat-dialog-actions>
+    </form>
+  </mat-card>
+
+  <mat-card class="matcardNoPaddingTop">
+    <p class="tab">Categorieën</p>
+    <div class="metadata">
+      <p>Oversight</p>
+      <p> € {{getUser().calculateShortOversight()}}</p>
+      <button class="addCategory" (click)='openCreate()'>Voeg een categorie toe</button>
+      <div class="error" *ngIf="error!==''">
+        <p>{{error}}</p>
+      </div>
+    </div>
+
+    <cdk-virtual-scroll-viewport class="categories" itemSize="100" style="height: 240px">
+      <ng-container *cdkVirtualFor='let category of getCategories(); index as i'>
+        <div class="category" [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}"
+          (click)="setCategory(category)">
+          <mat-icon [ngStyle]="{'color': category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}" class="icon">
+            {{category.icon}}
+          </mat-icon>
+          <p class="name">{{category.name}}</p>
+          <p class="type">{{category.type}}</p>
+          <button mat-icon-button class="clear">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </div>
+      </ng-container>
+    </cdk-virtual-scroll-viewport>
+  </mat-card>
+
+  <app-menu></app-menu>
+
+</div>

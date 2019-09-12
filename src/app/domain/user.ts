@@ -1,12 +1,12 @@
-import { Transaction } from './transaction';
-import { Category } from './category';
-import { Goal } from './goal';
-import { Investment } from './investment';
-import { Loan } from './loan';
-import { Income } from './income';
-import { Outcome } from './outcome';
-import { BankAccount } from './account';
-import { FormGroup } from '@angular/forms';
+import { Transaction } from "./transaction";
+import { Category } from "./category";
+import { Goal } from "./goal";
+import { Investment } from "./investment";
+import { Loan } from "./loan";
+import { Income } from "./income";
+import { Outcome } from "./outcome";
+import { BankAccount } from "./account";
+import { FormGroup } from "@angular/forms";
 
 export class User {
   private _oversight?: number;
@@ -34,29 +34,28 @@ export class User {
     this._shortOversight = this.calculateShortOversight();
   }
 
-
   get firstname(): string {
     return this._firstname;
   }
-  set firstname(value:string){
+  set firstname(value: string) {
     this._firstname = value;
   }
   get lastname(): string {
     return this._lastname;
   }
-  set lastname(value:string){
+  set lastname(value: string) {
     this._lastname = value;
   }
   get email(): string {
     return this._email;
   }
-  set email(value:string){
-    this._email= value;
+  set email(value: string) {
+    this._email = value;
   }
   get active(): boolean {
     return this._active;
   }
-  set active(value:boolean){
+  set active(value: boolean) {
     this._active = value;
   }
   get oversight(): number {
@@ -68,37 +67,37 @@ export class User {
   get accounts(): BankAccount[] {
     return this._accounts;
   }
-  set accounts(value:BankAccount[]){
+  set accounts(value: BankAccount[]) {
     this._accounts = value;
   }
   get transactions(): Transaction[] {
     return this._transactions;
   }
-  set transactions(value:Transaction[]){
+  set transactions(value: Transaction[]) {
     this._transactions = value;
   }
   get categories(): Category[] {
     return this._categories;
   }
-  set categories(value:Category[]){
+  set categories(value: Category[]) {
     this._categories = value;
   }
   get goals(): Goal[] {
     return this._goals;
   }
-  set goals(value:Goal[]){
+  set goals(value: Goal[]) {
     this._goals = value;
   }
   get investments(): Investment[] {
     return this._investments;
   }
-  set investments(value:Investment[]){
+  set investments(value: Investment[]) {
     this._investments = value;
   }
   get loans(): Loan[] {
     return this._loans;
   }
-  set loans(value:Loan[]){
+  set loans(value: Loan[]) {
     this._loans = value;
   }
 
@@ -225,7 +224,7 @@ export class User {
     return this.getAllOutcomes().filter(
       trans =>
         trans.date.getMonth() === date.getMonth() &&
-        trans.date.getFullYear() === trans.date.getFullYear()
+        trans.date.getFullYear() === date.getFullYear()
     );
   }
 
@@ -235,14 +234,31 @@ export class User {
     );
   }
 
+  calculateTotalSpendOnCategory(category: Category) {
+    const date:Date = new Date();
+    const transactions: Transaction[] = this.getAllTransactions().filter(
+      t =>
+        (t.category.type === category.type && t.category.name === category.name) &&
+        (t.date.getMonth() === date.getMonth() && t.date.getFullYear() === date.getFullYear())
+    );
+    let sum = 0;
+    transactions.forEach(e => (sum += e.amount));
+    return sum;
+  }
+  calculateSpendThisMonthOnCategory(category:Category){
+    const transactions: Transaction[] = this.getAllTransactions().filter(
+      t =>
+        t.category.type === category.type && t.category.name === category.name
+    );
+  }
   getAllCategories(): Category[] {
     return this.categories;
   }
   getIncomeCategories(): Category[] {
-    return this.categories.filter(cat => cat.type === 'income');
+    return this.categories.filter(cat => cat.type === "income");
   }
   getOutcomeCategories(): Category[] {
-    return this.categories.filter(cat => cat.type === 'outcome');
+    return this.categories.filter(cat => cat.type === "outcome");
   }
   getCategoryById(ID: number): Category {
     return this.categories.find(cat => cat.ID === ID);
@@ -296,6 +312,6 @@ export class User {
   }
 
   getAllPeriods(): string[] {
-    return ['daily', 'weekly', 'monthly', 'yearly'];
+    return ["daily", "weekly", "monthly", "yearly"];
   }
 }

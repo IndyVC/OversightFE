@@ -260,9 +260,7 @@ export class User {
   getOutcomeCategories(): Category[] {
     return this.categories.filter(cat => cat.type === "outcome");
   }
-  getCategoryById(ID: number): Category {
-    return this.categories.find(cat => cat.ID === ID);
-  }
+
   getCategoryByName(name: string): Category {
     return this.categories.find(cat => cat.name === name);
   }

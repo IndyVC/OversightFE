@@ -55,7 +55,7 @@ export class AuthenticationService {
   /*create firestore user*/
   createUserDoc(user: User) {
     const uid = this.angularFireAuth.auth.currentUser.uid;
-    this.userService.createUser(user, uid);
+    this.userService.createUser(user);
   }
 
   resetPassword(email: string) {

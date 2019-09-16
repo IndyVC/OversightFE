@@ -1,5 +1,4 @@
 <div class="container">
-
   <mat-card style="display: block" class="graph" *ngIf='chartActive===0 && smallScreen() || !smallScreen()'
     (swipeleft)=swipeLeft() (swiperight)=swipeRight()>
     <p class="name">{{currentCategory.name}}</p>
@@ -9,9 +8,10 @@
     <p class="type">Totaal uitgegeven deze maand: <br> € {{calculateTotalSpendOnCategory()}}</p>
   </mat-card>
 
-  <mat-card style="display: block" class="graph" *ngIf='chartActive===1 && smallScreen() || !smallScreen()'
-    (swipeleft)=swipeLeft() (swiperight)=swipeRight() id="totalYearChart">
-    <p class="graphTitel">Jaarlijks totaaloverzicht</p>
+  <mat-card style="display: block" class="graph matcardNoPaddingTop"
+    *ngIf='chartActive===1 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft() (swiperight)=swipeRight()
+    id="totalYearChart">
+    <p class="tab">Jaarlijks totaaloverzicht</p>
     <mat-form-field class="updateTotalYear">
       <mat-label>Jaartal</mat-label>
       <mat-select (selectionChange)='updateTotalYear($event)'>
@@ -26,20 +26,33 @@
     <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
   </mat-card>
 
-  <mat-card *ngIf='showCreate' class="graph">
-    <mat-card-title>Categorie aanmaken</mat-card-title>
+  <mat-card *ngIf='showCreate' class="graph matcardNoPaddingTop">
+    <p class='tab'>Categorie aanmaken</p>
     <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
       <mat-radio-group aria-label="Select an option" formControlName="type">
         <mat-radio-button value="income" class="radio">Inkomst</mat-radio-button>
         <mat-radio-button value="outcome">Uitgave</mat-radio-button>
       </mat-radio-group>
+      <mat-error *ngIf="form.get('type').invalid">
+        {{getErrorMessage("type")}}
+      </mat-error>
       <mat-form-field>
-        <input matInput placeholder="Naam transactie" formControlName="name">
+        <input matInput placeholder="Naam categorie" formControlName="name">
         <mat-error *ngIf="form.get('name').invalid">
           {{getErrorMessage("name")}}
         </mat-error>
       </mat-form-field>
-        <input [value]="form.get('color').value" (colorPickerSelect)='changeColor($event)'[cpOutputFormat]='auto' [style.background]="form.get('color').value" [(colorPicker)]="form.get('color').value" formControlName="color" id="colorpicker"/>
+
+      <span [style.color]="color" [cpPosition]="'bottom'" [cpPositionOffset]="'0%'" [cpPositionRelativeToArrow]="true"
+        [(colorPicker)]="color" (colorPickerChange)="changeColor($event)" id="colorpicker">Kies kleur!</span>
+        <mat-error *ngIf="form.get('color').invalid">
+          {{getErrorMessage("color")}}
+        </mat-error>
+
+      <div class="icons">
+        <i class="{{icon}} icon {{icon===selectedIcon?'selectedIcon':''}}" *ngFor="let icon of fixedCategoriesIcons" [ngStyle]="{'color':form.get('color').value,'background-color':'white'}"
+          (click)="changeIcon(icon)"></i>
+      </div>
 
       <mat-dialog-actions>
         <button id='Toevoegen' mat-raised-button mat-primary type="submit">Toevoegen</button>

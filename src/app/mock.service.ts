@@ -21,32 +21,19 @@ export class MockService {
       "BPN Paribas",
       "overzicht"
     );
-    var cat1 = new Category(0, "Verhuur", "house", "#2d3561", "income");
+    var cat1 = new Category("Verhuur", "house", "#2d3561", "income");
 
-    var cat2 = new Category(1, "Loon", "account_balance", "#c05c7e", "income");
+    var cat2 = new Category("Loon", "account_balance", "#c05c7e", "income");
 
-    var cat3 = new Category(
-      69,
-      "One-timers",
-      "euro_symbol",
-      "#CC8899",
-      "income"
-    );
-    var cat4 = new Category(1, "Winkel", "shopping_cart", "#f3826f", "outcome");
+    var cat3 = new Category("One-timers", "euro_symbol", "#CC8899", "income");
+    var cat4 = new Category("Winkel", "shopping_cart", "#f3826f", "outcome");
     var cat5 = new Category(
-      500,
       "Tanken",
       "local_gas_station",
       "#ffb961",
       "outcome"
     );
-    var cat6 = new Category(
-      500,
-      "One-timers",
-      "euro_symbol",
-      "#6EC6CA",
-      "outcome"
-    );
+    var cat6 = new Category("One-timers", "euro_symbol", "#6EC6CA", "outcome");
     // var trans1 = new Outcome("Tanken1", 60, new Date(), cat1, account);
     // var trans2 = new Outcome(
     //   "Tanken2",
@@ -270,7 +257,7 @@ export class MockService {
     );
     var outcome2 = new Outcome(
       "Pizza avond!",
-     1200,
+      1200,
       new Date("02-09-2019 00:00:00"),
       cat4,
       account,
@@ -310,7 +297,7 @@ export class MockService {
     );
     var outcome7 = new Outcome(
       "fill",
-     694,
+      694,
       new Date("07-16-2019 00:00:00"),
       cat4,
       account,
@@ -334,7 +321,7 @@ export class MockService {
     );
     var outcome10 = new Outcome(
       "fill",
-     243,
+      243,
       new Date("10-23-2019 00:00:00"),
       cat4,
       account,

@@ -4,6 +4,7 @@ import { Category } from "src/app/domain/category";
 import { User } from "src/app/domain/user";
 import { HostListener } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { CategoryService } from "src/app/services/category/category.service";
 
 @Component({
   selector: "app-categories",
@@ -13,10 +14,75 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 export class CategoriesComponent implements OnInit {
   currentCategory: Category;
   categories: Category[];
+  fixedCategoriesIcons: string[] = [
+    "fas fa-cat",
+    "fas fa-shopping-cart",
+    "fas fa-car",
+    "fas fa-ambulance",
+    "fas fa-mobile-alt",
+    "fas fa-at",
+    "fas fa-baby",
+    "fas fa-beer",
+    "fas fa-bicycle",
+    "fas fa-gift",
+    "fas fa-book",
+    "fas fa-bowling-ball",
+    "fas fa-broom",
+    "fas fa-bus",
+    "fas fa-burn",
+    "fas fa-cookie-bite",
+    "fas fa-campground",
+    "fas fa-carrot",
+    "fas fa-chair",
+    "fas fa-cheese",
+    "fas fa-cocktail",
+    "fab fa-cc-visa",
+    "fas fa-couch",
+    "fas fa-recycle",
+    "fas fa-dumbbell",
+    "fab fa-ebay",
+    "fas fa-envelope-open-text",
+    "fas fa-fire-extinguisher",
+    "fas fa-gas-pump",
+    "fas fa-gamepad",
+    "fas fa-gavel",
+    "fas fa-futbol",
+    "fas fa-glasses",
+    "fas fa-graduation-cap",
+    "fas fa-guitar",
+    "fas fa-hammer",
+    "fas fa-home",
+    "fas fa-hospital",
+    "fas fa-newspaper",
+    "fas fa-parking",
+    "fas fa-phone",
+    "fas fa-plane-departure",
+    "fas fa-pizza-slice",
+    "fas fa-prescription-bottle-alt",
+    "fas fa-shower",
+    "fas fa-skiing",
+    "fas fa-smoking",
+    "fas fa-solar-panel",
+    "fas fa-taxi",
+    "fas fa-ticket-alt",
+    "fas fa-train",
+    "fas fa-tshirt",
+    "fas fa-tv",
+    "fas fa-utensils",
+    "fas fa-briefcase",
+    "fab fa-bitcoin",
+    "fas fa-blind",
+    "fas fa-gem",
+    "fas fa-money-bill-wave",
+    "fas fa-chart-line",
+    "fas fa-coins",
+    "fas fa-credit-card"
+  ];
   user: User;
   form: FormGroup;
-  public color1: string;
-  showCreate:boolean = false;
+  public color: string;
+  public selectedIcon: string = this.fixedCategoriesIcons[0];
+  showCreate: boolean = false;
   public chartActive = 0;
   public error = "";
   public chart = "line";
@@ -63,7 +129,11 @@ export class CategoriesComponent implements OnInit {
     this.screenWidth = window.innerWidth;
   }
 
-  constructor(private _mock: MockService, private _fb: FormBuilder) {
+  constructor(
+    private _mock: MockService,
+    private _fb: FormBuilder,
+    private _categoryService: CategoryService
+  ) {
     this.onResize();
   }
 
@@ -165,20 +235,27 @@ export class CategoriesComponent implements OnInit {
     return this.error == null || this.error === "";
   }
 
-  openCreate(){
+  openCreate() {
     this.showCreate = true;
   }
   close() {
-    this.showCreate = false;    
+    this.showCreate = false;
   }
-  onSubmit(){
-    console.log(this.form);
+  onSubmit() {
+    const name = this.form.get("name").value;
+    const icon = this.selectedIcon;
+    const color = this.form.get("color").value;
+    const type = this.form.get("type").value;
+    const category = new Category(name, icon, color, type);
+    this._categoryService.createCategory(category);
   }
-  changeColor(event){
-    this.color1 = event;
-    this.form.setValue({'color':event});
+  changeColor(event) {
+    this.color = event;
+    this.form.get("color").setValue(event);
   }
-
+  changeIcon(icon) {
+    this.selectedIcon = icon;
+  }
   getErrorMessage(field: string) {
     if (field === "name") {
       if (this.form.get("name").hasError("required")) {
@@ -187,6 +264,10 @@ export class CategoriesComponent implements OnInit {
     } else if (field === "type") {
       if (this.form.get("type").hasError("required")) {
         return "Type is verplicht.";
+      }
+    } else if (field === "color") {
+      if (this.form.get("color").hasError("required")) {
+        return "Kleur is verplicht.";
       }
     }
   }

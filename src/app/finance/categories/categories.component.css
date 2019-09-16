@@ -44,7 +44,7 @@
   width: 50%;
   background-color: transparent;
   border: 0;
-  border-top: 5px #e8e8e7 solid;
+  border-top: 2px #e8e8e7 solid;
   color: #e8e8e7;
   font-weight: bold;
   margin-left: 25%;
@@ -136,6 +136,22 @@
 .form .input:nth-child(1) {
   margin-top: unset;
 }
+
 #colorpicker{
-width:100px !important;
+  margin-bottom:15px;
+  border-bottom: 1px solid rgb(148,148,148);
+  color: rgb(148,148,148);
+  padding-bottom:5px;
+}
+
+.icons{
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  margin-bottom:15px;
+}
+
+.selectedIcon{
+  background-color:#f6f5f6 !important;
 }

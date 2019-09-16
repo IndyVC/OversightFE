@@ -15,7 +15,7 @@ import {
   MatDialogModule,
   MatRadioModule
 } from "@angular/material";
-import { ColorPickerModule } from 'ngx-color-picker';
+import { ColorPickerModule } from "ngx-color-picker";
 
 @NgModule({
   declarations: [],

@@ -1,19 +1,22 @@
 import { Injectable } from "@angular/core";
-import {
-  AngularFirestore,
-  AngularFirestoreCollection
-} from "@angular/fire/firestore";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { AngularFirestore } from "@angular/fire/firestore";
 import { User } from "src/app/domain/user";
 import { map } from "rxjs/operators";
+import { Category } from "src/app/domain/category";
+import { AngularFireAuth } from "@angular/fire/auth";
+import firebase from "firebase/app";
 
 @Injectable({
   providedIn: "root"
 })
 export class UserService {
-  constructor(private firestore: AngularFirestore) {}
+  constructor(
+    private firestore: AngularFirestore,
+    private fireauth: AngularFireAuth
+  ) {}
 
-  createUser(user: User, uid) {
+  createUser(user: User) {
+    const uid = this.fireauth.auth.currentUser.uid;
     console.log(uid + user);
     this.firestore
       .collection("users")
@@ -28,17 +31,19 @@ export class UserService {
       .pipe(map(changes => changes.map(c => ({ ...c.payload.doc.data() }))));
   }
 
-  updateUser(key: string, value: any): Promise<void> {
+  updateUser(value: any): Promise<void> {
+    const uid = this.fireauth.auth.currentUser.uid;
     return this.firestore
       .collection("users")
-      .doc(key)
+      .doc(uid)
       .update(value);
   }
 
-  deleteUser(key: string): Promise<void> {
+  deleteUser(): Promise<void> {
+    const uid = this.fireauth.auth.currentUser.uid;
     return this.firestore
       .collection("users")
-      .doc(key)
+      .doc(uid)
       .delete();
   }
 
@@ -56,5 +61,15 @@ export class UserService {
           console.log("Error: " + error);
         }
       );
+  }
+
+  addCategory(category: Category) {
+    const uid = this.fireauth.auth.currentUser.uid;
+    this.firestore
+      .collection("users")
+      .doc(uid)
+      .update({
+        //categories: firebase.firestore.
+      });
   }
 }

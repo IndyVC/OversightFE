@@ -30,11 +30,11 @@ export class CategoryService {
       .pipe(map(changes => changes.map(c => ({ ...c.payload.doc.data() }))));
   }
 
-  updateCategory(key: string, value: any): Promise<void> {
+  updateCategory(key: string, value: Category): Promise<void> {
     return this.firestore
       .collection("categories")
       .doc(key)
-      .update(value);
+      .update(Object.assign({}, value));
   }
 
   deleteCategory(key: string) {

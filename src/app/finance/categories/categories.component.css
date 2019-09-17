@@ -31,7 +31,7 @@
   background-color: white;
 }
 .currentCategory{
-  background-color:rgba(31,56,126,0.8) !important;
+  border-left:2px solid rgba(31,56,126,0.8);
 }
 .updateTotalYear {
   display: inline-block;
@@ -111,8 +111,16 @@
   position: absolute;
   bottom: 5px;
   right: 10px;
+  font-size: 18px;
+  color:#1f387e;
 }
-
+.edit{
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 18px;
+  color:#1f387e;
+}
 .form {
   display: flex;
   flex-direction: column;
@@ -143,12 +151,12 @@
 }
 
 #colorpicker{
-  margin-bottom:15px;
   border-bottom: 1px solid rgb(148,148,148);
   color: rgb(148,148,148);
-  padding-bottom:5px;
 }
-
+.own-mat-errors{
+  font-size: 12px;
+}
 .icons{
   display: flex;
   flex-direction: row;

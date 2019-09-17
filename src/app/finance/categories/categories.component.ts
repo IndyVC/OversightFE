@@ -81,10 +81,13 @@ export class CategoriesComponent implements OnInit {
     "fas fa-credit-card"
   ];
   form: FormGroup;
+  edit: FormGroup;
   public color: string;
-  public selectedIcon: string = "";
+  public selectedIconCreate: string = "";
+  public selectedIconEdit: string = "";
   public showCreate: boolean = false;
   public showCategoryList: boolean = true;
+  showEdit;
   public chartActive = 0;
   public chart = "line";
   public legend = true;
@@ -147,10 +150,17 @@ export class CategoriesComponent implements OnInit {
         this.currentCategory = this.categories[0];
       }
     }
-
-    console.log(this.categories);
+    this.showEdit = false;
+    console.log("oninit:", this.showEdit);
     this.fillGraph(new Date());
     this.form = this.fb.group({
+      name: ["", [Validators.required]],
+      type: ["", [Validators.required]],
+      icon: ["", [Validators.required]],
+      color: ["", [Validators.required]]
+    });
+    this.edit = this.fb.group({
+      id: ["", [Validators.required]],
       name: ["", [Validators.required]],
       type: ["", [Validators.required]],
       icon: ["", [Validators.required]],
@@ -270,6 +280,7 @@ export class CategoriesComponent implements OnInit {
   }
 
   showCreateCategory() {
+    this.showEdit = false;
     return this.showCreate || this.categories.length === 0;
   }
   toggleCreate() {
@@ -281,7 +292,7 @@ export class CategoriesComponent implements OnInit {
   }
   onSubmit() {
     const name = this.form.get("name").value;
-    const icon = this.selectedIcon;
+    const icon = this.selectedIconCreate;
     const color = this.form.get("color").value;
     const type = this.form.get("type").value;
     const category = new Category(name, icon, color, type);
@@ -290,19 +301,52 @@ export class CategoriesComponent implements OnInit {
     this.toggleCreate();
   }
 
+
+  toggleShowEdit() {
+    if (this.showEdit === false) {
+      this.showEdit = true;
+    } else {
+      this.showEdit = false;
+    }
+  }
+
+  onSubmitEdit() {
+    const name = this.edit.get("name").value;
+    const icon = this.selectedIconEdit;
+    const color = this.edit.get("color").value;
+    const type = this.edit.get("type").value;
+    const id = this.edit.get("id").value;
+    const category = new Category(name, icon, color, type);
+    this.categoryService.updateCategory(id, category);
+    this.toggleShowEdit();
+    console.log(this.showEdit);
+  }
+
   deleteCategory(category) {
     this.categoryService.deleteCategory(category.id);
     const index = this.categories.findIndex(cat => cat.id === category.id);
     this.categories.splice(index, 1);
     this.currentCategory = this.categories[0];
   }
+  editCategory(category: Category) {
+    this.toggleShowEdit();
+    this.edit.get("name").setValue(category.name);
+    this.selectedIconEdit = category.icon;
+    this.edit.get("color").setValue(category.color);
+    this.edit.get("type").setValue(category.type);
+    this.edit.get("id").setValue(category.id);
+  }
+
+
   changeColor(event) {
     this.color = event;
     this.form.get("color").setValue(event);
   }
   changeIcon(icon) {
-    this.selectedIcon = icon;
-    console.log(this.userService.user);
+    this.selectedIconCreate = icon;
+  }
+  changeIconEdit(icon) {
+    this.selectedIconEdit = icon;
   }
   getErrorMessage(field: string) {
     if (field === "name") {
@@ -317,9 +361,20 @@ export class CategoriesComponent implements OnInit {
       if (this.form.get("color").hasError("required")) {
         return "Kleur is verplicht.";
       }
-    } else if (field === "graph") {
-      if (this.data == null) {
-        return "Geen grafiek mogelijk.";
+    }
+  }
+  getErrorMessageEdit(field: string) {
+    if (field === "name") {
+      if (this.edit.get("name").hasError("required")) {
+        return "Naam is verplicht.";
+      }
+    } else if (field === "type") {
+      if (this.edit.get("type").hasError("required")) {
+        return "Type is verplicht.";
+      }
+    } else if (field === "color") {
+      if (this.edit.get("color").hasError("required")) {
+        return "Kleur is verplicht.";
       }
     }
   }

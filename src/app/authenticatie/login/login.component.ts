@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
         ) {
           this.openEmailNotVerifiedDialog();
         } else {
-          this.router.navigate(["transacties"]);
+          this.router.navigate(["categorieën"]);
         }
       })
       .catch(e => {

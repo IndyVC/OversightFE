@@ -9,7 +9,6 @@ import { User } from "src/app/domain/user";
   providedIn: "root"
 })
 export class AuthenticationService {
-  userData: Observable<firebase.User>;
 
   constructor(
     public angularFireAuth: AngularFireAuth,
@@ -17,7 +16,6 @@ export class AuthenticationService {
     public ngZone: NgZone,
     public userService: UserService
   ) {
-    this.userData = angularFireAuth.authState;
   }
 
   /* Sign up */
@@ -44,7 +42,9 @@ export class AuthenticationService {
   SignIn(email, password) {
     return this.angularFireAuth.auth
       .signInWithEmailAndPassword(email, password)
-      .then(result => {});
+      .then(result => {
+
+      });
   }
 
   /* Sign out */

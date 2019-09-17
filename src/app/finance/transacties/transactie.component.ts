@@ -16,6 +16,7 @@ import { NewTransactionComponent } from "../dialogs/new-transaction/new-transact
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import * as _moment from "moment";
 import { default as _rollupMoment } from "moment";
+import { UserService } from "src/app/services/user/user.service";
 
 const moment = _rollupMoment || _moment;
 
@@ -146,7 +147,8 @@ export class TransactieComponent implements OnInit {
   constructor(
     private _mock: MockService,
     private _adapter: DateAdapter<any>,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private _userService: UserService
   ) {
     console.log(this._mock.getIndy());
     this.user = this._mock.getIndy();
@@ -154,6 +156,7 @@ export class TransactieComponent implements OnInit {
     this.categories = null;
     this._adapter.setLocale("nl");
     this.onResize();
+    console.log(this._userService.getUser());
   }
 
   ngOnInit() {

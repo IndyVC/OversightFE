@@ -5,6 +5,7 @@ import { User } from "src/app/domain/user";
 import { HostListener } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { CategoryService } from "src/app/services/category/category.service";
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: "app-categories",
@@ -132,9 +133,11 @@ export class CategoriesComponent implements OnInit {
   constructor(
     private _mock: MockService,
     private _fb: FormBuilder,
-    private _categoryService: CategoryService
+    private _categoryService: CategoryService,
+    private _userService:UserService
   ) {
     this.onResize();
+    console.log(this._userService.getUser());
   }
 
   ngOnInit() {
@@ -235,11 +238,12 @@ export class CategoriesComponent implements OnInit {
     return this.error == null || this.error === "";
   }
 
-  openCreate() {
-    this.showCreate = true;
-  }
-  close() {
-    this.showCreate = false;
+  toggleCreate() {
+    if (this.showCreate) {
+      this.showCreate = false;
+    } else {
+      this.showCreate = true;
+    }
   }
   onSubmit() {
     const name = this.form.get("name").value;
@@ -248,6 +252,7 @@ export class CategoriesComponent implements OnInit {
     const type = this.form.get("type").value;
     const category = new Category(name, icon, color, type);
     this._categoryService.createCategory(category);
+    this.toggleCreate();
   }
   changeColor(event) {
     this.color = event;

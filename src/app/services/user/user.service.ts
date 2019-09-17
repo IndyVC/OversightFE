@@ -10,6 +10,8 @@ import firebase from "firebase/app";
   providedIn: "root"
 })
 export class UserService {
+  public user: User;
+
   constructor(
     private firestore: AngularFirestore,
     private fireauth: AngularFireAuth
@@ -63,13 +65,24 @@ export class UserService {
       );
   }
 
-  addCategory(category: Category) {
+  getUser() {
+    const uid = this.fireauth.auth.currentUser.uid;
+    this.firestore
+      .collection("users")
+      .doc(uid)
+      .snapshotChanges()
+      .pipe(map(changes => ({ ...changes.payload.data() })))
+      .subscribe(value => {
+        console.log(value);
+      });
+  }
+  addCategory(reference) {
     const uid = this.fireauth.auth.currentUser.uid;
     this.firestore
       .collection("users")
       .doc(uid)
       .update({
-        //categories: firebase.firestore.
+        categories: firebase.firestore.FieldValue.arrayUnion(reference)
       });
   }
 }

@@ -123,8 +123,9 @@ h1 {
 
   .button_white {
     width: unset;
-    margin-left: unset;
+    margin-left: 10%;
     margin-top: 20px;
+    width:80%;
   }
 
   .slide{

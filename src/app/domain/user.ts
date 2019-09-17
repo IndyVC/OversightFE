@@ -24,14 +24,6 @@ export class User {
     private _investments?: Investment[],
     private _loans?: Loan[]
   ) {
-    this._transactions.map(trans => Transaction.fromJSON(trans));
-    this._categories.map(cats => Category.fromJSON(cats));
-    this._goals.map(goals => Goal.fromJSON(goals));
-    this._investments.map(invs => Investment.fromJSON(invs));
-    this._loans.map(loans => Loan.fromJSON(loans));
-    this._debt = this.calculateDebt();
-    this._oversight = this.calculateOversight();
-    this._shortOversight = this.calculateShortOversight();
   }
 
   get firstname(): string {

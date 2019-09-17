@@ -82,8 +82,8 @@
           {{getErrorMessageEdit("name")}}
         </mat-error>
       </mat-form-field>
-      <span [style.color]="color" [cpPosition]="'bottom'" [cpPositionOffset]="'0%'" [cpPositionRelativeToArrow]="true"
-        [(colorPicker)]="color" (colorPickerChange)="changeColor($event)" id="colorpicker">Kies kleur!</span>
+      <span [style.color]="edit.get('color').value" [cpPosition]="'bottom'" [cpPositionOffset]="'0%'" [cpPositionRelativeToArrow]="true"
+        [(colorPicker)]="edit.get('color').value" (colorPickerChange)="changeColor($event)" id="colorpicker">Kies kleur!</span>
       <mat-error *ngIf="edit.get('color').invalid" class="own-mat-errors">
         {{getErrorMessageEdit("color")}}
       </mat-error>
@@ -93,8 +93,8 @@
       </div>
       <mat-dialog-actions>
         <button id='Toevoegen' mat-raised-button mat-primary type="submit"
-          [disabled]="edit.get('color').invalid || edit.get('name').invalid || edit.get('type').invalid || selectedIconEdit==''">Toevoegen</button>
-        <button mat-raised-button (click)="toggleShowEdit()">Annuleer</button>
+          [disabled]="edit.get('color').invalid || edit.get('name').invalid || edit.get('type').invalid || selectedIconEdit==''">Wijzig</button>
+        <button mat-raised-button (click)="toggleEdit()">Annuleer</button>
       </mat-dialog-actions>
     </form>
   </mat-card>

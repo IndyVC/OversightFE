@@ -34,10 +34,14 @@ export class CategoryService {
     return this.firestore
       .collection("categories")
       .doc(key)
-      .update(Object.assign({}, value));
+      .update(Object.assign({}, value))
+      .then(() => {
+        value.id = key;
+      });
   }
 
   deleteCategory(key: string) {
+    console.log("key: ", key);
     const document = this.firestore.collection("categories").doc(key);
     const reference = document.ref;
     return document.delete().then(() => {

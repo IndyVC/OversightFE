@@ -16,6 +16,7 @@ export class CategoriesComponent implements OnInit {
   user: User;
   currentCategory: Category;
   categories: Category[];
+  showEdit = false;
   fixedCategoriesIcons: string[] = [
     "fas fa-cat",
     "fas fa-shopping-cart",
@@ -87,7 +88,6 @@ export class CategoriesComponent implements OnInit {
   public selectedIconEdit: string = "";
   public showCreate: boolean = false;
   public showCategoryList: boolean = true;
-  showEdit;
   public chartActive = 0;
   public chart = "line";
   public legend = true;
@@ -150,8 +150,6 @@ export class CategoriesComponent implements OnInit {
         this.currentCategory = this.categories[0];
       }
     }
-    this.showEdit = false;
-    console.log("oninit:", this.showEdit);
     this.fillGraph(new Date());
     this.form = this.fb.group({
       name: ["", [Validators.required]],
@@ -280,7 +278,6 @@ export class CategoriesComponent implements OnInit {
   }
 
   showCreateCategory() {
-    this.showEdit = false;
     return this.showCreate || this.categories.length === 0;
   }
   toggleCreate() {
@@ -288,6 +285,7 @@ export class CategoriesComponent implements OnInit {
       this.showCreate = false;
     } else {
       this.showCreate = true;
+      this.showEdit = false;
     }
   }
   onSubmit() {
@@ -298,13 +296,13 @@ export class CategoriesComponent implements OnInit {
     const category = new Category(name, icon, color, type);
     this.categoryService.createCategory(category);
     this.categories.push(category);
-    this.toggleCreate();
+    this.showCreate = false;
   }
 
-
-  toggleShowEdit() {
+  toggleEdit() {
     if (this.showEdit === false) {
       this.showEdit = true;
+      this.showCreate = false;
     } else {
       this.showEdit = false;
     }
@@ -317,26 +315,31 @@ export class CategoriesComponent implements OnInit {
     const type = this.edit.get("type").value;
     const id = this.edit.get("id").value;
     const category = new Category(name, icon, color, type);
+    const index = this.categories.findIndex(cat => cat.id === id);
+    this.categories[index] = category;
     this.categoryService.updateCategory(id, category);
-    this.toggleShowEdit();
-    console.log(this.showEdit);
+    this.setCategory(category);
+    this.toggleEdit();
   }
 
+  showCategory(){
+    this.showCreate = true;
+  }
   deleteCategory(category) {
+    this.showEdit = false;
     this.categoryService.deleteCategory(category.id);
     const index = this.categories.findIndex(cat => cat.id === category.id);
     this.categories.splice(index, 1);
     this.currentCategory = this.categories[0];
   }
   editCategory(category: Category) {
-    this.toggleShowEdit();
     this.edit.get("name").setValue(category.name);
     this.selectedIconEdit = category.icon;
     this.edit.get("color").setValue(category.color);
     this.edit.get("type").setValue(category.type);
     this.edit.get("id").setValue(category.id);
+    this.toggleEdit();
   }
-
 
   changeColor(event) {
     this.color = event;

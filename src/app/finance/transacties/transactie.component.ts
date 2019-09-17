@@ -156,7 +156,7 @@ export class TransactieComponent implements OnInit {
     this.categories = null;
     this._adapter.setLocale("nl");
     this.onResize();
-    console.log(this._userService.getUser());
+    console.log(this._userService.createUserObject());
   }
 
   ngOnInit() {

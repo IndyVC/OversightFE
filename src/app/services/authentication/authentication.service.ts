@@ -9,14 +9,12 @@ import { User } from "src/app/domain/user";
   providedIn: "root"
 })
 export class AuthenticationService {
-
   constructor(
     public angularFireAuth: AngularFireAuth,
     public router: Router,
     public ngZone: NgZone,
     public userService: UserService
-  ) {
-  }
+  ) {}
 
   /* Sign up */
   // Send email verfificaiton when new user sign up
@@ -41,10 +39,7 @@ export class AuthenticationService {
   // Sign in with email/password
   SignIn(email, password) {
     return this.angularFireAuth.auth
-      .signInWithEmailAndPassword(email, password)
-      .then(result => {
-
-      });
+      .signInWithEmailAndPassword(email, password);
   }
 
   /* Sign out */

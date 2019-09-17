@@ -22,15 +22,13 @@ import { ResetPasswordComponent } from "../dialogs/reset-password/reset-password
 export class LoginComponent implements OnInit {
   login: FormGroup;
 
-
   constructor(
     private fb: FormBuilder,
     public authenticationService: AuthenticationService,
+    public userService: UserService,
     private dialog: MatDialog,
-    private router: Router,
-  ) {
-
-  }
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.login = this.fb.group({
@@ -45,13 +43,15 @@ export class LoginComponent implements OnInit {
     this.authenticationService
       .SignIn(email, password)
       .then(e => {
+        this.userService.setUid();
         if (
           this.authenticationService.angularFireAuth.auth.currentUser
             .emailVerified === false
         ) {
           this.openEmailNotVerifiedDialog();
         } else {
-          this.router.navigate(["categorieën"]);
+          this.userService
+            .createUserObject();
         }
       })
       .catch(e => {

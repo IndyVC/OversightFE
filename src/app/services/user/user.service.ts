@@ -5,24 +5,25 @@ import { map } from "rxjs/operators";
 import { Category } from "src/app/domain/category";
 import { AngularFireAuth } from "@angular/fire/auth";
 import firebase from "firebase/app";
+import { Router } from "@angular/router";
 
 @Injectable({
   providedIn: "root"
 })
 export class UserService {
   public user: User;
-
+  public uid:string;
   constructor(
     private firestore: AngularFirestore,
-    private fireauth: AngularFireAuth
+    private fireauth: AngularFireAuth,
+    private router: Router
   ) {}
 
   createUser(user: User) {
-    const uid = this.fireauth.auth.currentUser.uid;
-    console.log(uid + user);
+    console.log(this.uid + user);
     this.firestore
       .collection("users")
-      .doc(uid)
+      .doc(this.uid)
       .set(Object.assign({}, user));
   }
 
@@ -34,18 +35,16 @@ export class UserService {
   }
 
   updateUser(value: any): Promise<void> {
-    const uid = this.fireauth.auth.currentUser.uid;
     return this.firestore
       .collection("users")
-      .doc(uid)
+      .doc(this.uid)
       .update(value);
   }
 
   deleteUser(): Promise<void> {
-    const uid = this.fireauth.auth.currentUser.uid;
     return this.firestore
       .collection("users")
-      .doc(uid)
+      .doc(this.uid)
       .delete();
   }
 
@@ -65,22 +64,66 @@ export class UserService {
       );
   }
 
-  getUser() {
-    const uid = this.fireauth.auth.currentUser.uid;
-    this.firestore
-      .collection("users")
-      .doc(uid)
-      .snapshotChanges()
-      .pipe(map(changes => ({ ...changes.payload.data() })))
-      .subscribe(value => {
-        console.log(value);
+  setUid(){
+    this.uid = this.fireauth.auth.currentUser.uid;
+  }
+
+  createUserObject() {
+    return (
+      this.firestore
+        .collection("users")
+        .doc(this.uid)
+        .get()
+        .toPromise()
+        .then(val => {
+          console.log("reading all data");
+          // Collections are filled with references
+          this.user = User.fromJSON(val.data());
+          return val;
+        })
+        // References are translated to the real categories by getting the documents in firestore
+        // Category
+        .then(async val => {
+          console.log("reading categories");
+          const realCategories: Category[] = [];
+          this.user.categories = realCategories;
+          let promises = [];
+          val.data().categories.forEach(cat =>
+            promises.push(
+              new Promise(function() {
+                cat.get().then(catDoc => {
+                  realCategories.push(Category.fromJSON(catDoc.data()));
+                });
+              })
+            )
+          );
+          console.log("promises :", promises);
+          Promise.all(promises);
+          console.log("alles is gedaan");
+          return val;
+        })
+        .then(val => {
+          console.log("user is created", this.user);
+          return val;
+        })
+        .then(() => {
+        })
+    );
+  }
+
+  getUserObject(): User {
+    if (this.user) {
+      return this.user;
+    } else {
+      this.createUserObject().then(() => {
+        return this.user;
       });
+    }
   }
   addCategory(reference) {
-    const uid = this.fireauth.auth.currentUser.uid;
     this.firestore
       .collection("users")
-      .doc(uid)
+      .doc(this.uid)
       .update({
         categories: firebase.firestore.FieldValue.arrayUnion(reference)
       });

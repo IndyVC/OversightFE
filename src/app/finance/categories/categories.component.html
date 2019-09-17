@@ -1,5 +1,5 @@
 <div class="container">
-  <mat-card style="display: block" class="graph" *ngIf='chartActive===0 && smallScreen() || !smallScreen()'
+  <mat-card style="display: block" class="graph" *ngIf='(chartActive===0 && smallScreen() || !smallScreen()) && currentCategory!=null'
     (swipeleft)=swipeLeft() (swiperight)=swipeRight()>
     <p class="name">{{currentCategory.name}}</p>
     <mat-icon [ngStyle]="{'color': currentCategory.color, 'background-color':'#f6f5f6'}" class="icon">
@@ -55,38 +55,37 @@
       </div>
 
       <mat-dialog-actions>
-        <button id='Toevoegen' mat-raised-button mat-primary type="submit">Toevoegen</button>
+        <button id='Toevoegen' mat-raised-button mat-primary type="submit" [disabled]="form.get('color').invalid || form.get('name').invalid || form.get('type').invalid || selectedIcon==''">Toevoegen</button>
         <button mat-raised-button (click)="toggleCreate()">Annuleer</button>
       </mat-dialog-actions>
     </form>
   </mat-card>
 
-  <mat-card class="matcardNoPaddingTop">
+  <mat-card class="matcardNoPaddingTop" *ngIf="showCategoryList">
     <p class="tab">Categorieën</p>
     <div class="metadata">
       <p>Oversight</p>
-      <p> € {{getUser().calculateShortOversight()}}</p>
+      <p> € {{calculateShortOversight()}}</p>
       <button class="addCategory" (click)='toggleCreate()'>Voeg een categorie toe</button>
       <div class="error" *ngIf="error!==''">
         <p>{{error}}</p>
       </div>
     </div>
 
-    <cdk-virtual-scroll-viewport class="categories" itemSize="100" style="height: 240px">
-      <ng-container *cdkVirtualFor='let category of getCategories(); index as i'>
+    <div class="categories">
+      <div *ngFor="let category of getCategories(); index as i">
         <div class="category" [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}"
           (click)="setCategory(category)">
-          <mat-icon [ngStyle]="{'color': category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}" class="icon">
-            {{category.icon}}
-          </mat-icon>
+          <i [ngStyle]="{'color': category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}" class=" {{category.icon}} icon">
+          </i>
           <p class="name">{{category.name}}</p>
           <p class="type">{{category.type}}</p>
           <button mat-icon-button class="clear">
             <mat-icon>clear</mat-icon>
           </button>
         </div>
-      </ng-container>
-    </cdk-virtual-scroll-viewport>
+      </div>
+    </div>
   </mat-card>
 
   <app-menu></app-menu>

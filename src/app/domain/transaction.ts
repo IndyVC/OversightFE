@@ -10,7 +10,6 @@ export class Transaction {
     private _account: BankAccount,
     private _ID?: number
   ) {
-    this._category = Category.fromJSON(this._category);
   }
 
   get ID(): number {

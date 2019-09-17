@@ -9,103 +9,30 @@ import { BankAccount } from "./account";
 import { FormGroup } from "@angular/forms";
 
 export class User {
-  private _oversight?: number;
-  private _debt?: number;
-  private _shortOversight?: number;
+  public oversight?: number;
+  public debt?: number;
+  public shortOversight?: number;
   constructor(
-    private _firstname: string,
-    private _lastname: string,
-    private _email: string,
-    private _active: boolean,
-    private _accounts?: BankAccount[],
-    private _transactions?: Transaction[],
-    private _categories?: Category[],
-    private _goals?: Goal[],
-    private _investments?: Investment[],
-    private _loans?: Loan[]
-  ) {
-  }
-
-  get firstname(): string {
-    return this._firstname;
-  }
-  set firstname(value: string) {
-    this._firstname = value;
-  }
-  get lastname(): string {
-    return this._lastname;
-  }
-  set lastname(value: string) {
-    this._lastname = value;
-  }
-  get email(): string {
-    return this._email;
-  }
-  set email(value: string) {
-    this._email = value;
-  }
-  get active(): boolean {
-    return this._active;
-  }
-  set active(value: boolean) {
-    this._active = value;
-  }
-  get oversight(): number {
-    return this._oversight;
-  }
-  get debt(): number {
-    return this._debt;
-  }
-  get accounts(): BankAccount[] {
-    return this._accounts;
-  }
-  set accounts(value: BankAccount[]) {
-    this._accounts = value;
-  }
-  get transactions(): Transaction[] {
-    return this._transactions;
-  }
-  set transactions(value: Transaction[]) {
-    this._transactions = value;
-  }
-  get categories(): Category[] {
-    return this._categories;
-  }
-  set categories(value: Category[]) {
-    this._categories = value;
-  }
-  get goals(): Goal[] {
-    return this._goals;
-  }
-  set goals(value: Goal[]) {
-    this._goals = value;
-  }
-  get investments(): Investment[] {
-    return this._investments;
-  }
-  set investments(value: Investment[]) {
-    this._investments = value;
-  }
-  get loans(): Loan[] {
-    return this._loans;
-  }
-  set loans(value: Loan[]) {
-    this._loans = value;
-  }
+    public firstname: string,
+    public lastname: string,
+    public email: string,
+    public active: boolean,
+    public accounts?: BankAccount[],
+    public transactions?: Transaction[],
+    public categories?: Category[],
+    public goals?: Goal[],
+    public investments?: Investment[],
+    public loans?: Loan[]
+  ) {}
 
   public static fromJSON(json: any): User {
-    return new User(
+    const user: User = new User(
       json.firstname,
       json.lastname,
       json.email,
-      json.active,
-      json.accounts,
-      json.transactions,
-      json.categories,
-      json.goals,
-      json.investment,
-      json.loans
+      json.active
     );
+    return user;
   }
 
   public calculateDebt(): number {
@@ -120,42 +47,50 @@ export class User {
   }
   public calculateOversight(): number {
     let oversight = 0;
-
-    this._accounts.map(account => {
-      oversight += account.balance;
-    });
-
-    this.investments.map(investment => {
-      oversight += investment.current;
-    });
+    if (this.accounts) {
+      this.accounts.map(account => {
+        oversight += account.balance;
+      });
+    }
+    if (this.investments) {
+      this.investments.map(investment => {
+        oversight += investment.current;
+      });
+    }
 
     return oversight - this.debt;
   }
 
   public calculateShortOversight(): number {
     let shortOversight = 0;
-    this.getIncomesFromMonth(new Date()).forEach(
-      income => (shortOversight += income.amount)
-    );
-    this.getOutcomesFromMonth(new Date()).forEach(
-      outcome => (shortOversight -= outcome.amount)
-    );
+    if (this.getIncomesFromMonth(new Date())) {
+      this.getIncomesFromMonth(new Date()).forEach(
+        income => (shortOversight += income.amount)
+      );
+    }
+    if (this.getOutcomesFromMonth(new Date())) {
+      this.getOutcomesFromMonth(new Date()).forEach(
+        outcome => (shortOversight -= outcome.amount)
+      );
+    }
 
     return shortOversight;
   }
 
   getAllTransactions(): Transaction[] {
-    return this.transactions.sort((recent, old) => {
-      if (recent.date.getFullYear() !== old.date.getFullYear()) {
-        return recent.date.getFullYear() - old.date.getFullYear();
-      } else if (recent.date.getMonth() !== old.date.getMonth()) {
-        return recent.date.getMonth() - old.date.getMonth();
-      } else if (recent.date.getDate() !== old.date.getDate()) {
-        return recent.date.getDate() - old.date.getDate();
-      } else if (recent.date.getTime() !== old.date.getTime()) {
-        return recent.date.getMilliseconds() - old.date.getMilliseconds();
-      }
-    });
+    if (this.transactions) {
+      return this.transactions.sort((recent, old) => {
+        if (recent.date.getFullYear() !== old.date.getFullYear()) {
+          return recent.date.getFullYear() - old.date.getFullYear();
+        } else if (recent.date.getMonth() !== old.date.getMonth()) {
+          return recent.date.getMonth() - old.date.getMonth();
+        } else if (recent.date.getDate() !== old.date.getDate()) {
+          return recent.date.getDate() - old.date.getDate();
+        } else if (recent.date.getTime() !== old.date.getTime()) {
+          return recent.date.getMilliseconds() - old.date.getMilliseconds();
+        }
+      });
+    }
   }
   getTransactionById(ID: number): Transaction {
     return this.transactions.find(trans => trans.ID === ID);
@@ -164,14 +99,18 @@ export class User {
     return this.transactions.filter(trans => trans.name === name);
   }
   getAllOutcomes(): Transaction[] {
-    return this.getAllTransactions()
-      .filter(trans => trans instanceof Outcome)
-      .reverse();
+    if (this.getAllTransactions()) {
+      return this.getAllTransactions()
+        .filter(trans => trans instanceof Outcome)
+        .reverse();
+    }
   }
   getAllIncomes(): Transaction[] {
-    return this.getAllTransactions()
-      .filter(trans => trans instanceof Income)
-      .reverse();
+    if (this.getAllTransactions()) {
+      return this.getAllTransactions()
+        .filter(trans => trans instanceof Income)
+        .reverse();
+    }
   }
   createOutcome(form: FormGroup) {
     return null;
@@ -193,55 +132,71 @@ export class User {
     return null;
   }
   getTransactionsFromMonth(date: Date) {
-    return this.getAllTransactions().filter(
-      trans =>
-        trans.date.getMonth() === date.getMonth() &&
-        trans.date.getFullYear() === trans.date.getFullYear()
-    );
+    if (this.getAllTransactions()) {
+      return this.getAllTransactions().filter(
+        trans =>
+          trans.date.getMonth() === date.getMonth() &&
+          trans.date.getFullYear() === trans.date.getFullYear()
+      );
+    }
   }
 
   getIncomesFromMonth(date: Date) {
-    return this.getAllIncomes().filter(
-      trans =>
-        trans.date.getMonth() === date.getMonth() &&
-        trans.date.getFullYear() === trans.date.getFullYear()
-    );
+    if (this.getAllIncomes()) {
+      return this.getAllIncomes().filter(
+        trans =>
+          trans.date.getMonth() === date.getMonth() &&
+          trans.date.getFullYear() === trans.date.getFullYear()
+      );
+    }
   }
   getIncomesFromYear(date: Date) {
-    return this.getAllIncomes().filter(
-      trans => trans.date.getFullYear() === trans.date.getFullYear()
-    );
+    if (this.getAllTransactions()) {
+      return this.getAllIncomes().filter(
+        trans => trans.date.getFullYear() === trans.date.getFullYear()
+      );
+    }
   }
   getOutcomesFromMonth(date: Date) {
-    return this.getAllOutcomes().filter(
-      trans =>
-        trans.date.getMonth() === date.getMonth() &&
-        trans.date.getFullYear() === date.getFullYear()
-    );
+    if (this.getAllOutcomes()) {
+      return this.getAllOutcomes().filter(
+        trans =>
+          trans.date.getMonth() === date.getMonth() &&
+          trans.date.getFullYear() === date.getFullYear()
+      );
+    }
   }
 
   getOutcomesFromYear(date: Date) {
-    return this.getAllOutcomes().filter(
-      trans => trans.date.getFullYear() === trans.date.getFullYear()
-    );
+    if (this.getAllOutcomes()) {
+      return this.getAllOutcomes().filter(
+        trans => trans.date.getFullYear() === trans.date.getFullYear()
+      );
+    }
   }
 
   calculateTotalSpendOnCategory(category: Category) {
-    const date:Date = new Date();
-    const transactions: Transaction[] = this.getAllTransactions().filter(
-      t =>
-        (t.category.type === category.type && t.category.name === category.name) &&
-        (t.date.getMonth() === date.getMonth() && t.date.getFullYear() === date.getFullYear())
-    );
-    let sum = 0;
-    transactions.forEach(e => (sum += e.amount));
-    return sum;
+    const date: Date = new Date();
+    if (this.getAllTransactions()) {
+      const transactions: Transaction[] = this.getAllTransactions().filter(
+        t =>
+          t.category.type === category.type &&
+          t.category.name === category.name &&
+          (t.date.getMonth() === date.getMonth() &&
+            t.date.getFullYear() === date.getFullYear())
+      );
+      let sum = 0;
+      transactions.forEach(e => (sum += e.amount));
+      return sum;
+    }
   }
-  calculateSpendThisMonthOnCategory(category:Category){
-    const transactions: Transaction[] = this.getAllTransactions().filter(
-      t =>
-        t.category.type === category.type && t.category.name === category.name
-    );
+  calculateSpendThisMonthOnCategory(category: Category) {
+    if (this.getAllTransactions()) {
+      const transactions: Transaction[] = this.getAllTransactions().filter(
+        t =>
+          t.category.type === category.type && t.category.name === category.name
+      );
+    }
   }
   getAllCategories(): Category[] {
     return this.categories;

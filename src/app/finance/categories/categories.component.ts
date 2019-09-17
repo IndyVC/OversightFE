@@ -5,7 +5,7 @@ import { User } from "src/app/domain/user";
 import { HostListener } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { CategoryService } from "src/app/services/category/category.service";
-import { UserService } from 'src/app/services/user/user.service';
+import { UserService } from "src/app/services/user/user.service";
 
 @Component({
   selector: "app-categories",
@@ -13,6 +13,7 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ["./categories.component.css"]
 })
 export class CategoriesComponent implements OnInit {
+  user: User;
   currentCategory: Category;
   categories: Category[];
   fixedCategoriesIcons: string[] = [
@@ -79,11 +80,11 @@ export class CategoriesComponent implements OnInit {
     "fas fa-coins",
     "fas fa-credit-card"
   ];
-  user: User;
   form: FormGroup;
   public color: string;
-  public selectedIcon: string = this.fixedCategoriesIcons[0];
-  showCreate: boolean = false;
+  public selectedIcon: string = "";
+  public showCreate: boolean = false;
+  public showCategoryList: boolean = true;
   public chartActive = 0;
   public error = "";
   public chart = "line";
@@ -131,19 +132,20 @@ export class CategoriesComponent implements OnInit {
   }
 
   constructor(
-    private _mock: MockService,
     private _fb: FormBuilder,
     private _categoryService: CategoryService,
-    private _userService:UserService
+    private _userService: UserService
   ) {
     this.onResize();
-    console.log(this._userService.getUser());
   }
 
   ngOnInit() {
-    this.categories = this._mock.getIndy().categories;
-    this.currentCategory = this.categories[0];
-    this.user = this._mock.getIndy();
+    console.log("INIT");
+    this.user = this._userService.getUserObject();
+    if (this.user) {
+      this.categories = this.user.categories;
+    }
+    console.log(this.categories);
     this.fillGraph(new Date());
     this.form = this._fb.group({
       name: ["", [Validators.required]],
@@ -153,12 +155,23 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
-  getCategories(): Category[] {
+  getUser() {
+    if (this.user) {
+      return this.user;
+    }
+  }
+  getCategories() {
     return this.categories;
   }
-
+  calculateShortOversight() {
+    if (this.user) {
+      return this.user.calculateShortOversight();
+    }
+  }
   calculateTotalSpendOnCategory(): number {
-    return this.user.calculateTotalSpendOnCategory(this.currentCategory);
+    if (this.user) {
+      return this.user.calculateTotalSpendOnCategory(this.currentCategory);
+    }
   }
   setCategory(category) {
     this.currentCategory = category;
@@ -185,37 +198,40 @@ export class CategoriesComponent implements OnInit {
       "November",
       "December"
     ];
-    this.user.getIncomesFromYear(newDate).forEach(trans => {
-      if (
-        trans.category.name === this.currentCategory.name &&
-        trans.category.type === this.currentCategory.type
-      ) {
-        const nrMonth = trans.date.getMonth();
-        transactions[nrMonth] += trans.amount;
+    if (this.user) {
+      if (this.user.getIncomesFromYear(newDate)) {
+        this.user.getIncomesFromYear(newDate).forEach(trans => {
+          if (
+            trans.category.name === this.currentCategory.name &&
+            trans.category.type === this.currentCategory.type
+          ) {
+            const nrMonth = trans.date.getMonth();
+            transactions[nrMonth] += trans.amount;
+          }
+        });
       }
-    });
 
-    this.user.getOutcomesFromYear(newDate).forEach(trans => {
-      if (
-        trans.category.name === this.currentCategory.name &&
-        trans.category.type === this.currentCategory.type
-      ) {
-        const nrMonth = trans.date.getMonth();
-        transactions[nrMonth] += trans.amount;
+      if (this.user.getOutcomesFromYear(newDate)) {
+        this.user.getOutcomesFromYear(newDate).forEach(trans => {
+          if (
+            trans.category.name === this.currentCategory.name &&
+            trans.category.type === this.currentCategory.type
+          ) {
+            const nrMonth = trans.date.getMonth();
+            transactions[nrMonth] += trans.amount;
+          }
+        });
+        transactions.length === 0
+          ? (this.error = "Er zijn geen transacties voor deze opties")
+          : (this.error = "");
+        this.data = [
+          {
+            data: transactions,
+            label: "Transacties"
+          }
+        ];
       }
-    });
-    transactions.length === 0
-      ? (this.error = "Er zijn geen transacties voor deze opties")
-      : (this.error = "");
-    this.data = [
-      {
-        data: transactions,
-        label: "Transacties"
-      }
-    ];
-  }
-  getUser() {
-    return this.user;
+    }
   }
   updateTotalYear(event) {
     console.log(new Date("01-01-" + event.value));
@@ -252,6 +268,7 @@ export class CategoriesComponent implements OnInit {
     const type = this.form.get("type").value;
     const category = new Category(name, icon, color, type);
     this._categoryService.createCategory(category);
+    this.categories.push(category);
     this.toggleCreate();
   }
   changeColor(event) {
@@ -260,6 +277,7 @@ export class CategoriesComponent implements OnInit {
   }
   changeIcon(icon) {
     this.selectedIcon = icon;
+    console.log(this._userService.user);
   }
   getErrorMessage(field: string) {
     if (field === "name") {

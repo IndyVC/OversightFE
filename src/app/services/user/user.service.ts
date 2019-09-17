@@ -12,7 +12,7 @@ import { Router } from "@angular/router";
 })
 export class UserService {
   public user: User;
-  public uid:string;
+  public uid: string;
   constructor(
     private firestore: AngularFirestore,
     private fireauth: AngularFireAuth,
@@ -20,10 +20,10 @@ export class UserService {
   ) {}
 
   createUser(user: User) {
-    console.log(this.uid + user);
+    console.log(this.fireauth.auth.currentUser.uid + user);
     this.firestore
       .collection("users")
-      .doc(this.uid)
+      .doc(this.fireauth.auth.currentUser.uid)
       .set(Object.assign({}, user));
   }
 
@@ -64,7 +64,7 @@ export class UserService {
       );
   }
 
-  setUid(){
+  setUid() {
     this.uid = this.fireauth.auth.currentUser.uid;
   }
 
@@ -88,15 +88,20 @@ export class UserService {
           const realCategories: Category[] = [];
           this.user.categories = realCategories;
           let promises = [];
-          val.data().categories.forEach(cat =>
-            promises.push(
-              new Promise(function() {
-                cat.get().then(catDoc => {
-                  realCategories.push(Category.fromJSON(catDoc.data()));
-                });
-              })
-            )
-          );
+          if (val.data().categories) {
+            val.data().categories.forEach(cat =>
+              promises.push(
+                new Promise(function() {
+                  cat.get().then(catDoc => {
+                    const cat: Category = Category.fromJSON(catDoc.data());
+                    cat.id = catDoc.id;
+                    realCategories.push(cat);
+                  });
+                })
+              )
+            );
+          }
+
           console.log("promises :", promises);
           Promise.all(promises);
           console.log("alles is gedaan");
@@ -106,8 +111,7 @@ export class UserService {
           console.log("user is created", this.user);
           return val;
         })
-        .then(() => {
-        })
+        .then(() => {})
     );
   }
 
@@ -126,6 +130,15 @@ export class UserService {
       .doc(this.uid)
       .update({
         categories: firebase.firestore.FieldValue.arrayUnion(reference)
+      });
+  }
+
+  removeCategory(reference){
+    this.firestore
+      .collection('users')
+      .doc(this.uid)
+      .update({
+        categories: firebase.firestore.FieldValue.arrayRemove(reference)
       });
   }
 }

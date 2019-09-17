@@ -86,11 +86,11 @@ export class CategoriesComponent implements OnInit {
   public showCreate: boolean = false;
   public showCategoryList: boolean = true;
   public chartActive = 0;
-  public error = "";
   public chart = "line";
   public legend = true;
   public labels;
   public data;
+  public error = "";
   public options = {
     scaleShowVerticalLines: false,
     responsive: true,
@@ -132,22 +132,25 @@ export class CategoriesComponent implements OnInit {
   }
 
   constructor(
-    private _fb: FormBuilder,
-    private _categoryService: CategoryService,
-    private _userService: UserService
+    private fb: FormBuilder,
+    private categoryService: CategoryService,
+    private userService: UserService
   ) {
     this.onResize();
   }
 
   ngOnInit() {
-    console.log("INIT");
-    this.user = this._userService.getUserObject();
+    this.user = this.userService.getUserObject();
     if (this.user) {
       this.categories = this.user.categories;
+      if (this.categories) {
+        this.currentCategory = this.categories[0];
+      }
     }
+
     console.log(this.categories);
     this.fillGraph(new Date());
-    this.form = this._fb.group({
+    this.form = this.fb.group({
       name: ["", [Validators.required]],
       type: ["", [Validators.required]],
       icon: ["", [Validators.required]],
@@ -169,9 +172,13 @@ export class CategoriesComponent implements OnInit {
     }
   }
   calculateTotalSpendOnCategory(): number {
+    let number: number = 0;
     if (this.user) {
-      return this.user.calculateTotalSpendOnCategory(this.currentCategory);
+      if (this.user.calculateTotalSpendOnCategory(this.currentCategory)) {
+        number = this.user.calculateTotalSpendOnCategory(this.currentCategory);
+      }
     }
+    return number;
   }
   setCategory(category) {
     this.currentCategory = category;
@@ -183,7 +190,7 @@ export class CategoriesComponent implements OnInit {
     if (date.getFullYear() !== 1970) {
       newDate = date;
     }
-    const transactions = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    const transactions = [];
     this.labels = [
       "Januari",
       "Februari",
@@ -221,9 +228,6 @@ export class CategoriesComponent implements OnInit {
             transactions[nrMonth] += trans.amount;
           }
         });
-        transactions.length === 0
-          ? (this.error = "Er zijn geen transacties voor deze opties")
-          : (this.error = "");
         this.data = [
           {
             data: transactions,
@@ -232,6 +236,9 @@ export class CategoriesComponent implements OnInit {
         ];
       }
     }
+    transactions.length === 0
+      ? (this.error = "Er zijn geen transacties voor deze opties")
+      : (this.error = "");
   }
   updateTotalYear(event) {
     console.log(new Date("01-01-" + event.value));
@@ -254,6 +261,17 @@ export class CategoriesComponent implements OnInit {
     return this.error == null || this.error === "";
   }
 
+  showListCategories() {
+    if (this.categories.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  showCreateCategory() {
+    return this.showCreate || this.categories.length === 0;
+  }
   toggleCreate() {
     if (this.showCreate) {
       this.showCreate = false;
@@ -267,9 +285,16 @@ export class CategoriesComponent implements OnInit {
     const color = this.form.get("color").value;
     const type = this.form.get("type").value;
     const category = new Category(name, icon, color, type);
-    this._categoryService.createCategory(category);
+    this.categoryService.createCategory(category);
     this.categories.push(category);
     this.toggleCreate();
+  }
+
+  deleteCategory(category) {
+    this.categoryService.deleteCategory(category.id);
+    const index = this.categories.findIndex(cat => cat.id === category.id);
+    this.categories.splice(index, 1);
+    this.currentCategory = this.categories[0];
   }
   changeColor(event) {
     this.color = event;
@@ -277,7 +302,7 @@ export class CategoriesComponent implements OnInit {
   }
   changeIcon(icon) {
     this.selectedIcon = icon;
-    console.log(this._userService.user);
+    console.log(this.userService.user);
   }
   getErrorMessage(field: string) {
     if (field === "name") {
@@ -291,6 +316,10 @@ export class CategoriesComponent implements OnInit {
     } else if (field === "color") {
       if (this.form.get("color").hasError("required")) {
         return "Kleur is verplicht.";
+      }
+    } else if (field === "graph") {
+      if (this.data == null) {
+        return "Geen grafiek mogelijk.";
       }
     }
   }

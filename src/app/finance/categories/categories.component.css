@@ -20,14 +20,19 @@
 .matcardNoPaddingTop {
   padding-top: 0px;
 }
-
+.categories{
+  max-height:50vh;
+  overflow-y: auto;
+}
 .category,
 .categoryShowbox {
   height: 80px;
   position: relative;
   background-color: white;
 }
-
+.currentCategory{
+  background-color:rgba(31,56,126,0.8) !important;
+}
 .updateTotalYear {
   display: inline-block;
   text-align: center;

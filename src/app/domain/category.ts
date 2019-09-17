@@ -1,6 +1,7 @@
-import { Transaction } from './transaction';
+import { Transaction } from "./transaction";
 
 export class Category {
+  public id:string;
   constructor(
     public name: string,
     public icon: string,
@@ -8,7 +9,7 @@ export class Category {
     public type: string
   ) {}
 
-  public static fromJSON(json:any){
-      return new Category(json.name,json.icon,json.color,json.type);
+  public static fromJSON(json: any) {
+    return new Category(json.name, json.icon, json.color, json.type);
   }
 }

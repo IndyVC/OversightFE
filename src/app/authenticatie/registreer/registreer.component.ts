@@ -40,11 +40,13 @@ export class RegistreerComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log("ONCE");
     const email = this.register.get("email").value;
     const password = this.register.get("password").value;
     this.authService
       .SignUp(email, password, this.mapFormGroupToUser(this.register))
       .catch(e => {
+        console.log(e);
         this.openUsedEmailDialog();
       });
   }

@@ -2,14 +2,13 @@
   <mat-card style="display: block" class="graph" *ngIf='(chartActive===0 && smallScreen() || !smallScreen()) && currentCategory!=null'
     (swipeleft)=swipeLeft() (swiperight)=swipeRight()>
     <p class="name">{{currentCategory.name}}</p>
-    <mat-icon [ngStyle]="{'color': currentCategory.color, 'background-color':'#f6f5f6'}" class="icon">
-      {{currentCategory.icon}}
-    </mat-icon>
+    <i [ngStyle]="{'color': currentCategory.color, 'background-color':'#f6f5f6'}" class="icon  {{currentCategory.icon}}">
+    </i>
     <p class="type">Totaal uitgegeven deze maand: <br> € {{calculateTotalSpendOnCategory()}}</p>
   </mat-card>
 
   <mat-card style="display: block" class="graph matcardNoPaddingTop"
-    *ngIf='chartActive===1 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft() (swiperight)=swipeRight()
+    *ngIf='(chartActive===1 && smallScreen() || !smallScreen())' (swipeleft)=swipeLeft() (swiperight)=swipeRight()
     id="totalYearChart">
     <p class="tab">Jaarlijks totaaloverzicht</p>
     <mat-form-field class="updateTotalYear">
@@ -21,12 +20,12 @@
       </mat-select>
     </mat-form-field>
     <canvas baseChart [datasets]="data" [labels]="labels" [options]="options" [legend]="legend" [chartType]="chart"
-      [colors]="chartColors">
+      [colors]="chartColors" *ngIf="noError()">
     </canvas>
     <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
   </mat-card>
 
-  <mat-card *ngIf='showCreate' class="graph matcardNoPaddingTop">
+  <mat-card *ngIf='showCreateCategory()' class="graph matcardNoPaddingTop">
     <p class='tab'>Categorie aanmaken</p>
     <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
       <mat-radio-group aria-label="Select an option" formControlName="type">
@@ -61,26 +60,23 @@
     </form>
   </mat-card>
 
-  <mat-card class="matcardNoPaddingTop" *ngIf="showCategoryList">
+  <mat-card class="matcardNoPaddingTop" *ngIf="showListCategories()">
     <p class="tab">Categorieën</p>
     <div class="metadata">
       <p>Oversight</p>
       <p> € {{calculateShortOversight()}}</p>
       <button class="addCategory" (click)='toggleCreate()'>Voeg een categorie toe</button>
-      <div class="error" *ngIf="error!==''">
-        <p>{{error}}</p>
-      </div>
     </div>
 
     <div class="categories">
       <div *ngFor="let category of getCategories(); index as i">
-        <div class="category" [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}"
+        <div class="category {{category.id===currentCategory.id?'currentCategory':''}}" [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}"
           (click)="setCategory(category)">
           <i [ngStyle]="{'color': category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}" class=" {{category.icon}} icon">
           </i>
           <p class="name">{{category.name}}</p>
           <p class="type">{{category.type}}</p>
-          <button mat-icon-button class="clear">
+          <button mat-icon-button class="clear" (click)="deleteCategory(category)">
             <mat-icon>clear</mat-icon>
           </button>
         </div>

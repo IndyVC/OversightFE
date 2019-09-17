@@ -252,8 +252,12 @@ export class User {
 
   getAllYears(): number[] {
     let years = new Set<number>();
-    this.getAllTransactions().map(trans => years.add(trans.date.getFullYear()));
-    return Array.from(years.values());
+    if (this.getAllTransactions()) {
+      this.getAllTransactions().map(trans =>
+        years.add(trans.date.getFullYear())
+      );
+      return Array.from(years.values());
+    }
   }
 
   getAllPeriods(): string[] {

@@ -128,6 +128,7 @@ export class CategoriesComponent implements OnInit {
   ];
   public screenHeight: any;
   public screenWidth: any;
+
   @HostListener("window:resize", ["$event"])
   onResize(event?) {
     this.screenHeight = window.innerHeight;
@@ -166,14 +167,6 @@ export class CategoriesComponent implements OnInit {
     });
   }
 
-  getUser() {
-    if (this.user) {
-      return this.user;
-    }
-  }
-  getCategories() {
-    return this.categories;
-  }
   calculateShortOversight() {
     if (this.user) {
       return this.user.calculateShortOversight();
@@ -187,10 +180,6 @@ export class CategoriesComponent implements OnInit {
       }
     }
     return number;
-  }
-  setCategory(category) {
-    this.currentCategory = category;
-    this.fillGraph(new Date());
   }
 
   fillGraph(date: Date) {
@@ -248,46 +237,7 @@ export class CategoriesComponent implements OnInit {
       ? (this.error = "Er zijn geen transacties voor deze opties")
       : (this.error = "");
   }
-  updateTotalYear(event) {
-    console.log(new Date("01-01-" + event.value));
-    this.fillGraph(new Date(event.value));
-  }
-  smallScreen() {
-    return this.screenWidth < 1200;
-  }
-  swipeLeft() {
-    this.chartActive = (this.chartActive + 1) % 2;
-  }
-  swipeRight() {
-    this.chartActive =
-      this.chartActive - 1 < 0
-        ? (this.chartActive = 1)
-        : (this.chartActive -= 1);
-  }
 
-  noError() {
-    return this.error == null || this.error === "";
-  }
-
-  showListCategories() {
-    if (this.categories.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  showCreateCategory() {
-    return this.showCreate || this.categories.length === 0;
-  }
-  toggleCreate() {
-    if (this.showCreate) {
-      this.showCreate = false;
-    } else {
-      this.showCreate = true;
-      this.showEdit = false;
-    }
-  }
   onSubmit() {
     const name = this.form.get("name").value;
     const icon = this.selectedIconCreate;
@@ -297,15 +247,6 @@ export class CategoriesComponent implements OnInit {
     this.categoryService.createCategory(category);
     this.categories.push(category);
     this.showCreate = false;
-  }
-
-  toggleEdit() {
-    if (this.showEdit === false) {
-      this.showEdit = true;
-      this.showCreate = false;
-    } else {
-      this.showEdit = false;
-    }
   }
 
   onSubmitEdit() {
@@ -322,9 +263,46 @@ export class CategoriesComponent implements OnInit {
     this.toggleEdit();
   }
 
-  showCategory(){
-    this.showCreate = true;
+  toggleCreate() {
+    if (this.showCreate) {
+      this.showCreate = false;
+    } else {
+      this.showCreate = true;
+      this.showEdit = false;
+    }
   }
+
+  toggleEdit() {
+    if (this.showEdit === false) {
+      this.showEdit = true;
+      this.showCreate = false;
+    } else {
+      this.showEdit = false;
+    }
+  }
+
+  showCategory() {
+    this.showCreate = true;
+    this.showEdit = false;
+  }
+
+  showListCategories() {
+    if (this.categories.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  showCreateCategory() {
+    return this.showCreate || this.categories.length === 0;
+  }
+
+  updateTotalYear(event) {
+    console.log(new Date("01-01-" + event.value));
+    this.fillGraph(new Date(event.value));
+  }
+
   deleteCategory(category) {
     this.showEdit = false;
     this.categoryService.deleteCategory(category.id);
@@ -351,6 +329,16 @@ export class CategoriesComponent implements OnInit {
   changeIconEdit(icon) {
     this.selectedIconEdit = icon;
   }
+
+  getUser() {
+    if (this.user) {
+      return this.user;
+    }
+  }
+  getCategories() {
+    return this.categories;
+  }
+
   getErrorMessage(field: string) {
     if (field === "name") {
       if (this.form.get("name").hasError("required")) {
@@ -366,6 +354,7 @@ export class CategoriesComponent implements OnInit {
       }
     }
   }
+
   getErrorMessageEdit(field: string) {
     if (field === "name") {
       if (this.edit.get("name").hasError("required")) {
@@ -380,5 +369,27 @@ export class CategoriesComponent implements OnInit {
         return "Kleur is verplicht.";
       }
     }
+  }
+
+  setCategory(category) {
+    this.currentCategory = category;
+    this.fillGraph(new Date());
+  }
+
+  smallScreen() {
+    return this.screenWidth < 1200;
+  }
+  swipeLeft() {
+    this.chartActive = (this.chartActive + 1) % 2;
+  }
+  swipeRight() {
+    this.chartActive =
+      this.chartActive - 1 < 0
+        ? (this.chartActive = 1)
+        : (this.chartActive -= 1);
+  }
+
+  noError() {
+    return this.error == null || this.error === "";
   }
 }

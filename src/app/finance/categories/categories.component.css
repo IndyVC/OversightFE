@@ -5,23 +5,24 @@
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   margin-top: 100px;
 }
-.container_lg{
+
+.container_lg {
   display: none;
 }
+
 .graph {
   background-color: white;
   margin-bottom: 20px;
 }
 
-.graphTitel {
-  text-align: center;
-  margin-top: 5px;
-  color: #1f387e;
+.matcardNoPadding{
+  padding: 0px !important;
 }
 
-.matcardNoPaddingTop {
-  padding-top: 0px;
+.matcardNoPaddingTop{
+  padding-top: 0px !important;
 }
+
 
 .categories {
   max-height: 50vh;
@@ -99,19 +100,20 @@
 
 .name {
   position: absolute;
-
   left: 70px;
   font-weight: bold;
   top: 20px;
   color: #1f387e;
 }
 
-#name{
-  left:80px;
+#name {
+  left: 80px;
 }
-#type{
-  left:80px;
+
+#type {
+  left: 80px;
 }
+
 .type {
   position: absolute;
   left: 70px;
@@ -152,7 +154,7 @@
   margin-bottom: 20px;
 }
 
-#Toevoegen {
+.toevoegen {
   margin-right: 10px;
 }
 
@@ -177,28 +179,39 @@
 .icons {
   display: flex;
   flex-direction: row;
-  overflow:auto;
+  overflow: auto;
   flex-wrap: nowrap;
   margin-bottom: 15px;
+}
+
+.noGraph {
+  padding: 50px;
+  text-align: center;
 }
 
 .selectedIcon {
   background-color: #f6f5f6 !important;
 }
+.mat-dialog-actions{
+  margin-top:10px;
+}
 @media screen and (min-width:560px) {
-  .container{
-    margin-top:20px;
+  .container {
+    margin-top: 20px;
   }
-  .tabletContainer{
-    margin-left:250px;
+
+  .tabletContainer {
+    margin-left: 250px;
   }
 }
+
 @media screen and (min-width: 1000px) {
   .container {
     display: none;
   }
-  .tabletContainer{
-    margin-left:unset;
+
+  .tabletContainer {
+    margin-left: unset;
   }
 
   .container_lg {
@@ -229,7 +242,7 @@
     margin-left: 10vw;
     margin-top: 10vh;
     border-radius: 20px 0 0 20px;
-    padding-right:1px;
+    padding-right: 1px;
   }
 
   .content_right {
@@ -241,19 +254,21 @@
     border-radius: 0 20px 20px 0;
 
   }
-  .list{
-    margin-left:210px;
-    right:10px;
-    top:10px;
+
+  .list {
+    margin-left: 210px;
+    right: 10px;
+    top: 10px;
   }
-  .categories{
+
+  .categories {
     max-height: 60vh;
   }
 
-  .dash{
-    left:1vw;
-    top:10px;
-    width:30vw;
+  .dash {
+    left: 1vw;
+    top: 10px;
+    width: 30vw;
   }
 
 }

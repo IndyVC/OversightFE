@@ -6,6 +6,9 @@ import { Category } from "src/app/domain/category";
 import { AngularFireAuth } from "@angular/fire/auth";
 import firebase from "firebase/app";
 import { Router } from "@angular/router";
+import { Transaction } from "src/app/domain/transaction";
+import { Income } from "src/app/domain/income";
+import { Outcome } from "src/app/domain/outcome";
 
 @Injectable({
   providedIn: "root"
@@ -83,19 +86,19 @@ export class UserService {
         })
         // References are translated to the real categories by getting the documents in firestore
         // Category
-        .then(async val => {
+        .then(val => {
           console.log("reading categories");
           const realCategories: Category[] = [];
           this.user.categories = realCategories;
-          let promises = [];
+          const promises = [];
           if (val.data().categories) {
             val.data().categories.forEach(cat =>
               promises.push(
-                new Promise(function() {
+                new Promise(() => {
                   cat.get().then(catDoc => {
-                    const cat: Category = Category.fromJSON(catDoc.data());
-                    cat.id = catDoc.id;
-                    realCategories.push(cat);
+                    const cats: Category = Category.fromJSON(catDoc.data());
+                    cats.id = catDoc.id;
+                    realCategories.push(cats);
                   });
                 })
               )
@@ -104,7 +107,60 @@ export class UserService {
 
           console.log("promises :", promises);
           Promise.all(promises);
-          console.log("alles is gedaan");
+          console.log("alle promises zijn gedaan");
+          return val;
+        })
+        .then(val => {
+          console.log("reading incomes");
+          const realIncomes: Transaction[] = [];
+          this.user.incomes = realIncomes;
+          const promises = [];
+          if (val.data().incomes) {
+            val.data().incomes.forEach(income =>
+              promises.push(
+                new Promise(() => {
+                  income.get().then(incomeDoc => {
+                    const trans: Income = Income.fromJSON(incomeDoc.data());
+                    incomeDoc
+                      .data()
+                      .category.get()
+                      .then(categoryDoc => {
+                        console.log(categoryDoc.data());
+                        trans.category = Category.fromJSON(categoryDoc.data());
+                      });
+                    trans.id = incomeDoc.id;
+                    realIncomes.push(trans);
+                  });
+                })
+              )
+            );
+          }
+          console.log("inkomens :", promises);
+          Promise.all(promises);
+          console.log("alle inkomens zijn gedaan");
+          return val;
+        })
+        .then(val => {
+          console.log("reading outcomes");
+          const realOutcomes: Transaction[] = [];
+          this.user.outcomes = realOutcomes;
+          const promises = [];
+          if (val.data().outcomes) {
+            val.data().outcomes.forEach(outcome =>
+              promises.push(
+                new Promise(() => {
+                  outcome.get().then(outcomeDoc => {
+                    const trans: Income = Outcome.fromJSON(outcomeDoc.data());
+                    trans.id = outcomeDoc.id;
+                    realOutcomes.push(trans);
+                  });
+                })
+              )
+            );
+          }
+          console.log("uitgaves :", promises);
+          Promise.all(promises);
+          console.log("alle uitgaves zijn gedaan");
           return val;
         })
         .then(val => {
@@ -133,12 +189,46 @@ export class UserService {
       });
   }
 
-  removeCategory(reference){
+  removeCategory(reference) {
     this.firestore
-      .collection('users')
+      .collection("users")
       .doc(this.uid)
       .update({
         categories: firebase.firestore.FieldValue.arrayRemove(reference)
+      });
+  }
+
+  addIncome(reference) {
+    this.firestore
+      .collection("users")
+      .doc(this.uid)
+      .update({
+        incomes: firebase.firestore.FieldValue.arrayUnion(reference)
+      });
+  }
+
+  addOutcome(reference) {
+    this.firestore
+      .collection("users")
+      .doc(this.uid)
+      .update({
+        outcomes: firebase.firestore.FieldValue.arrayUnion(reference)
+      });
+  }
+  removeIncome(reference) {
+    this.firestore
+      .collection("users")
+      .doc(this.uid)
+      .update({
+        incomes: firebase.firestore.FieldValue.arrayRemove(reference)
+      });
+  }
+  removeOutcome(reference) {
+    this.firestore
+      .collection("users")
+      .doc(this.uid)
+      .update({
+        outcomes: firebase.firestore.FieldValue.arrayRemove(reference)
       });
   }
 }

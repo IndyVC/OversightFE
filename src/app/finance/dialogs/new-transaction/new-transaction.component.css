@@ -1,8 +1,0 @@
-form .mat-dialog-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.radio {
-  padding-right: 10px;
-}

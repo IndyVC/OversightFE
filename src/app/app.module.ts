@@ -11,7 +11,6 @@ import { TransactieComponent } from "./finance/transacties/transactie.component"
 import { ChartsModule } from "ng2-charts";
 import { AppRoutingModule } from "./app-routing/app-routing.module";
 import { ScrollingModule } from "@angular/cdk/scrolling";
-import { NewTransactionComponent } from "./finance/dialogs/new-transaction/new-transaction.component";
 import { FinanceModule } from "./finance/finance.module";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { environment } from "src/environments/environment";
@@ -35,7 +34,6 @@ import { CategoriesComponent } from './finance/categories/categories.component';
     LoginComponent,
     RegistreerComponent,
     TransactieComponent,
-    NewTransactionComponent,
     CategoriesComponent
   ],
   imports: [
@@ -56,7 +54,6 @@ import { CategoriesComponent } from './finance/categories/categories.component';
   providers: [UserService, TransactionService, MaterialModule],
   bootstrap: [AppComponent],
   entryComponents: [
-    NewTransactionComponent,
     UsedEmailComponent,
     EmailNotVerifiedComponent,
     NoValidCombinationComponent,

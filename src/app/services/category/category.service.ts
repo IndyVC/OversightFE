@@ -49,4 +49,11 @@ export class CategoryService {
       console.log("deleted document category: ", document);
     });
   }
+
+  getCategoryReference(key:string){
+    const document = this.firestore.collection("categories").doc(key);
+    return document.ref;
+  }
+
+  getCategory
 }

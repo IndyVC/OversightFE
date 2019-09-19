@@ -14,10 +14,12 @@
         getErrorMessage("password")
       }}</mat-error>
     </mat-form-field>
-    <button mat-raised-button class="button_blue" type="submit">Log in</button>
-    <button mat-raised-button class="button_white" (click)="resetPassword()">
-      Wachtwoord vergeten
-    </button>
+    <div class="buttons">
+      <button mat-raised-button class="button_blue" type="submit">Log in</button>
+      <button mat-raised-button class="button_white" (click)="resetPassword()">
+        Wachtwoord vergeten
+      </button>
+    </div>
   </form>
   <app-menu></app-menu>
 

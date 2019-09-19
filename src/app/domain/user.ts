@@ -3,7 +3,6 @@ import { Category } from "./category";
 import { Goal } from "./goal";
 import { Investment } from "./investment";
 import { Loan } from "./loan";
-import { Income } from "./income";
 import { Outcome } from "./outcome";
 import { BankAccount } from "./account";
 import { FormGroup } from "@angular/forms";
@@ -12,6 +11,8 @@ export class User {
   public oversight?: number;
   public debt?: number;
   public shortOversight?: number;
+  public incomes?: Transaction[];
+  public outcomes?: Transaction[];
   constructor(
     public firstname: string,
     public lastname: string,
@@ -23,7 +24,12 @@ export class User {
     public goals?: Goal[],
     public investments?: Investment[],
     public loans?: Loan[]
-  ) {}
+  ) {
+    this.accounts = [];
+    this.accounts.push(
+      new BankAccount("BE 0000 0000 0000", 2000.65, "Fortis", "Zichtrekening")
+    );
+  }
 
   public static fromJSON(json: any): User {
     const user: User = new User(
@@ -36,25 +42,25 @@ export class User {
   }
 
   public calculateDebt(): number {
-    let debt = 0;
+    let debt: number = 0;
 
     this.loans.map(loan => {
-      debt += loan.loan;
-      debt -= loan.current;
+      debt += loan.loan as number;
+      debt -= loan.current as number;
     });
 
     return debt;
   }
   public calculateOversight(): number {
-    let oversight = 0;
+    let oversight: number = 0;
     if (this.accounts) {
       this.accounts.map(account => {
-        oversight += account.balance;
+        oversight += account.balance as number;
       });
     }
     if (this.investments) {
       this.investments.map(investment => {
-        oversight += investment.current;
+        oversight += investment.current as number;
       });
     }
 
@@ -62,22 +68,25 @@ export class User {
   }
 
   public calculateShortOversight(): number {
-    let shortOversight = 0;
+    let shortOversight: number = 0;
     if (this.getIncomesFromMonth(new Date())) {
-      this.getIncomesFromMonth(new Date()).forEach(
-        income => (shortOversight += income.amount)
-      );
+      this.getIncomesFromMonth(new Date()).forEach(income => {
+        const forcedNumber: number = income.amount as number;
+        shortOversight += forcedNumber as number;
+      });
     }
     if (this.getOutcomesFromMonth(new Date())) {
-      this.getOutcomesFromMonth(new Date()).forEach(
-        outcome => (shortOversight -= outcome.amount)
-      );
+      this.getOutcomesFromMonth(new Date()).forEach(outcome => {
+        const forcedNumber: number = outcome.amount as number;
+        shortOversight -= forcedNumber as number;
+      });
     }
 
     return shortOversight;
   }
 
   getAllTransactions(): Transaction[] {
+    this.transactions = [...this.incomes, ...this.outcomes];
     if (this.transactions) {
       return this.transactions.sort((recent, old) => {
         if (recent.date.getFullYear() !== old.date.getFullYear()) {
@@ -92,45 +101,14 @@ export class User {
       });
     }
   }
-  getTransactionById(ID: number): Transaction {
-    return this.transactions.find(trans => trans.ID === ID);
-  }
-  getTransactionsByName(name: string): Transaction[] {
-    return this.transactions.filter(trans => trans.name === name);
-  }
+
   getAllOutcomes(): Transaction[] {
-    if (this.getAllTransactions()) {
-      return this.getAllTransactions()
-        .filter(trans => trans instanceof Outcome)
-        .reverse();
-    }
+    return this.outcomes;
   }
   getAllIncomes(): Transaction[] {
-    if (this.getAllTransactions()) {
-      return this.getAllTransactions()
-        .filter(trans => trans instanceof Income)
-        .reverse();
-    }
+    return this.incomes;
   }
-  createOutcome(form: FormGroup) {
-    return null;
-  }
-  createIncome(form: FormGroup) {
-    const income = new Income(
-      form.value.name,
-      form.value.amount,
-      form.value.date,
-      form.value.category,
-      form.value.account
-    );
-    console.log(income);
-  }
-  deleteOutcome(ID: number) {
-    return null;
-  }
-  deleteIncome(ID: number) {
-    return null;
-  }
+
   getTransactionsFromMonth(date: Date) {
     if (this.getAllTransactions()) {
       return this.getAllTransactions().filter(
@@ -179,25 +157,14 @@ export class User {
     const date: Date = new Date();
     if (this.getAllTransactions()) {
       const transactions: Transaction[] = this.getAllTransactions().filter(
-        t =>
-          t.category.type === category.type &&
-          t.category.name === category.name &&
-          (t.date.getMonth() === date.getMonth() &&
-            t.date.getFullYear() === date.getFullYear())
+        t => (t.category = category)
       );
       let sum = 0;
       transactions.forEach(e => (sum += e.amount));
       return sum;
     }
   }
-  calculateSpendThisMonthOnCategory(category: Category) {
-    if (this.getAllTransactions()) {
-      const transactions: Transaction[] = this.getAllTransactions().filter(
-        t =>
-          t.category.type === category.type && t.category.name === category.name
-      );
-    }
-  }
+
   getAllCategories(): Category[] {
     return this.categories;
   }
@@ -211,12 +178,6 @@ export class User {
   getCategoryByName(name: string): Category {
     return this.categories.find(cat => cat.name === name);
   }
-  deleteCategory(ID: number) {
-    return null;
-  }
-  createCategory(name, icon) {
-    return null;
-  }
 
   getAllInvestments(): Investment[] {
     return this.investments;
@@ -226,12 +187,6 @@ export class User {
   }
   getInvestmentByName(name: string): Investment {
     return this.investments.find(inv => inv.name === name);
-  }
-  deleteInvestment(ID: number) {
-    return null;
-  }
-  createInvestment(name, start, dateStart) {
-    return null;
   }
 
   getAllLoans(): Loan[] {
@@ -243,13 +198,6 @@ export class User {
   getLoanByName(name: string): Loan {
     return this.loans.find(loan => loan.name === name);
   }
-  deleteLoan(ID: number) {
-    return null;
-  }
-  createLoan(name, loan, dateStart, dateEnd, description, period) {
-    return null;
-  }
-
   getAllYears(): number[] {
     let years = new Set<number>();
     if (this.getAllTransactions()) {

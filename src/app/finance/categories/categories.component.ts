@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { MockService } from "src/app/mock.service";
 import { Category } from "src/app/domain/category";
 import { User } from "src/app/domain/user";
 import { HostListener } from "@angular/core";
@@ -16,7 +15,6 @@ export class CategoriesComponent implements OnInit {
   user: User;
   currentCategory: Category;
   categories: Category[];
-  showEdit = false;
   fixedCategoriesIcons: string[] = [
     "fas fa-cat",
     "fas fa-shopping-cart",
@@ -81,12 +79,14 @@ export class CategoriesComponent implements OnInit {
     "fas fa-coins",
     "fas fa-credit-card"
   ];
-  form: FormGroup;
-  edit: FormGroup;
+  public form: FormGroup;
+  public edit: FormGroup;
   public color: string;
   public selectedIconCreate: string = "";
   public selectedIconEdit: string = "";
   public showCreate: boolean = false;
+  public showEdit = false;
+
   public showCategoryList: boolean = true;
   public chartActive = 0;
   public chart = "line";

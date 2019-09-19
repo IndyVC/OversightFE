@@ -57,11 +57,12 @@
             *ngFor="let icon of fixedCategoriesIcons"
             [ngStyle]="{'color':form.get('color').value,'background-color':'white'}" (click)="changeIcon(icon)"></i>
         </div>
-        <mat-dialog-actions>
-          <button id='Toevoegen' mat-raised-button mat-primary type="submit"
+        <div class="buttons">
+          <button class="toevoegen" mat-raised-button mat-primary type="submit"
             [disabled]="form.get('color').invalid || form.get('name').invalid || form.get('type').invalid || selectedIconCreate==''">Toevoegen</button>
           <button mat-raised-button (click)="toggleCreate()">Annuleer</button>
-        </mat-dialog-actions>
+        </div>
+
       </form>
     </mat-card>
 
@@ -93,16 +94,17 @@
             *ngFor="let icon of fixedCategoriesIcons"
             [ngStyle]="{'color':form.get('color').value,'background-color':'white'}" (click)="changeIconEdit(icon)"></i>
         </div>
-        <mat-dialog-actions>
-          <button id='Toevoegen' mat-raised-button mat-primary type="submit"
+        <div class="buttons">
+          <button class="toevoegen" mat-raised-button mat-primary type="submit"
             [disabled]="edit.get('color').invalid || edit.get('name').invalid || edit.get('type').invalid || selectedIconEdit==''">Wijzig</button>
           <button mat-raised-button (click)="toggleEdit()">Annuleer</button>
-        </mat-dialog-actions>
+        </div>
+
       </form>
     </mat-card>
 
     <!--MAT-CARD lijst categorieën-->
-    <mat-card class="matcardNoPaddingTop" *ngIf="showListCategories()">
+    <mat-card class="matcardNoPadding" *ngIf="showListCategories()">
       <p class="tab">Categorieën</p>
       <div class="metadata">
         <p>Oversight</p>
@@ -227,16 +229,17 @@
               *ngFor="let icon of fixedCategoriesIcons"
               [ngStyle]="{'color':form.get('color').value,'background-color':'white'}" (click)="changeIcon(icon)"></i>
           </div>
-          <mat-dialog-actions>
-            <button id='Toevoegen' mat-raised-button mat-primary type="submit"
+          <div class="buttons">
+            <button class='toevoegen' mat-raised-button mat-primary type="submit"
               [disabled]="form.get('color').invalid || form.get('name').invalid || form.get('type').invalid || selectedIconCreate==''">Toevoegen</button>
             <button mat-raised-button (click)="toggleCreate()">Annuleer</button>
-          </mat-dialog-actions>
+          </div>
+
         </form>
       </mat-card>
 
       <!--MAT-CARD edit categorie-->
-      <mat-card class="graph matcardNoPaddingTop dash"  *ngIf='showEdit'>
+      <div class="graph matcardNoPaddingTop dash" *ngIf='showEdit'>
         <p class='tab'>Categorie wijzigen</p>
         <form [formGroup]='edit' (ngSubmit)='onSubmitEdit()' class="form">
           <mat-radio-group aria-label="Select an option" formControlName="type">
@@ -264,13 +267,14 @@
               [ngStyle]="{'color':form.get('color').value,'background-color':'white'}"
               (click)="changeIconEdit(icon)"></i>
           </div>
-          <mat-dialog-actions>
-            <button id='Toevoegen' mat-raised-button mat-primary type="submit"
+          <div class="buttons">
+            <button class="toevoegen" mat-raised-button mat-primary type=" submit"
               [disabled]="edit.get('color').invalid || edit.get('name').invalid || edit.get('type').invalid || selectedIconEdit==''">Wijzig</button>
             <button mat-raised-button (click)="toggleEdit()">Annuleer</button>
-          </mat-dialog-actions>
+          </div>
+
         </form>
-      </mat-card>
+      </div>
     </div>
   </div>
 </div>

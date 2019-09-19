@@ -3,6 +3,7 @@
   width: 100%;
   height: 80vh;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+  margin-top: 100px;
 }
 
 .container_white {
@@ -18,7 +19,7 @@
   margin-left: 10%;
 }
 
-.tab {
+.tabButton {
   width: 50%;
   background-color: transparent;
   border: 0;
@@ -27,24 +28,48 @@
   font-weight: bold;
 }
 
-.graph {
-  background-color: white;
-  margin: 15px;
-  border-radius: 20px;
-  margin-top: 90px;
-  padding: 5px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+.tab {
+  width: 50%;
+  background-color: transparent;
+  border: 0;
+  border-top: 2px #e8e8e7 solid;
+  color: #e8e8e7;
+  font-weight: bold;
+  margin-left: 25%;
+  text-align: center;
+  color: #1f387e;
+  border-color: #1f387e;
 }
 
-.graphTitel {
-  text-align: center;
-  margin-top: 5px;
-  color: #1f387e;
+.matcardNoPadding {
+  padding: 0px !important;
+}
+.matcardNoPaddingTop{
+  padding-top: 0px !important;
+}
+
+.graph {
+  background-color: white;
+  margin-bottom: 20px;
 }
 
 #selected {
   color: #1f387e;
   border-color: #1f387e;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin-top: 50px;
+  margin-left: 10%;
+  height: unset;
+  background-color: unset;
+  border-radius: 0px;
+}
+.radio {
+  padding-right: 10px;
 }
 
 .metadata {
@@ -72,11 +97,11 @@
 }
 
 .transactions {
-  margin-top: 20px;
+  max-height: 50vh;
+  overflow-y: auto;
 }
 
 .transaction {
-  width: 100%;
   height: 80px;
   position: relative;
   background-color: white;
@@ -93,14 +118,15 @@
 
 .name {
   position: absolute;
-  left: 20%;
+  left: 70px;
   font-weight: bold;
   top: 20px;
+  color: #1f387e;
 }
 
 .amount {
   position: absolute;
-  left: 20%;
+  left: 70px;
   top: 40px;
   color: #1f387e;
   font-family: 'Open Sans', Roboto, sans-serif;
@@ -108,20 +134,47 @@
 
 .date {
   position: absolute;
-  right: 10px;
-  top: 17.5px;
+  left: 70px;
+  bottom:5px;
+  font-size: 12px;
+  opacity: 0.5;
 }
 
 .clear {
   position: absolute;
   bottom: 5px;
   right: 10px;
+  font-size: 18px;
+  color: #1f387e;
+}
+
+.edit {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  font-size: 18px;
+  color: #1f387e;
 }
 
 .error {
   margin-top: 15px;
 }
+.toevoegen {
+  margin-right: 10px;
+}
+.geenTransacties{
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color:#f6f5f6;
+  height: 60px;
 
+}
+.legeLijst{
+  text-align: center;
+  color:#1f387e;
+}
 .options {
   width: 100vw;
   background-color: #e8e8e7;
@@ -130,7 +183,7 @@
   justify-content: space-around;
   align-items: center;
   height: 100px;
-  border-radius: 0 0 20px 20px;
+  border-radius: 0 0 4px 4px;
   padding-top: 20px;
   padding-bottom: 10px;
   position: relative;
@@ -150,6 +203,9 @@
   padding: 50px;
   text-align: center;
 }
+.own-mat-errors {
+  font-size: 12px;
+}
 
 .updateTotalYear {
   display: inline-block;
@@ -158,6 +214,9 @@
   margin-left: 25%;
 }
 
+.mat-dialog-actions{
+  margin-top:10px;
+}
 @media screen and (min-width: 560px) {
   .container {
     margin: 0;

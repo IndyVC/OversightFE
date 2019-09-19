@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MockService } from "src/app/mock.service";
 import { User } from "src/app/domain/user";
 import { Transaction } from "src/app/domain/transaction";
 import { Outcome } from "src/app/domain/outcome";
@@ -12,11 +11,17 @@ import {
   NativeDateAdapter
 } from "@angular/material";
 import { HostListener } from "@angular/core";
-import { NewTransactionComponent } from "../dialogs/new-transaction/new-transaction.component";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  FormBuilder
+} from "@angular/forms";
 import * as _moment from "moment";
 import { default as _rollupMoment } from "moment";
 import { UserService } from "src/app/services/user/user.service";
+import { Income } from "src/app/domain/income";
+import { TransactionService } from "src/app/services/transaction/transaction.service";
 
 const moment = _rollupMoment || _moment;
 
@@ -38,9 +43,15 @@ export class TransactieComponent implements OnInit {
   public transactions: Transaction[];
   public categories: Category[];
   public date = new FormControl();
+  public form: FormGroup;
+  public edit: FormGroup;
   public incomeActive = true;
   public chartActive = 0;
   public error = "";
+  public showCreate: boolean = false;
+  public showEdit = false;
+  public showTransactionsList: boolean = true;
+
   public chart1Type = "bar";
   public chart1Legend = true;
   public chart1Labels;
@@ -143,73 +154,89 @@ export class TransactieComponent implements OnInit {
   public screenHeight: any;
   public screenWidth: any;
 
-  // tslint:disable-next-line: variable-name
-  constructor(
-    private _mock: MockService,
-    private _adapter: DateAdapter<any>,
-    private dialog: MatDialog,
-    private _userService: UserService
-  ) {
-    console.log(this._mock.getIndy());
-    this.user = this._mock.getIndy();
-    this.transactions = this.user.getIncomesFromMonth(new Date());
-    this.categories = null;
-    this._adapter.setLocale("nl");
-    this.onResize();
-    console.log(this._userService.createUserObject());
-  }
-
-  ngOnInit() {
-    this.fillGraph1(this.getTransactions(), "Totaal inkomsten");
-    this.fillGraph2(this.getTransactions(), "Totale vergelijking");
-    this.fillGraph3(new Date());
-    this.fillGraph4(new Date());
-  }
-
-  openDialog() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.autoFocus = true;
-
-    const dialogRef = this.dialog.open(NewTransactionComponent, dialogConfig);
-  }
-
   @HostListener("window:resize", ["$event"])
   onResize(event?) {
     this.screenHeight = window.innerHeight;
     this.screenWidth = window.innerWidth;
   }
+  // tslint:disable-next-line: variable-name
+  constructor(
+    private adapter: DateAdapter<any>,
+    private userService: UserService,
+    private transactionService: TransactionService,
+    private fb: FormBuilder
+  ) {
+    this.onResize();
+  }
+
+  ngOnInit() {
+    this.user = this.userService.getUserObject();
+    if (this.user) {
+      this.getIncomes();
+      console.log(this.user);
+      this.categories = this.user.categories;
+      this.fillGraph1(this.getTransactions(), "Totaal inkomsten");
+      this.fillGraph2(this.getTransactions(), "Totale vergelijking");
+      this.fillGraph3(new Date());
+      this.fillGraph4(new Date());
+    }
+
+    this.adapter.setLocale("nl");
+    this.form = this.fb.group({
+      type: this.fb.control("", [Validators.required]),
+      name: this.fb.control("", [Validators.required]),
+      amount: this.fb.control("", [Validators.required]),
+      date: this.fb.control(""),
+      category: this.fb.control("", [Validators.required]),
+      account: this.fb.control("", [Validators.required])
+    });
+
+    this.edit = this.fb.group({
+      id: ["", [Validators.required]],
+      type: this.fb.control("", [Validators.required]),
+      name: this.fb.control("", [Validators.required]),
+      amount: this.fb.control("", [Validators.required]),
+      date: this.fb.control(""),
+      category: this.fb.control("", [Validators.required]),
+      account: this.fb.control("", [Validators.required])
+    });
+  }
 
   fillGraph1(transactions: Transaction[], newLabel: string) {
     let gt28 = false;
     const amounts = [0, 0, 0, 0, 0];
-    transactions.forEach(trans => {
-      if (trans.date.getDate() > 28) {
-        gt28 = true;
+    if (this.user) {
+      if (this.transactions) {
+        transactions.forEach(trans => {
+          if (trans.date.getDate() > 28) {
+            gt28 = true;
+          }
+        });
+        this.chart1Labels = gt28
+          ? ["Week 1", "Week 2", " Week 3", "Week 4", "Week 5"]
+          : ["Week 1", "Week 2", "Week 3", "Week 4"];
+        transactions.forEach(trans => {
+          const nrDay = trans.date.getDate();
+          if (nrDay <= 7) {
+            amounts[0] += trans.amount;
+          } else if (nrDay > 7 && nrDay <= 14) {
+            amounts[1] += trans.amount;
+          } else if (nrDay > 14 && nrDay <= 21) {
+            amounts[2] += trans.amount;
+          } else if (nrDay > 21 && nrDay <= 28) {
+            amounts[3] += trans.amount;
+          } else if (nrDay > 28) {
+            amounts[4] += trans.amount;
+          }
+        });
+        this.chart1Data = [
+          {
+            data: amounts,
+            label: newLabel
+          }
+        ];
       }
-    });
-    this.chart1Labels = gt28
-      ? ["Week 1", "Week 2", " Week 3", "Week 4", "Week 5"]
-      : ["Week 1", "Week 2", "Week 3", "Week 4"];
-    transactions.forEach(trans => {
-      const nrDay = trans.date.getDate();
-      if (nrDay <= 7) {
-        amounts[0] += trans.amount;
-      } else if (nrDay > 7 && nrDay <= 14) {
-        amounts[1] += trans.amount;
-      } else if (nrDay > 14 && nrDay <= 21) {
-        amounts[2] += trans.amount;
-      } else if (nrDay > 21 && nrDay <= 28) {
-        amounts[3] += trans.amount;
-      } else if (nrDay > 28) {
-        amounts[4] += trans.amount;
-      }
-    });
-    this.chart1Data = [
-      {
-        data: amounts,
-        label: newLabel
-      }
-    ];
+    }
   }
   fillGraph2(transactions: Transaction[], newLabel: string) {
     const categories = new Set<string>();
@@ -317,24 +344,92 @@ export class TransactieComponent implements OnInit {
       "November",
       "December"
     ];
-    this.user.getIncomesFromYear(newDate).forEach(trans => {
-      const nrMonth = trans.date.getMonth();
-      incomes[nrMonth] += trans.amount;
-    });
-    this.user.getOutcomesFromYear(newDate).forEach(trans => {
-      const nrMonth = trans.date.getMonth();
-      outcomes[nrMonth] += trans.amount;
-    });
-    this.chart4Data = [
-      {
-        data: incomes,
-        label: "Inkomen"
-      },
-      {
-        data: outcomes,
-        label: "Uitgaven"
+    if (this.user) {
+      if (this.user.transactions) {
+        this.user.getIncomesFromYear(newDate).forEach(trans => {
+          const nrMonth = trans.date.getMonth();
+          incomes[nrMonth] += trans.amount;
+        });
+        this.user.getOutcomesFromYear(newDate).forEach(trans => {
+          const nrMonth = trans.date.getMonth();
+          outcomes[nrMonth] += trans.amount;
+        });
+        this.chart4Data = [
+          {
+            data: incomes,
+            label: "Inkomen"
+          },
+          {
+            data: outcomes,
+            label: "Uitgaven"
+          }
+        ];
       }
-    ];
+    }
+  }
+
+  onSubmit() {
+    const type = this.form.get("type").value;
+    const name = this.form.get("name").value;
+    const amount = this.form.get("amount").value;
+    const date = this.form.get("date").value;
+    console.log("DATE VALUE RIGHT NOW: ", date);
+    const category = this.form.get("category").value;
+    const account = this.form.get("account").value;
+    let transaction: Transaction;
+    if (type === "inkomen") {
+      transaction = new Income(name, amount, date, account);
+      transaction.category = category;
+      console.log("inkomen reached");
+      this.transactionService.createIncome(transaction);
+    } else if (type === "uitgave") {
+      transaction = new Outcome(name, amount, date, account);
+      transaction.category = category;
+      console.log("uitgave reached");
+      this.transactionService.createOutcome(transaction);
+    }
+    this.transactions.push(transaction);
+    this.showCreate = false;
+  }
+  onSubmitEdit() {
+    const type = this.form.get("type").value;
+    const name = this.form.get("name").value;
+    const amount = this.form.get("amount").value;
+    const date = this.form.get("date").value;
+    const category = this.form.get("category").value;
+    const account = this.form.get("account").value;
+    const id = this.edit.get("id").value;
+    let transaction: Transaction;
+    if (type === "inkomen") {
+      transaction = new Income(name, amount, date, account);
+      transaction.category = category;
+      this.transactionService.updateIncome(id, transaction);
+    } else if (type === "uitgave") {
+      transaction = new Outcome(name, amount, date, account);
+      transaction.category = category;
+      this.transactionService.updateOutcome(id, transaction);
+    }
+    const index = this.transactions.findIndex(trans => trans.id === id);
+    this.transactions[index] = transaction;
+    this.toggleEdit();
+  }
+
+  toggleCreate() {
+    if (this.showCreate) {
+      this.showCreate = false;
+    } else {
+      this.showCreate = true;
+      this.showEdit = false;
+    }
+  }
+
+  toggleEdit() {
+    if (this.showEdit === false) {
+      this.showEdit = true;
+      this.showCreate = false;
+    } else {
+      this.showEdit = false;
+    }
   }
 
   smallScreen() {
@@ -410,6 +505,35 @@ export class TransactieComponent implements OnInit {
     this.getOutcomes();
   }
 
+  editTransaction(transaction: Transaction) {
+    this.edit.get("id").setValue(transaction.id);
+    if (transaction instanceof Income) {
+      this.edit.get("type").setValue("inkomen");
+    } else if (transaction instanceof Outcome) {
+      this.edit.get("type").setValue("uitgave");
+    } else {
+      console.log("something happened...");
+    }
+    this.edit.get("name").setValue(transaction.name);
+    this.edit.get("amount").setValue(transaction.amount);
+    this.edit.get("date").setValue(transaction.date);
+    this.edit.get("category").setValue(transaction.category);
+    this.edit.get("account").setValue(transaction.account);
+    this.toggleEdit();
+  }
+  deleteTransaction(transaction: Transaction) {
+    this.showEdit = false;
+    if (transaction instanceof Income) {
+      this.transactionService.deleteIncome(transaction.id);
+    } else if (transaction instanceof Outcome) {
+      this.transactionService.deleteOutcome(transaction.id);
+    } else {
+      console.log("something happened...");
+    }
+    const index = this.transactions.findIndex(trans => trans.id === transaction.id);
+    this.transactions.splice(index, 1);
+  }
+
   getOutcomes() {
     if (this.categories == null && this.date.value == null) {
       this.transactions = this.user.getOutcomesFromMonth(new Date());
@@ -438,6 +562,7 @@ export class TransactieComponent implements OnInit {
     this.fillGraph1(this.getTransactions(), "Totaal uitgaven");
     this.fillGraph2(this.getTransactions(), "Per categorie");
     this.fillGraph3(new Date(this.date.value));
+    this.fillGraph4(new Date());
   }
   getIncomes() {
     if (this.categories == null && this.date.value == null) {
@@ -467,12 +592,69 @@ export class TransactieComponent implements OnInit {
     this.fillGraph1(this.getTransactions(), "Alle inkomsten");
     this.fillGraph2(this.getTransactions(), "Per categorie");
     this.fillGraph3(new Date(this.date.value));
+    this.fillGraph4(new Date());
   }
   getUser(): User {
     return this.user;
   }
   getTransactions() {
     return this.transactions;
+  }
+
+  getErrorMessage(field: string) {
+    if (field === "name") {
+      if (this.form.get("name").hasError("required")) {
+        return "Naam is verplicht.";
+      }
+    } else if (field === "type") {
+      if (this.form.get("type").hasError("required")) {
+        return "Type is verplicht.";
+      }
+    } else if (field === "amount") {
+      if (this.form.get("amount").hasError("required")) {
+        return "Aantal is verplicht.";
+      }
+    } else if (field === "date") {
+      if (this.form.get("date").hasError("required")) {
+        return "Datum is verplicht.";
+      }
+    } else if (field === "category") {
+      if (this.form.get("category").hasError("required")) {
+        return "Categorie is verplicht.";
+      }
+    } else if (field === "account") {
+      if (this.form.get("account").hasError("required")) {
+        return "Bankrekening is verplicht.";
+      }
+    }
+  }
+
+  getErrorMessageEdit(field: string) {
+    if (field === "name") {
+      if (this.form.get("name").hasError("required")) {
+        return "Naam is verplicht.";
+      }
+    } else if (field === "type") {
+      if (this.form.get("type").hasError("required")) {
+        return "Type is verplicht.";
+      }
+    } else if (field === "amount") {
+      if (this.form.get("amount").hasError("required")) {
+        return "Aantal is verplicht.";
+      }
+    } else if (field === "date") {
+      if (this.form.get("date").hasError("required")) {
+        return "Datum is verplicht.";
+      }
+    } else if (field === "category") {
+      if (this.form.get("category").hasError("required")) {
+        return "Categorie is verplicht.";
+      }
+    } else if (field === "account") {
+      if (this.form.get("account").hasError("required")) {
+        return "Bankrekening is verplicht.";
+      }
+    }
   }
 
   switch(tab1, tab2) {
@@ -496,5 +678,12 @@ export class TransactieComponent implements OnInit {
       this.chartActive - 1 < 0
         ? (this.chartActive = 3)
         : (this.chartActive -= 1);
+  }
+  showCreateTransaction() {
+    return this.showCreate;
+  }
+  showTransaction() {
+    this.showCreate = true;
+    this.showEdit = false;
   }
 }

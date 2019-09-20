@@ -242,7 +242,7 @@
     margin-left: 10vw;
     margin-top: 10vh;
     border-radius: 20px 0 0 20px;
-    padding-right: 1px;
+    padding-right:  10px;
   }
 
   .content_right {
@@ -258,7 +258,7 @@
   .list {
     margin-left: 210px;
     right: 10px;
-    top: 10px;
+    top: 0.5vh;
   }
 
   .categories {
@@ -267,7 +267,7 @@
 
   .dash {
     left: 1vw;
-    top: 10px;
+    top: 0.5vh;
     width: 30vw;
   }
 

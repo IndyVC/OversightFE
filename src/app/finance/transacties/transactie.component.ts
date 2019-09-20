@@ -22,6 +22,7 @@ import { default as _rollupMoment } from "moment";
 import { UserService } from "src/app/services/user/user.service";
 import { Income } from "src/app/domain/income";
 import { TransactionService } from "src/app/services/transaction/transaction.service";
+import { stringify } from "querystring";
 
 const moment = _rollupMoment || _moment;
 
@@ -39,8 +40,11 @@ class CustomDateAdapter extends NativeDateAdapter {
 })
 export class TransactieComponent implements OnInit {
   @ViewChild(MatDatepicker, null) picker;
+  @ViewChild("tab1", null) tab1;
+  @ViewChild("tab2", null) tab2;
+
   public user: User;
-  public transactions: Transaction[];
+  public transactions: Transaction[] = [];
   public categories: Category[];
   public date = new FormControl();
   public form: FormGroup;
@@ -175,17 +179,22 @@ export class TransactieComponent implements OnInit {
       this.getIncomes();
       console.log(this.user);
       this.categories = this.user.categories;
-      this.fillGraph1(this.getTransactions(), "Totaal inkomsten");
-      this.fillGraph2(this.getTransactions(), "Totale vergelijking");
-      this.fillGraph3(new Date());
-      this.fillGraph4(new Date());
+      if (this.transactions) {
+        this.fillGraph1(this.getTransactions(), "Totaal inkomsten");
+        this.fillGraph2(this.getTransactions(), "Totale vergelijking");
+        this.fillGraph3(new Date());
+        this.fillGraph4(new Date());
+      }
     }
 
     this.adapter.setLocale("nl");
     this.form = this.fb.group({
       type: this.fb.control("", [Validators.required]),
       name: this.fb.control("", [Validators.required]),
-      amount: this.fb.control("", [Validators.required]),
+      amount: this.fb.control("", [
+        Validators.required,
+        Validators.pattern("[0-9]{1,}(.|,[0-9]{1,})*")
+      ]),
       date: this.fb.control(""),
       category: this.fb.control("", [Validators.required]),
       account: this.fb.control("", [Validators.required])
@@ -195,7 +204,10 @@ export class TransactieComponent implements OnInit {
       id: ["", [Validators.required]],
       type: this.fb.control("", [Validators.required]),
       name: this.fb.control("", [Validators.required]),
-      amount: this.fb.control("", [Validators.required]),
+      amount: this.fb.control("", [
+        Validators.required,
+        Validators.pattern("[0-9]{1,}(.|,[0-9]{1,})*")
+      ]),
       date: this.fb.control(""),
       category: this.fb.control("", [Validators.required]),
       account: this.fb.control("", [Validators.required])
@@ -345,72 +357,104 @@ export class TransactieComponent implements OnInit {
       "December"
     ];
     if (this.user) {
-      if (this.user.transactions) {
-        this.user.getIncomesFromYear(newDate).forEach(trans => {
-          const nrMonth = trans.date.getMonth();
-          incomes[nrMonth] += trans.amount;
-        });
-        this.user.getOutcomesFromYear(newDate).forEach(trans => {
-          const nrMonth = trans.date.getMonth();
-          outcomes[nrMonth] += trans.amount;
-        });
-        this.chart4Data = [
-          {
-            data: incomes,
-            label: "Inkomen"
-          },
-          {
-            data: outcomes,
-            label: "Uitgaven"
-          }
-        ];
-      }
+      this.user.getIncomesFromYear(newDate).forEach(trans => {
+        const nrMonth = trans.date.getMonth();
+        incomes[nrMonth] += trans.amount;
+      });
+      this.user.getOutcomesFromYear(newDate).forEach(trans => {
+        const nrMonth = trans.date.getMonth();
+        outcomes[nrMonth] += trans.amount;
+      });
+      this.chart4Data = [
+        {
+          data: incomes,
+          label: "Inkomen"
+        },
+        {
+          data: outcomes,
+          label: "Uitgaven"
+        }
+      ];
     }
   }
 
   onSubmit() {
     const type = this.form.get("type").value;
     const name = this.form.get("name").value;
-    const amount = this.form.get("amount").value;
+    let amount: string = this.form.get("amount").value.toString();
+    amount = amount.replace(",", ".");
+    console.log(amount);
+
     const date = this.form.get("date").value;
     console.log("DATE VALUE RIGHT NOW: ", date);
     const category = this.form.get("category").value;
+    console.log(category);
     const account = this.form.get("account").value;
     let transaction: Transaction;
     if (type === "inkomen") {
-      transaction = new Income(name, amount, date, account);
+      transaction = new Income(name, parseFloat(amount), date, account);
       transaction.category = category;
       console.log("inkomen reached");
       this.transactionService.createIncome(transaction);
+      this.user.incomes.push(transaction);
+      this.getIncomes();
+      this.resetForm();
     } else if (type === "uitgave") {
-      transaction = new Outcome(name, amount, date, account);
+      transaction = new Outcome(name, parseFloat(amount), date, account);
       transaction.category = category;
       console.log("uitgave reached");
       this.transactionService.createOutcome(transaction);
+      this.user.outcomes.push(transaction);
+      this.getOutcomes();
+      this.resetForm();
     }
-    this.transactions.push(transaction);
+
     this.showCreate = false;
   }
+
+  resetForm() {
+    this.form.get("type").reset();
+    this.form.get("name").reset();
+    this.form.get("amount").reset();
+    this.form.get("date").reset();
+    this.form.get("category").reset();
+    this.form.get("account").reset();
+  }
   onSubmitEdit() {
-    const type = this.form.get("type").value;
-    const name = this.form.get("name").value;
-    const amount = this.form.get("amount").value;
-    const date = this.form.get("date").value;
-    const category = this.form.get("category").value;
-    const account = this.form.get("account").value;
+    const type = this.edit.get("type").value;
+    const name = this.edit.get("name").value;
+    let amount: string = this.edit.get("amount").value.toString();
+    amount = amount.replace(",", ".");
+    console.log(amount);
+    const date = this.edit.get("date").value;
+    const category = this.edit.get("category").value;
+    console.log(category);
+    const account = this.edit.get("account").value;
     const id = this.edit.get("id").value;
     let transaction: Transaction;
+    console.log("EDITED");
+
     if (type === "inkomen") {
-      transaction = new Income(name, amount, date, account);
+      console.log(type);
+      transaction = new Income(name, parseFloat(amount), date, account);
       transaction.category = category;
       this.transactionService.updateIncome(id, transaction);
+      const index = this.user.incomes.findIndex(trans => trans.id === id);
+      console.log(this.user.incomes[index], " ---------", transaction);
+      this.user.incomes[index] = transaction;
+      this.getIncomes();
+      this.setTab1Active();
     } else if (type === "uitgave") {
-      transaction = new Outcome(name, amount, date, account);
+      console.log(type);
+      transaction = new Outcome(name, parseFloat(amount), date, account);
       transaction.category = category;
       this.transactionService.updateOutcome(id, transaction);
+      const index = this.user.outcomes.findIndex(trans => trans.id === id);
+      console.log(this.user.outcomes[index], " ---------", transaction);
+      this.user.outcomes[index] = transaction;
+      this.getOutcomes();
+      this.setTab2Active();
     }
-    const index = this.transactions.findIndex(trans => trans.id === id);
-    this.transactions[index] = transaction;
     this.toggleEdit();
   }
 
@@ -433,7 +477,7 @@ export class TransactieComponent implements OnInit {
   }
 
   smallScreen() {
-    return this.screenWidth < 1200;
+    return this.screenWidth < 1000;
   }
 
   clearOptionsIncome() {
@@ -525,13 +569,21 @@ export class TransactieComponent implements OnInit {
     this.showEdit = false;
     if (transaction instanceof Income) {
       this.transactionService.deleteIncome(transaction.id);
+      const index = this.user.incomes.findIndex(
+        trans => trans.id === transaction.id
+      );
+      this.user.incomes.splice(index, 1);
+      this.getIncomes();
     } else if (transaction instanceof Outcome) {
       this.transactionService.deleteOutcome(transaction.id);
+      const index = this.user.outcomes.findIndex(
+        trans => trans.id === transaction.id
+      );
+      this.user.outcomes.splice(index, 1);
+      this.getOutcomes();
     } else {
       console.log("something happened...");
     }
-    const index = this.transactions.findIndex(trans => trans.id === transaction.id);
-    this.transactions.splice(index, 1);
   }
 
   getOutcomes() {
@@ -613,6 +665,8 @@ export class TransactieComponent implements OnInit {
     } else if (field === "amount") {
       if (this.form.get("amount").hasError("required")) {
         return "Aantal is verplicht.";
+      } else if (this.form.get("amount").hasError("pattern")) {
+        return "Geef een geldig getal in.";
       }
     } else if (field === "date") {
       if (this.form.get("date").hasError("required")) {
@@ -631,27 +685,25 @@ export class TransactieComponent implements OnInit {
 
   getErrorMessageEdit(field: string) {
     if (field === "name") {
-      if (this.form.get("name").hasError("required")) {
+      if (this.edit.get("name").hasError("required")) {
         return "Naam is verplicht.";
       }
-    } else if (field === "type") {
-      if (this.form.get("type").hasError("required")) {
-        return "Type is verplicht.";
-      }
     } else if (field === "amount") {
-      if (this.form.get("amount").hasError("required")) {
+      if (this.edit.get("amount").hasError("required")) {
         return "Aantal is verplicht.";
+      } else if (this.edit.get("amount").hasError("pattern")) {
+        return "Geef een geldig getal in.";
       }
     } else if (field === "date") {
-      if (this.form.get("date").hasError("required")) {
+      if (this.edit.get("date").hasError("required")) {
         return "Datum is verplicht.";
       }
     } else if (field === "category") {
-      if (this.form.get("category").hasError("required")) {
+      if (this.edit.get("category").hasError("required")) {
         return "Categorie is verplicht.";
       }
     } else if (field === "account") {
-      if (this.form.get("account").hasError("required")) {
+      if (this.edit.get("account").hasError("required")) {
         return "Bankrekening is verplicht.";
       }
     }
@@ -668,20 +720,39 @@ export class TransactieComponent implements OnInit {
       : (this.incomeActive = true);
     this.categories = null;
     this.date.setValue(null);
-    this.fillGraph3(new Date(this.date.value));
   }
+
+  setTab1Active() {
+    this.tab1.nativeElement.style.color = "#1F387E";
+    this.tab1.nativeElement.style.borderColor = "#1F387E";
+
+    this.tab2.nativeElement.style.color = "#E8E8E7";
+    this.tab2.nativeElement.style.borderColor = "#E8E8E7";
+    this.categories = null;
+    this.date.setValue(null);
+  }
+
+  setTab2Active() {
+    this.tab1.nativeElement.style.color = "#E8E8E7";
+    this.tab1.nativeElement.style.borderColor = "#E8E8E7";
+
+    this.tab2.nativeElement.style.color = "#1F387E";
+    this.tab2.nativeElement.style.borderColor = "#1F387E";
+    this.categories = null;
+    this.date.setValue(null);
+  }
+
   swipeLeft() {
     this.chartActive = (this.chartActive + 1) % 4;
   }
+
   swipeRight() {
     this.chartActive =
       this.chartActive - 1 < 0
         ? (this.chartActive = 3)
         : (this.chartActive -= 1);
   }
-  showCreateTransaction() {
-    return this.showCreate;
-  }
+
   showTransaction() {
     this.showCreate = true;
     this.showEdit = false;

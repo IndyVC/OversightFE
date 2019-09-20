@@ -187,7 +187,7 @@ export class CategoriesComponent implements OnInit {
     if (date.getFullYear() !== 1970) {
       newDate = date;
     }
-    const transactions = [];
+    const transactions = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     this.labels = [
       "Januari",
       "Februari",
@@ -202,13 +202,11 @@ export class CategoriesComponent implements OnInit {
       "November",
       "December"
     ];
+
     if (this.user) {
       if (this.user.getIncomesFromYear(newDate)) {
         this.user.getIncomesFromYear(newDate).forEach(trans => {
-          if (
-            trans.category.name === this.currentCategory.name &&
-            trans.category.type === this.currentCategory.type
-          ) {
+          if (trans.category.id === this.currentCategory.id) {
             const nrMonth = trans.date.getMonth();
             transactions[nrMonth] += trans.amount;
           }
@@ -217,10 +215,7 @@ export class CategoriesComponent implements OnInit {
 
       if (this.user.getOutcomesFromYear(newDate)) {
         this.user.getOutcomesFromYear(newDate).forEach(trans => {
-          if (
-            trans.category.name === this.currentCategory.name &&
-            trans.category.type === this.currentCategory.type
-          ) {
+          if (trans.category.id === this.currentCategory.id) {
             const nrMonth = trans.date.getMonth();
             transactions[nrMonth] += trans.amount;
           }

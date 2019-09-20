@@ -127,6 +127,7 @@ export class UserService {
                       .then(categoryDoc => {
                         console.log(categoryDoc.data());
                         trans.category = Category.fromJSON(categoryDoc.data());
+                        trans.category.id = categoryDoc.id;
                       });
                     trans.id = incomeDoc.id;
                     realIncomes.push(trans);
@@ -151,6 +152,14 @@ export class UserService {
                 new Promise(() => {
                   outcome.get().then(outcomeDoc => {
                     const trans: Income = Outcome.fromJSON(outcomeDoc.data());
+                    outcomeDoc
+                      .data()
+                      .category.get()
+                      .then(categoryDoc => {
+                        console.log(categoryDoc.data());
+                        trans.category = Category.fromJSON(categoryDoc.data());
+                        trans.category.id = categoryDoc.id;
+                      });
                     trans.id = outcomeDoc.id;
                     realOutcomes.push(trans);
                   });

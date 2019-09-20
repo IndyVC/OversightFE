@@ -47,13 +47,33 @@ export class TransactionService {
       .pipe(map(changes => changes.map(c => ({ ...c.payload.doc.data() }))));
   }
 
-  updateIncome(key: string, value: Transaction): Promise<void> {
+  updateIncome(key: string, income: Transaction): Promise<void> {
+    console.log(income);
+    console.log(income.category);
+    console.log(income.category.id);
+    const categoryReference: DocumentReference = this.categoryService.getCategoryReference(
+      income.category.id
+    );
+
+    const docData = {
+      name: income.name,
+      amount: income.amount,
+      date: income.date,
+      category: categoryReference,
+      account: {
+        accountNumber: income.account.accountNumber
+      }
+    };
     return this.firestore
       .collection("incomes")
       .doc(key)
-      .update(Object.assign({}, value))
-      .then(() => {
-        value.id = key;
+      .update(docData)
+      .then(e => {
+        console.log(e);
+        income.id = key;
+      })
+      .catch(e => {
+        console.log(e);
       });
   }
 
@@ -86,7 +106,7 @@ export class TransactionService {
       .collection("outcomes")
       .add(docData)
       .then(docRef => {
-        this.userService.addIncome(docRef);
+        this.userService.addOutcome(docRef);
         outcome.id = docRef.id;
       });
   }
@@ -98,13 +118,33 @@ export class TransactionService {
       .pipe(map(changes => changes.map(c => ({ ...c.payload.doc.data() }))));
   }
 
-  updateOutcome(key: string, value: Transaction): Promise<void> {
+  updateOutcome(key: string, outcome: Transaction): Promise<void> {
+    console.log(outcome);
+    console.log(outcome.category);
+    console.log(outcome.category.id);
+    const categoryReference: DocumentReference = this.categoryService.getCategoryReference(
+      outcome.category.id
+    );
+
+    const docData = {
+      name: outcome.name,
+      amount: outcome.amount,
+      date: outcome.date,
+      category: categoryReference,
+      account: {
+        accountNumber: outcome.account.accountNumber
+      }
+    };
     return this.firestore
       .collection("outcomes")
       .doc(key)
-      .update(Object.assign({}, value))
-      .then(() => {
-        value.id = key;
+      .update(docData)
+      .then(e => {
+        console.log(e);
+        outcome.id = key;
+      })
+      .catch(e => {
+        console.log(e);
       });
   }
 

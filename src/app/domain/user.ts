@@ -71,18 +71,17 @@ export class User {
     let shortOversight: number = 0;
     if (this.getIncomesFromMonth(new Date())) {
       this.getIncomesFromMonth(new Date()).forEach(income => {
-        const forcedNumber: number = income.amount as number;
+        const forcedNumber: number = parseFloat(income.amount.toString());
         shortOversight += forcedNumber as number;
       });
     }
     if (this.getOutcomesFromMonth(new Date())) {
       this.getOutcomesFromMonth(new Date()).forEach(outcome => {
-        const forcedNumber: number = outcome.amount as number;
+        const forcedNumber: number = parseFloat(outcome.amount.toString());
         shortOversight -= forcedNumber as number;
       });
     }
-
-    return shortOversight;
+    return shortOversight as number;
   }
 
   getAllTransactions(): Transaction[] {
@@ -131,7 +130,7 @@ export class User {
   getIncomesFromYear(date: Date) {
     if (this.getAllTransactions()) {
       return this.getAllIncomes().filter(
-        trans => trans.date.getFullYear() === trans.date.getFullYear()
+        trans => trans.date.getFullYear() === date.getFullYear()
       );
     }
   }
@@ -148,7 +147,7 @@ export class User {
   getOutcomesFromYear(date: Date) {
     if (this.getAllOutcomes()) {
       return this.getAllOutcomes().filter(
-        trans => trans.date.getFullYear() === trans.date.getFullYear()
+        trans => trans.date.getFullYear() === date.getFullYear()
       );
     }
   }
@@ -157,7 +156,7 @@ export class User {
     const date: Date = new Date();
     if (this.getAllTransactions()) {
       const transactions: Transaction[] = this.getAllTransactions().filter(
-        t => (t.category = category)
+        t => t.category.id === category.id
       );
       let sum = 0;
       transactions.forEach(e => (sum += e.amount));

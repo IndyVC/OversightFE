@@ -5,6 +5,9 @@
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   margin-top: 100px;
 }
+.container_lg{
+  display: none;
+}
 
 .container_white {
   width: 100vw;
@@ -53,7 +56,7 @@
   margin-bottom: 20px;
 }
 
-#selected {
+.selected {
   color: #1f387e;
   border-color: #1f387e;
 }
@@ -176,7 +179,7 @@
   color:#1f387e;
 }
 .options {
-  width: 100vw;
+  width: 100%;
   background-color: #e8e8e7;
   display: flex;
   flex-direction: column;
@@ -184,8 +187,8 @@
   align-items: center;
   height: 100px;
   border-radius: 0 0 4px 4px;
-  padding-top: 20px;
-  padding-bottom: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   position: relative;
 }
 
@@ -217,94 +220,90 @@
 .mat-dialog-actions{
   margin-top:10px;
 }
-@media screen and (min-width: 560px) {
+@media screen and (min-width:560px) {
   .container {
-    margin: 0;
+    margin-top: 20px;
   }
 
-  .container,
-  .container_white,
-  .graph,
-  .options {
-    width: 30vw;
+  .tabletContainer {
+    margin-left: 250px;
   }
-
+}
+@media screen and (min-width: 1000px) {
   .container {
-    right: 0px;
+    display: none;
   }
 
-  .graph {
-    right: 20px;
-    margin: 0;
-    margin-top: 10px;
-    margin-left: 35vw;
-    border-radius: 20px;
-    padding: 0;
+  .tabletContainer {
+    margin-left: unset;
   }
 
-  .graphTitel {
-    padding-top: 10px;
+  .container_lg {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    font-family: Roboto, "Open-sans", sans-serif;
   }
 
-  .container_white {
-    margin-top: 10px;
-    margin-left: 35vw;
+  .container_left {
+    width: 50vw;
+    height: 100vh;
+    background-color: #141B65;
+  }
+
+  .container_right {
+    width: 50vw;
+    height: 100vh;
+    background-color: #1A237E;
+  }
+
+  .content_left {
+    width: 40vw;
+    height: 80vh;
+    background-color: #FFFFFF;
+    margin-left: 10vw;
+    margin-top: 10vh;
+    border-radius: 20px 0 0 20px;
+    padding-right: 10px;
+  }
+
+  .content_right {
+    width:50vw;
+    height: 80vh;
+    background-color: #F6F5F6;
+    margin-right: 10vw;
+    margin-top: 10vh;
+  }
+
+  .list {
+    margin-left: 210px;
+    right: 10px;
+    top: 0.5vh;
+    max-height:79vh;
+    margin-bottom: 10px;
   }
 
   .transactions {
-    margin: 0;
-    margin-bottom: 20px;
-    height: 30vh !important;
+    max-height: 50vh;
+    height:unset;
   }
-
-  .options {
-    border-radius: 0 0 20px 20px;
-    height: 120px;
-    display: flex;
+  .grid{
     flex-direction: column;
+    display: flex;
+    justify-content: space-around;
+    align-content: space-around;
+    height:80vh;
   }
-
-  .options .mat-form-field {
-    margin-left: 10%;
-    width: 80%;
+  .graphRow{
+    display: flex;
+    flex-direction: row;
+    width:50vw;
+    justify-content: space-around;
   }
-
-  @media screen and (min-width: 1200px) {
-
-    .container_white,
-    .options {
-      width: 25vw;
-    }
-
-    .options {
-      padding-bottom: 20px;
-
-      padding-top: 10px;
-    }
-
-    .container_white {
-      margin-left: 20vw;
-      margin-top: 20px;
-      position: fixed;
-
-    }
-
-    .graphs {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      right: 20px;
-      top: 20px;
-    }
-
-    .graph {
-      width: 45vw;
-      margin: 0;
-      margin-bottom: 20px;
-    }
-
-    .transactions {
-      height: 65vh !important;
-    }
+  .graph{
+    width:24vw;
+    top:0.5vh;
   }
 }

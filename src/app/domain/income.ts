@@ -6,7 +6,7 @@ export class Income extends Transaction {
   static fromJSON(json: any): Income {
     return new Income(
       json.name,
-      json.amount,
+      parseFloat(json.amount.toString()),
       json.date.toDate(),
       new BankAccount(json.account, 200, "Forsti", "Zichtrekening")
     );

@@ -145,7 +145,7 @@
       <!--MENU-->
       <app-menu></app-menu>
       <!--MAT-CARD lijst categorieën-->
-      <mat-card class="matcardNoPaddingTop list">
+      <mat-card class="matcardNoPaddingTop list" *ngIf="!showEdit && !showCreateCategory()">
         <p class="tab">Categorieën</p>
         <div class="metadata">
           <p>Oversight</p>
@@ -171,38 +171,8 @@
           </div>
         </div>
       </mat-card>
-    </div>
-  </div>
-
-  <div class="container_right">
-    <div class="content_right">
-      <!--MAT-CARD current category-->
-      <mat-card class="graph dash" *ngIf="currentCategory!=null">
-        <p class="name" id="name">{{currentCategory.name}}</p>
-        <i [ngStyle]="{'color': currentCategory.color, 'background-color':'#f6f5f6'}"
-          class="icon  {{currentCategory.icon}}">
-        </i>
-        <p class="type" id="type">Totaal uitgegeven deze maand: <br> € {{calculateTotalSpendOnCategory()}}</p>
-      </mat-card>
-
-      <!--MAT-CARD jaar grafiek-->
-      <mat-card class="graph matcardNoPaddingTop dash" id="totalYearChart">
-        <p class="tab">Jaarlijks totaaloverzicht</p>
-        <mat-form-field class="updateTotalYear">
-          <mat-label>Jaartal</mat-label>
-          <mat-select (selectionChange)='updateTotalYear($event)'>
-            <mat-option *ngFor='let year of getUser().getAllYears()' [value]='year'>
-              {{year}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <canvas baseChart [datasets]="data" [labels]="labels" [options]="options" [legend]="legend" [chartType]="chart"
-          [colors]="chartColors" *ngIf="noError()">
-        </canvas>
-        <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
-      </mat-card>
       <!--MAT-CARD creation categorie-->
-      <mat-card class="graph matcardNoPaddingTop dash" *ngIf='showCreateCategory()'>
+      <mat-card class="matcardNoPaddingTop list" *ngIf='showCreateCategory()'>
         <p class='tab'>Categorie aanmaken</p>
         <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
           <mat-radio-group aria-label="Select an option" formControlName="type">
@@ -239,7 +209,7 @@
       </mat-card>
 
       <!--MAT-CARD edit categorie-->
-      <div class="graph matcardNoPaddingTop dash" *ngIf='showEdit'>
+      <div class="list matcardNoPaddingTop" *ngIf='showEdit'>
         <p class='tab'>Categorie wijzigen</p>
         <form [formGroup]='edit' (ngSubmit)='onSubmitEdit()' class="form">
           <mat-radio-group aria-label="Select an option" formControlName="type">
@@ -275,6 +245,37 @@
 
         </form>
       </div>
+    </div>
+  </div>
+
+  <div class="container_right">
+    <div class="content_right">
+      <!--MAT-CARD current category-->
+      <mat-card class="graph dash" *ngIf="currentCategory!=null">
+        <p class="name" id="name">{{currentCategory.name}}</p>
+        <i [ngStyle]="{'color': currentCategory.color, 'background-color':'#f6f5f6'}"
+          class="icon  {{currentCategory.icon}}">
+        </i>
+        <p class="type" id="type">Totaal uitgegeven deze maand: <br> € {{calculateTotalSpendOnCategory()}}</p>
+      </mat-card>
+
+      <!--MAT-CARD jaar grafiek-->
+      <mat-card class="graph matcardNoPaddingTop dash" id="totalYearChart">
+        <p class="tab">Jaarlijks totaaloverzicht</p>
+        <mat-form-field class="updateTotalYear">
+          <mat-label>Jaartal</mat-label>
+          <mat-select (selectionChange)='updateTotalYear($event)'>
+            <mat-option *ngFor='let year of getUser().getAllYears()' [value]='year'>
+              {{year}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <canvas baseChart [datasets]="data" [labels]="labels" [options]="options" [legend]="legend" [chartType]="chart"
+          [colors]="chartColors" *ngIf="noError()">
+        </canvas>
+        <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
+      </mat-card>
+
     </div>
   </div>
 </div>

@@ -1,272 +1,572 @@
 <div class="container">
-  <!--All graphs-->
-  <div class="graphs">
-    <mat-card style="display: block" class="graph matcardNoPaddingTop"
-      *ngIf='chartActive===0 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft() (swiperight)=swipeRight()>
-      <p class="tab">Wekelijkse transactie</p>
-      <canvas baseChart [datasets]="chart1Data" [labels]="chart1Labels" [options]="chart1Options"
-        [legend]="chart1Legend" [chartType]="chart1Type" [colors]="chartColors" *ngIf='noError();'>
-      </canvas>
-      <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
-    </mat-card>
+  <div class="tabletContainer">
 
-    <mat-card style="display: block" class="graph matcardNoPaddingTop" id="graph2"
-      *ngIf='chartActive===1 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft() (swiperight)=swipeRight()>
-      <p class="tab">Verhouding categorieën</p>
-      <canvas baseChart [datasets]="chart2Data" [labels]="chart2Labels" [options]="chart2Options"
-        [legend]="chart2Legend" [chartType]="chart2Type" [colors]="pieColors" *ngIf='noError()'>
-      </canvas>
-      <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
-    </mat-card>
+    <!--All graphs-->
+    <div class="graphs">
+      <mat-card style="display: block" class="graph matcardNoPaddingTop"
+        *ngIf='chartActive===0 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft() (swiperight)=swipeRight()>
+        <p class="tab">Wekelijkse transactie</p>
+        <canvas baseChart [datasets]="chart1Data" [labels]="chart1Labels" [options]="chart1Options"
+          [legend]="chart1Legend" [chartType]="chart1Type" [colors]="chartColors" *ngIf='noError();'>
+        </canvas>
+        <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
+      </mat-card>
 
-    <mat-card style="display: block" class="graph matcardNoPaddingTop"
-      *ngIf='chartActive===2 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft() (swiperight)=swipeRight()>
-      <p class="tab">Wekelijks totaaloverzicht</p>
-      <canvas baseChart [datasets]="chart3Data" [labels]="chart3Labels" [options]="chart3Options"
-        [legend]="chart3Legend" [chartType]="chart3Type" [colors]="chartColors" *ngIf='noError()'>
-      </canvas>
-      <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
-    </mat-card>
+      <mat-card style="display: block" class="graph matcardNoPaddingTop" id="graph2"
+        *ngIf='chartActive===1 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft() (swiperight)=swipeRight()>
+        <p class="tab">Verhouding categorieën</p>
+        <canvas baseChart [datasets]="chart2Data" [labels]="chart2Labels" [options]="chart2Options"
+          [legend]="chart2Legend" [chartType]="chart2Type" [colors]="pieColors" *ngIf='noError()'>
+        </canvas>
+        <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
+      </mat-card>
 
-    <mat-card style="display: block" class="graph matcardNoPaddingTop"
-      *ngIf='chartActive===3 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft() (swiperight)=swipeRight()
-      id="totalYearChart">
-      <p class="tab">Jaarlijks totaaloverzicht</p>
-      <mat-form-field class="updateTotalYear">
-        <mat-label>Jaartal</mat-label>
-        <mat-select (selectionChange)='updateTotalYear($event)'>
-          <mat-option *ngFor='let year of getUser().getAllYears()' [value]='year'>
-            {{year}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <canvas baseChart [datasets]="chart4Data" [labels]="chart4Labels" [options]="chart4Options"
-        [legend]="chart4Legend" [chartType]="chart4Type" [colors]="chartColors" *ngIf='noError()'>
-      </canvas>
-      <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
-    </mat-card>
-  </div>
+      <mat-card style="display: block" class="graph matcardNoPaddingTop"
+        *ngIf='chartActive===2 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft() (swiperight)=swipeRight()>
+        <p class="tab">Wekelijks totaaloverzicht</p>
+        <canvas baseChart [datasets]="chart3Data" [labels]="chart3Labels" [options]="chart3Options"
+          [legend]="chart3Legend" [chartType]="chart3Type" [colors]="chartColors"
+          *ngIf='user.incomes || user.outcomes;else noGraph'>
+        </canvas>
+        <ng-template #noGraph>
+          <p class="noGraph">Geen grafiek mogelijk.</p>
+        </ng-template>
+      </mat-card>
 
-  <!--MAT-CARD creation transaction-->
-  <mat-card *ngIf='showCreateTransaction()' class="graph matcardNoPaddingTop">
-    <p class='tab'>Transactie aanmaken</p>
-    <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
-      <mat-radio-group aria-label="Select an option" formControlName="type">
-        <mat-radio-button value="inkomen" class="radio">Inkomst</mat-radio-button>
-        <mat-radio-button value="uitgave">Uitgave</mat-radio-button>
-        <mat-error *ngIf="form.get('type').invalid" class="own-mat-errors">
-          {{getErrorMessage("type")}}
-        </mat-error>
-      </mat-radio-group>
-      <mat-form-field>
-        <input matInput placeholder="Naam transactie" formControlName="name">
-        <mat-error *ngIf="form.get('name').invalid">
-          {{getErrorMessage("name")}}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput placeholder="Bedrag" formControlName="amount">
-        <mat-error *ngIf="form.get('amount').invalid">
-          {{getErrorMessage("amount")}}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput [matDatepicker]="picker1" placeholder="Datum" formControlName="date">
-        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-        <mat-datepicker #picker1>
-        </mat-datepicker>
-        <mat-error *ngIf="form.get('date').invalid">
-          {{getErrorMessage("date")}}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field #cat1>
-        <mat-label>Categorie</mat-label>
-        <mat-select formControlName="category">
-          <mat-option *ngFor='let category of user.getAllCategories()' [value]='category'>
-            {{category.name}}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="form.get('category').invalid">
-          {{getErrorMessage("category")}}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Bankaccount</mat-label>
-        <mat-select formControlName="account">
-          <mat-option *ngFor='let account of user.accounts' [value]='account'>
-            {{account.accountNumber}}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="form.get('account').invalid">
-          {{getErrorMessage("account")}}
-        </mat-error>
-      </mat-form-field>
-
-      <div class="buttons">
-        <button mat-raised-button mat-primary class='toevoegen' [disabled]="form.get('type').invalid ||
-          form.get('name').invalid || form.get('amount').invalid || form.get('date').invalid ||
-          form.get('category').invalid || form.get('account').invalid">Toevoegen</button>
-        <button mat-raised-button (click)="toggleCreate()">Annuleer</button>
-      </div>
-
-    </form>
-  </mat-card>
-
-
-  <!--MAT-CARD edit transaction-->
-  <mat-card class="graph matcardNoPaddingTop" *ngIf='showEdit'>
-    <p class='tab'>Transactie wijzigen</p>
-    <form [formGroup]='edit' (ngSubmit)='onSubmitEdit()' class="form">
-      <mat-radio-group aria-label="Select an option" formControlName="type">
-        <mat-radio-button value="inkomen" class="radio">Inkomst</mat-radio-button>
-        <mat-radio-button value="uitgave">Uitgave</mat-radio-button>
-        <mat-error *ngIf="edit.get('type').invalid"  class="own-mat-errors">
-          {{getErrorMessageEdit("type")}}
-        </mat-error>
-      </mat-radio-group>
-      <mat-form-field>
-        <input matInput placeholder="Naam transactie" formControlName="name">
-        <mat-error *ngIf="edit.get('name').invalid">
-          {{getErrorMessageEdit("name")}}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput placeholder="Bedrag" formControlName="amount">
-        <mat-error *ngIf="edit.get('amount').invalid">
-          {{getErrorMessageEdit("amount")}}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput [matDatepicker]="picker1" placeholder="Datum" formControlName="date">
-        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-        <mat-datepicker #picker1>
-        </mat-datepicker>
-        <mat-error *ngIf="edit.get('date').invalid">
-          {{getErrorMessageEdit("date")}}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field #cat1>
-        <mat-label>Categorie</mat-label>
-        <mat-select formControlName="category">
-          <mat-option *ngFor='let category of user.getAllCategories()' [value]='category.name'>
-            {{category.name}}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="edit.get('category').invalid">
-          {{getErrorMessageEdit("category")}}
-        </mat-error>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-label>Bankaccount</mat-label>
-        <mat-select formControlName="account">
-          <mat-option *ngFor='let account of user.accounts' [value]='account'>
-            {{account.accountNumber}}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="edit.get('account').invalid">
-          {{getErrorMessageEdit("account")}}
-        </mat-error>
-      </mat-form-field>
-      <div class="buttons">
-        <button class="toevoegen" mat-raised-button mat-primary type="submit" [disabled]="form.get('type').invalid ||
-        form.get('name').invalid || form.get('amount').invalid || form.get('date').invalid ||
-        form.get('category').invalid || form.get('account').invalid">Wijzig</button>
-        <button mat-raised-button (click)="toggleEdit()">Annuleer</button>
-      </div>
-    </form>
-  </mat-card>
-
-  <mat-card class="matcardNoPadding">
-    <div class="tabs">
-      <button #tab1 id="selected" class="tabButton" (click)='switch(tab1,tab2);getIncomes()'>Inkomen</button>
-      <button #tab2 class="tabButton" (click)='switch(tab2,tab1);getOutcomes()'>Uitgave</button>
+      <mat-card style="display: block" class="graph matcardNoPaddingTop"
+        *ngIf='chartActive===3 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft() (swiperight)=swipeRight()
+        id="totalYearChart">
+        <p class="tab">Jaarlijks totaaloverzicht</p>
+        <mat-form-field class="updateTotalYear" *ngIf='user.incomes || user.outcomes;else noGraph2'>
+          <mat-label>Jaartal</mat-label>
+          <mat-select (selectionChange)='updateTotalYear($event)'>
+            <mat-option *ngFor='let year of getUser().getAllYears()' [value]='year'>
+              {{year}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <canvas baseChart [datasets]="chart4Data" [labels]="chart4Labels" [options]="chart4Options"
+          [legend]="chart4Legend" [chartType]="chart4Type" [colors]="chartColors"
+          *ngIf='user.incomes || user.outcomes;else noGraph2'>
+        </canvas>
+        <ng-template #noGraph2>
+          <p class="noGraph">Geen grafiek mogelijk.</p>
+        </ng-template>
+      </mat-card>
     </div>
 
-    <div class="metadata">
-      <p>Oversight</p>
-      <p> € {{getUser().calculateShortOversight()}}</p>
-      <button class="addTransaction" (click)='showTransaction()'>Voeg transactie toe</button>
-    </div>
-
-    <div class="transactions" *ngIf="transactions.length>0">
-      <div *ngFor='let transaction of getTransactions(); index as i'>
-        <div class="transaction" [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}">
-          <i [ngStyle]="{'color': transaction.category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}"
-            class="icon {{transaction.category.icon}}">
-        </i>
-          <p class="name">{{transaction.name}}</p>
-          <p class="amount">€ {{transaction.amount}}</p>
-          <p class="date">
-            {{transaction.date.toLocaleDateString()}}
-          </p>
-          <button mat-icon-button class="clear" (click)="deleteTransaction(transaction)">
-            <i class="fas fa-times"></i>
-          </button>
-          <button mat-icon-button class="edit" (click)="editTransaction(transaction)">
-            <i class="fas fa-edit"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div *ngIf="transactions.length===0" class="geenTransacties">
-      <p class="legeLijst"> Geen transacties</p>
-    </div>
-
-    <div class="options">
-      <button mat-icon-button (click)="clearOptionsIncome();" class="removeFilter" *ngIf=incomeActive>
-        <mat-icon>clear</mat-icon>
-      </button>
-      <button mat-icon-button (click)="clearOptionsOutcome();" class="removeFilter" *ngIf=!incomeActive>
-        <mat-icon>clear</mat-icon>
-      </button>
-      <div class="datepicker">
-        <div class="incomeDate" *ngIf=incomeActive>
-          <mat-form-field>
-            <input matInput [matDatepicker]="picker1" placeholder="Kies maand">
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <mat-datepicker #picker1 (monthSelected)="updateIncomeDate($event)" startView="multi-year">
-            </mat-datepicker>
-          </mat-form-field>
-        </div>
-
-        <div class="outcomeDate" *ngIf=!incomeActive>
-          <mat-form-field>
-            <input matInput [matDatepicker]="picker2" placeholder="Kies maand">
-            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-            <mat-datepicker #picker2 (monthSelected)="updateOutcomeDate($event)" startView="multi-year">
-            </mat-datepicker>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="incomeCategory" *ngIf=incomeActive>
+    <!--MAT-CARD creation transaction-->
+    <mat-card *ngIf='showCreate' class="graph matcardNoPaddingTop">
+      <p class='tab'>Transactie aanmaken</p>
+      <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
+        <mat-radio-group aria-label="Select an option" formControlName="type">
+          <mat-radio-button value="inkomen" (click)="getIncomes();setTab1Active()" class="radio">Inkomst
+          </mat-radio-button>
+          <mat-radio-button value="uitgave" (click)="getOutcomes();setTab2Active()">Uitgave</mat-radio-button>
+          <mat-error *ngIf="form.get('type').invalid" class="own-mat-errors">
+            {{getErrorMessage("type")}}
+          </mat-error>
+        </mat-radio-group>
+        <mat-form-field>
+          <input matInput placeholder="Naam transactie" formControlName="name">
+          <mat-error *ngIf="form.get('name').invalid">
+            {{getErrorMessage("name")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Bedrag" formControlName="amount">
+          <mat-error *ngIf="form.get('amount').invalid">
+            {{getErrorMessage("amount")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker1" placeholder="Datum" formControlName="date">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1>
+          </mat-datepicker>
+          <mat-error *ngIf="form.get('date').invalid">
+            {{getErrorMessage("date")}}
+          </mat-error>
+        </mat-form-field>
         <mat-form-field #cat1>
           <mat-label>Categorie</mat-label>
-          <mat-select (selectionChange)=' updateIncomeCategory($event)' multiple>
-            <mat-option *ngFor='let category of getUser().getIncomeCategories()' [value]='category.name'>
+          <mat-select formControlName="category">
+            <mat-option *ngFor='let category of user.getAllCategories()' [value]='category'>
               {{category.name}}
             </mat-option>
-            <mat-option value="all">
-              Allemaal
-            </mat-option>
           </mat-select>
+          <mat-error *ngIf="form.get('category').invalid">
+            {{getErrorMessage("category")}}
+          </mat-error>
         </mat-form-field>
-      </div>
-      <div class="outcomeCategory" *ngIf=!incomeActive>
         <mat-form-field>
-          <mat-label>Categorie</mat-label>
-          <mat-select (selectionChange)='updateOutcomeCategory($event)' multiple>
-            <mat-option *ngFor='let category of getUser().getOutcomeCategories()' [value]='category.name'>
-              {{category.name}}
-            </mat-option>
-            <mat-option value="all">
-              Allemaal
+          <mat-label>Bankaccount</mat-label>
+          <mat-select formControlName="account">
+            <mat-option *ngFor='let account of user.accounts' [value]='account'>
+              {{account.accountNumber}}
             </mat-option>
           </mat-select>
+          <mat-error *ngIf="form.get('account').invalid">
+            {{getErrorMessage("account")}}
+          </mat-error>
         </mat-form-field>
+
+        <div class="buttons">
+          <button mat-raised-button mat-primary class='toevoegen' [disabled]="form.get('type').invalid ||
+          form.get('name').invalid || form.get('amount').invalid || form.get('date').invalid ||
+          form.get('category').invalid || form.get('account').invalid">Toevoegen</button>
+          <button mat-raised-button (click)="toggleCreate()">Annuleer</button>
+        </div>
+
+      </form>
+    </mat-card>
+
+
+    <!--MAT-CARD edit transaction-->
+    <mat-card class="graph matcardNoPaddingTop" *ngIf='showEdit'>
+      <p class='tab'>Transactie wijzigen</p>
+      <form [formGroup]='edit' (ngSubmit)='onSubmitEdit()' class="form">
+
+        <mat-form-field>
+          <input matInput placeholder="Naam transactie" formControlName="name">
+          <mat-error *ngIf="edit.get('name').invalid">
+            {{getErrorMessageEdit("name")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Bedrag" formControlName="amount">
+          <mat-error *ngIf="edit.get('amount').invalid">
+            {{getErrorMessageEdit("amount")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker1" placeholder="Datum" formControlName="date">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1>
+          </mat-datepicker>
+          <mat-error *ngIf="edit.get('date').invalid">
+            {{getErrorMessageEdit("date")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field #cat1>
+          <mat-label>Categorie</mat-label>
+          <mat-select formControlName="category">
+            <mat-option *ngFor='let category of user.getAllCategories()' [value]="category"
+              (value)="edit.get('category').value.name">
+              {{category.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="edit.get('category').invalid">
+            {{getErrorMessageEdit("category")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Bankaccount</mat-label>
+          <mat-select formControlName="account">
+            <mat-option *ngFor='let account of user.accounts' [value]="account"
+              (value)="edit.get('account').value.accountNumber">
+              {{account.accountNumber}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="edit.get('account').invalid">
+            {{getErrorMessageEdit("account")}}
+          </mat-error>
+        </mat-form-field>
+        <div class="buttons">
+          <button class="toevoegen" mat-raised-button mat-primary type="submit" [disabled]="edit.get('type').invalid ||
+        edit.get('name').invalid || edit.get('amount').invalid || edit.get('date').invalid ||
+        edit.get('category').invalid || edit.get('account').invalid">Wijzig</button>
+          <button mat-raised-button (click)="toggleEdit()">Annuleer</button>
+        </div>
+      </form>
+    </mat-card>
+
+    <!--MAT-CARD lijst transacties-->
+    <mat-card class="matcardNoPadding">
+      <div class="tabs">
+        <button #tab1 class="tabButton selected" (click)='switch(tab1,tab2);getIncomes()'>Inkomen</button>
+        <button #tab2 class="tabButton" (click)='switch(tab2,tab1);getOutcomes()'>Uitgave</button>
       </div>
 
-    </div>
-  </mat-card>
+      <div class="metadata">
+        <p>Oversight</p>
+        <p> € {{getUser().calculateShortOversight()}}</p>
+        <button class="addTransaction" (click)='showTransaction()'>Voeg transactie toe</button>
+      </div>
+
+      <div class="transactions" *ngIf="transactions.length>0">
+        <div *ngFor='let transaction of getTransactions(); index as i'>
+          <div class="transaction" [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}">
+            <i [ngStyle]="{'color': transaction.category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}"
+              class="icon {{transaction.category.icon}}">
+            </i>
+            <p class="name">{{transaction.name}}</p>
+            <p class="amount">€ {{transaction.amount}}</p>
+            <p class="date">
+              {{transaction.date.toLocaleDateString()}}
+            </p>
+            <button mat-icon-button class="clear" (click)="deleteTransaction(transaction)">
+              <i class="fas fa-times"></i>
+            </button>
+            <button mat-icon-button class="edit" (click)="editTransaction(transaction)">
+              <i class="fas fa-edit"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="transactions.length===0" class="geenTransacties">
+        <p class="legeLijst"> Geen transacties</p>
+      </div>
+
+      <div class="options">
+        <button mat-icon-button (click)="clearOptionsIncome();" class="removeFilter" *ngIf=incomeActive>
+          <mat-icon>clear</mat-icon>
+        </button>
+        <button mat-icon-button (click)="clearOptionsOutcome();" class="removeFilter" *ngIf=!incomeActive>
+          <mat-icon>clear</mat-icon>
+        </button>
+        <div class="datepicker">
+          <div class="incomeDate" *ngIf=incomeActive>
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker1" placeholder="Kies maand">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1 (monthSelected)="updateIncomeDate($event)" startView="multi-year">
+              </mat-datepicker>
+            </mat-form-field>
+          </div>
+
+          <div class="outcomeDate" *ngIf=!incomeActive>
+            <mat-form-field>
+              <input matInput [matDatepicker]="picker2" placeholder="Kies maand">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2 (monthSelected)="updateOutcomeDate($event)" startView="multi-year">
+              </mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="incomeCategory" *ngIf=incomeActive>
+          <mat-form-field #cat1>
+            <mat-label>Categorie</mat-label>
+            <mat-select (selectionChange)=' updateIncomeCategory($event)' multiple>
+              <mat-option *ngFor='let category of getUser().getIncomeCategories()' [value]='category.name'>
+                {{category.name}}
+              </mat-option>
+              <mat-option value="all">
+                Allemaal
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="outcomeCategory" *ngIf=!incomeActive>
+          <mat-form-field>
+            <mat-label>Categorie</mat-label>
+            <mat-select (selectionChange)='updateOutcomeCategory($event)' multiple>
+              <mat-option *ngFor='let category of getUser().getOutcomeCategories()' [value]='category.name'>
+                {{category.name}}
+              </mat-option>
+              <mat-option value="all">
+                Allemaal
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+      </div>
+    </mat-card>
+  </div>
+  <app-menu></app-menu>
 </div>
-<app-menu></app-menu>
+
+
+
+
+<!--large screen-->
+<div class="container_lg">
+  <div class="container_left">
+    <div class="content_left">
+      <!--MENU-->
+      <app-menu></app-menu>
+      <!--MAT-CARD creation transaction-->
+    <mat-card *ngIf='showCreate' class="matcardNoPaddingTop list">
+        <p class='tab'>Transactie aanmaken</p>
+        <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
+          <mat-radio-group aria-label="Select an option" formControlName="type">
+            <mat-radio-button value="inkomen" (click)="getIncomes();setTab1Active()" class="radio">Inkomst
+            </mat-radio-button>
+            <mat-radio-button value="uitgave" (click)="getOutcomes();setTab2Active()">Uitgave</mat-radio-button>
+            <mat-error *ngIf="form.get('type').invalid" class="own-mat-errors">
+              {{getErrorMessage("type")}}
+            </mat-error>
+          </mat-radio-group>
+          <mat-form-field>
+            <input matInput placeholder="Naam transactie" formControlName="name">
+            <mat-error *ngIf="form.get('name').invalid">
+              {{getErrorMessage("name")}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Bedrag" formControlName="amount">
+            <mat-error *ngIf="form.get('amount').invalid">
+              {{getErrorMessage("amount")}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker1" placeholder="Datum" formControlName="date">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1>
+            </mat-datepicker>
+            <mat-error *ngIf="form.get('date').invalid">
+              {{getErrorMessage("date")}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field #cat1>
+            <mat-label>Categorie</mat-label>
+            <mat-select formControlName="category">
+              <mat-option *ngFor='let category of user.getAllCategories()' [value]='category'>
+                {{category.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('category').invalid">
+              {{getErrorMessage("category")}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Bankaccount</mat-label>
+            <mat-select formControlName="account">
+              <mat-option *ngFor='let account of user.accounts' [value]='account'>
+                {{account.accountNumber}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('account').invalid">
+              {{getErrorMessage("account")}}
+            </mat-error>
+          </mat-form-field>
+
+          <div class="buttons">
+            <button mat-raised-button mat-primary class='toevoegen' [disabled]="form.get('type').invalid ||
+            form.get('name').invalid || form.get('amount').invalid || form.get('date').invalid ||
+            form.get('category').invalid || form.get('account').invalid">Toevoegen</button>
+            <button mat-raised-button (click)="toggleCreate()">Annuleer</button>
+          </div>
+
+        </form>
+      </mat-card>
+
+
+      <!--MAT-CARD edit transaction-->
+      <mat-card class="list matcardNoPaddingTop" *ngIf='showEdit'>
+        <p class='tab'>Transactie wijzigen</p>
+        <form [formGroup]='edit' (ngSubmit)='onSubmitEdit()' class="form">
+
+          <mat-form-field>
+            <input matInput placeholder="Naam transactie" formControlName="name">
+            <mat-error *ngIf="edit.get('name').invalid">
+              {{getErrorMessageEdit("name")}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Bedrag" formControlName="amount">
+            <mat-error *ngIf="edit.get('amount').invalid">
+              {{getErrorMessageEdit("amount")}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker1" placeholder="Datum" formControlName="date">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1>
+            </mat-datepicker>
+            <mat-error *ngIf="edit.get('date').invalid">
+              {{getErrorMessageEdit("date")}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field #cat1>
+            <mat-label>Categorie</mat-label>
+            <mat-select formControlName="category">
+              <mat-option *ngFor='let cat of user.getAllCategories()' [value]="cat">
+                {{cat.name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="edit.get('category').invalid">
+              {{getErrorMessageEdit("category")}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Bankaccount</mat-label>
+            <mat-select formControlName="account">
+              <mat-option *ngFor='let account of user.accounts' [value]="account">
+                {{account.accountNumber}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="edit.get('account').invalid">
+              {{getErrorMessageEdit("account")}}
+            </mat-error>
+          </mat-form-field>
+          <div class="buttons">
+            <button class="toevoegen" mat-raised-button mat-primary type="submit" [disabled]="edit.get('type').invalid ||
+          edit.get('name').invalid || edit.get('amount').invalid || edit.get('date').invalid ||
+          edit.get('category').invalid || edit.get('account').invalid">Wijzig</button>
+            <button mat-raised-button (click)="toggleEdit()">Annuleer</button>
+          </div>
+        </form>
+      </mat-card>
+      <!--MAT-CARD lijst transacties-->
+      <mat-card class="matcardNoPadding list" *ngIf="!showEdit && !showCreate">
+        <div class="tabs">
+          <button #tab1 class="tabButton selected" (click)='switch(tab1,tab2);getIncomes()'>Inkomen</button>
+          <button #tab2 class="tabButton" (click)='switch(tab2,tab1);getOutcomes()'>Uitgave</button>
+        </div>
+
+        <div class="metadata">
+          <p>Oversight</p>
+          <p> € {{getUser().calculateShortOversight()}}</p>
+          <button class="addTransaction" (click)='showTransaction()'>Voeg transactie toe</button>
+        </div>
+
+        <div class="transactions" *ngIf="transactions.length>0">
+          <div *ngFor='let transaction of getTransactions(); index as i'>
+            <div class="transaction" [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}">
+              <i [ngStyle]="{'color': transaction.category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}"
+                class="icon {{transaction.category.icon}}">
+              </i>
+              <p class="name">{{transaction.name}}</p>
+              <p class="amount">€ {{transaction.amount}}</p>
+              <p class="date">
+                {{transaction.date.toLocaleDateString()}}
+              </p>
+              <button mat-icon-button class="clear" (click)="deleteTransaction(transaction)">
+                <i class="fas fa-times"></i>
+              </button>
+              <button mat-icon-button class="edit" (click)="editTransaction(transaction)">
+                <i class="fas fa-edit"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="transactions.length===0" class="geenTransacties">
+          <p class="legeLijst"> Geen transacties</p>
+        </div>
+
+        <div class="options">
+          <button mat-icon-button (click)="clearOptionsIncome();" class="removeFilter" *ngIf=incomeActive>
+            <mat-icon>clear</mat-icon>
+          </button>
+          <button mat-icon-button (click)="clearOptionsOutcome();" class="removeFilter" *ngIf=!incomeActive>
+            <mat-icon>clear</mat-icon>
+          </button>
+          <div class="datepicker">
+            <div class="incomeDate" *ngIf=incomeActive>
+              <mat-form-field>
+                <input matInput [matDatepicker]="picker1" placeholder="Kies maand">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1 (monthSelected)="updateIncomeDate($event)" startView="multi-year">
+                </mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="outcomeDate" *ngIf=!incomeActive>
+              <mat-form-field>
+                <input matInput [matDatepicker]="picker2" placeholder="Kies maand">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2 (monthSelected)="updateOutcomeDate($event)" startView="multi-year">
+                </mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="incomeCategory" *ngIf=incomeActive>
+            <mat-form-field #cat1>
+              <mat-label>Categorie</mat-label>
+              <mat-select (selectionChange)=' updateIncomeCategory($event)' multiple>
+                <mat-option *ngFor='let category of getUser().getIncomeCategories()' [value]='category.name'>
+                  {{category.name}}
+                </mat-option>
+                <mat-option value="all">
+                  Allemaal
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="outcomeCategory" *ngIf=!incomeActive>
+            <mat-form-field>
+              <mat-label>Categorie</mat-label>
+              <mat-select (selectionChange)='updateOutcomeCategory($event)' multiple>
+                <mat-option *ngFor='let category of getUser().getOutcomeCategories()' [value]='category.name'>
+                  {{category.name}}
+                </mat-option>
+                <mat-option value="all">
+                  Allemaal
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="container_right">
+    <div class="content_right">
+      <div class="graphs">
+        <div class="grid">
+          <div class="graphRow">
+            <mat-card style="display: block" class="graph matcardNoPadding"
+              *ngIf='chartActive===0 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft()
+              (swiperight)=swipeRight()>
+              <p class="tab">Wekelijkse transactie</p>
+              <canvas baseChart [datasets]="chart1Data" [labels]="chart1Labels" [options]="chart1Options"
+                [legend]="chart1Legend" [chartType]="chart1Type" [colors]="chartColors" *ngIf='noError();'>
+              </canvas>
+              <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
+            </mat-card>
+
+            <mat-card style="display: block" class="graph matcardNoPadding" id="graph2"
+              *ngIf='chartActive===1 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft()
+              (swiperight)=swipeRight()>
+              <p class="tab">Verhouding categorieën</p>
+              <canvas baseChart [datasets]="chart2Data" [labels]="chart2Labels" [options]="chart2Options"
+                [legend]="chart2Legend" [chartType]="chart2Type" [colors]="pieColors" *ngIf='noError()'>
+              </canvas>
+              <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
+            </mat-card>
+          </div>
+
+          <div class="graphRow">
+            <mat-card style="display: block" class="graph matcardNoPadding"
+              *ngIf='chartActive===2 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft()
+              (swiperight)=swipeRight()>
+              <p class="tab">Wekelijks totaaloverzicht</p>
+              <canvas baseChart [datasets]="chart3Data" [labels]="chart3Labels" [options]="chart3Options"
+                [legend]="chart3Legend" [chartType]="chart3Type" [colors]="chartColors"
+                *ngIf='user.incomes || user.outcomes;else noGraph'>
+              </canvas>
+              <ng-template #noGraph>
+                <p class="noGraph">Geen grafiek mogelijk.</p>
+              </ng-template>
+            </mat-card>
+
+            <mat-card style="display: block" class="graph matcardNoPadding"
+              *ngIf='chartActive===3 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft()
+              (swiperight)=swipeRight() id="totalYearChart">
+              <p class="tab">Jaarlijks totaaloverzicht</p>
+              <mat-form-field class="updateTotalYear" *ngIf='user.incomes || user.outcomes;else noGraph2'>
+                <mat-label>Jaartal</mat-label>
+                <mat-select (selectionChange)='updateTotalYear($event)'>
+                  <mat-option *ngFor='let year of getUser().getAllYears()' [value]='year'>
+                    {{year}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <canvas baseChart [datasets]="chart4Data" [labels]="chart4Labels" [options]="chart4Options"
+                [legend]="chart4Legend" [chartType]="chart4Type" [colors]="chartColors"
+                *ngIf='user.incomes || user.outcomes;else noGraph2'>
+              </canvas>
+              <ng-template #noGraph2>
+                <p class="noGraph">Geen grafiek mogelijk.</p>
+              </ng-template>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

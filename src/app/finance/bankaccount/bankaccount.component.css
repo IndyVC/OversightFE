@@ -1,0 +1,68 @@
+.container {
+  background-color: #f6f5f6;
+  width: 100%;
+  height: 80vh;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin-top: 100px;
+}
+
+.bankCard {
+  background-color: #1f387e;
+  height: 200px;
+  margin: 10px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 400px;
+}
+.matcardNoPadding{
+  padding: 0px !important;
+}
+
+.matcardNoPaddingTop{
+  padding-top: 0px !important;
+}
+
+.tab {
+  width: 50%;
+  background-color: transparent;
+  border: 0;
+  border-top: 2px #e8e8e7 solid;
+  color: #e8e8e7;
+  font-weight: bold;
+  margin-left: 25%;
+  text-align: center;
+  color: #1f387e;
+  border-color: #1f387e;
+}
+.section{
+  width:100vw;
+  margin-bottom: 15px;
+  margin-left:20px;
+  color:white;
+}
+.title{
+  margin-bottom: 5px;
+}
+
+.content{
+  font-size: 24px;
+  text-transform: uppercase;
+}
+
+.balance{
+  margin-left:20px;
+}
+.history{
+  margin-left:20px;
+}
+@media screen and (min-width: 560px) {
+  .container {
+    margin-top: 20px;
+  }
+
+  .tabletContainer {
+    margin-left: 250px;
+  }
+}

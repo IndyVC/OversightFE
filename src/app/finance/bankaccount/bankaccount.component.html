@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="tabletContainer">
+    <!--MAT-CARD current category-->
+    <mat-card class="">
+      <div class="bankCard">
+        <div class="section">
+          <p class="title">Naam</p>
+          <p class="content">Indy Van Canegem</p>
+        </div>
+        <div class="section">
+          <p class="title">Kaart</p>
+          <p class="content">BE90 0016 0504 2832</p>
+        </div>
+      </div>
+      <div class="balance">
+        <p>Balans: € 8.000,65</p>
+      </div>
+      <div class="history">
+        <div class="transactions" *ngIf="transactions.length > 0">
+          <div *ngFor="let transaction of getTransactions(); index as i">
+            <div
+              class="transaction"
+              [ngStyle]="{
+                'background-color': i % 2 == 0 ? '#f6f5f6' : 'white'
+              }"
+            >
+              <i
+                [ngStyle]="{
+                  color: transaction.category.color,
+                  'background-color': i % 2 == 0 ? 'white' : '#f6f5f6'
+                }"
+                class="icon {{ transaction.category.icon }}"
+              >
+              </i>
+              <p class="name">{{ transaction.name }}</p>
+              <p class="amount">€ {{ transaction.amount }}</p>
+              <p class="date">
+                {{ transaction.date.toLocaleDateString() }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>

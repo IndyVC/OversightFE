@@ -500,7 +500,7 @@ export class TransactieComponent implements OnInit {
     console.log(new Date("01-01-" + event.value));
     this.fillGraph4(new Date(event.value));
   }
-  updateIncomeCategory(event: any) {
+  updateCategory(event: any) {
     if (
       Array.from(event.value).includes("all") ||
       event.value == null ||
@@ -517,27 +517,13 @@ export class TransactieComponent implements OnInit {
       }
       this.categories = cats;
     }
-    this.getIncomes();
-  }
-  updateOutcomeCategory(event: any) {
-    if (
-      Array.from(event.value).includes("all") ||
-      event.value == null ||
-      event.value === [] ||
-      event.value.length === 0
-    ) {
-      this.categories = null;
+    if (this.incomeActive) {
+      this.getIncomes();
     } else {
-      const cats: Category[] = [];
-      // tslint:disable-next-line: forin
-      for (const index in event.value) {
-        const name = event.value[index];
-        cats.push(this.user.getCategoryByName(name));
-      }
-      this.categories = cats;
+      this.getOutcomes();
     }
-    this.getOutcomes();
   }
+
   updateIncomeDate(params) {
     this.date.setValue(params);
     this.picker.close();
@@ -650,7 +636,7 @@ export class TransactieComponent implements OnInit {
     return this.user;
   }
   getTransactions() {
-    return this.transactions;
+    return this.transactions.sort(transaction=>transaction.date.getTime()).reverse();
   }
 
   getErrorMessage(field: string) {
@@ -756,5 +742,17 @@ export class TransactieComponent implements OnInit {
   showTransaction() {
     this.showCreate = true;
     this.showEdit = false;
+  }
+
+  showListTransactions() {
+    if (this.transactions) {
+      return this.transactions.length > 0;
+    } else {
+      return false;
+    }
+  }
+
+  showCreateTransaction() {
+    return this.showCreate || this.transactions.length === 0;
   }
 }

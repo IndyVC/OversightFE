@@ -9,6 +9,7 @@ import { Router } from "@angular/router";
 import { Transaction } from "src/app/domain/transaction";
 import { Income } from "src/app/domain/income";
 import { Outcome } from "src/app/domain/outcome";
+import { BankAccount } from "src/app/domain/account";
 
 @Injectable({
   providedIn: "root"
@@ -87,6 +88,31 @@ export class UserService {
         // References are translated to the real categories by getting the documents in firestore
         // Category
         .then(val => {
+          console.log("reading bankaccounts");
+          const realBankaccounts: BankAccount[] = [];
+          this.user.accounts = realBankaccounts;
+          const promises = [];
+          if (val.data().bankaccounts) {
+            val.data().bankaccounts.forEach(acc => {
+              promises.push(
+                new Promise(() => {
+                  acc.get().then(accDoc => {
+                    const accs: BankAccount = BankAccount.fromJSON(
+                      accDoc.data()
+                    );
+                    accs.id = accDoc.id;
+                    realBankaccounts.push(accs);
+                  });
+                })
+              );
+            });
+          }
+          console.log("promises :", promises);
+          Promise.all(promises);
+          console.log("alle promises zijn gedaan");
+          return val;
+        })
+        .then(val => {
           console.log("reading categories");
           const realCategories: Category[] = [];
           this.user.categories = realCategories;
@@ -129,6 +155,15 @@ export class UserService {
                         trans.category = Category.fromJSON(categoryDoc.data());
                         trans.category.id = categoryDoc.id;
                       });
+                    incomeDoc
+                      .data()
+                      .account.get()
+                      .then(accountDoc => {
+                        console.log(accountDoc.data());
+                        trans.account = BankAccount.fromJSON(accountDoc.data());
+                        trans.account.id = accountDoc.id;
+                      });
+
                     trans.id = incomeDoc.id;
                     realIncomes.push(trans);
                   });
@@ -159,6 +194,15 @@ export class UserService {
                         console.log(categoryDoc.data());
                         trans.category = Category.fromJSON(categoryDoc.data());
                         trans.category.id = categoryDoc.id;
+                      });
+                    console.log("outcomedoc :", outcomeDoc);
+                    outcomeDoc
+                      .data()
+                      .account.get()
+                      .then(accountDoc => {
+                        console.log(accountDoc.data());
+                        trans.account = BankAccount.fromJSON(accountDoc.data());
+                        trans.account.id = accountDoc.id;
                       });
                     trans.id = outcomeDoc.id;
                     realOutcomes.push(trans);
@@ -238,6 +282,24 @@ export class UserService {
       .doc(this.uid)
       .update({
         outcomes: firebase.firestore.FieldValue.arrayRemove(reference)
+      });
+  }
+
+  addBankaccount(reference) {
+    this.firestore
+      .collection("users")
+      .doc(this.uid)
+      .update({
+        bankaccounts: firebase.firestore.FieldValue.arrayUnion(reference)
+      });
+  }
+
+  removeBankaccount(reference) {
+    this.firestore
+      .collection("users")
+      .doc(this.uid)
+      .update({
+        bankaccounts: firebase.firestore.FieldValue.arrayRemove(reference)
       });
   }
 }

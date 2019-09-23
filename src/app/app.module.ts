@@ -26,6 +26,7 @@ import { NoValidCombinationComponent } from "./authenticatie/dialogs/no-valid-co
 import { ResetPasswordComponent } from './authenticatie/dialogs/reset-password/reset-password.component';
 import { CategoriesComponent } from './finance/categories/categories.component';
 import { BankaccountComponent } from './finance/bankaccount/bankaccount.component';
+import { UsedByTransactionsComponent } from './finance/dialogs/used-by-transactions/used-by-transactions.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +36,8 @@ import { BankaccountComponent } from './finance/bankaccount/bankaccount.componen
     RegistreerComponent,
     TransactieComponent,
     CategoriesComponent,
-    BankaccountComponent
+    BankaccountComponent,
+    UsedByTransactionsComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +60,9 @@ import { BankaccountComponent } from './finance/bankaccount/bankaccount.componen
     UsedEmailComponent,
     EmailNotVerifiedComponent,
     NoValidCombinationComponent,
-    ResetPasswordComponent
+    ResetPasswordComponent,
+    UsedByTransactionsComponent
+
   ]
 })
 export class AppModule {}

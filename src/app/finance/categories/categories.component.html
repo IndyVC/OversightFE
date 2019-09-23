@@ -34,13 +34,6 @@
     <mat-card *ngIf='showCreateCategory()' class="graph matcardNoPaddingTop">
       <p class='tab'>Categorie aanmaken</p>
       <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
-        <mat-radio-group aria-label="Select an option" formControlName="type">
-          <mat-radio-button value="inkomen" class="radio">Inkomen</mat-radio-button>
-          <mat-radio-button value="uitgave">Uitgave</mat-radio-button>
-          <mat-error *ngIf="form.get('type').invalid" class="own-mat-errors">
-            {{getErrorMessage("type")}}
-          </mat-error>
-        </mat-radio-group>
         <mat-form-field>
           <input matInput placeholder="Naam categorie" formControlName="name">
           <mat-error *ngIf="form.get('name').invalid">
@@ -55,11 +48,11 @@
         <div class="icons">
           <i class="{{icon}} icon {{icon===selectedIconCreate?'selectedIcon':''}}"
             *ngFor="let icon of fixedCategoriesIcons"
-            [ngStyle]="{'color':form.get('color').value,'background-color':'white'}" (click)="changeIcon(icon)"></i>
+            [ngStyle]="{'color': form.get('color').value,'background-color':'white'}" (click)="changeIcon(icon)"></i>
         </div>
         <div class="buttons">
           <button class="toevoegen" mat-raised-button mat-primary type="submit"
-            [disabled]="form.get('color').invalid || form.get('name').invalid || form.get('type').invalid || selectedIconCreate==''">Toevoegen</button>
+            [disabled]="form.get('color').invalid || form.get('name').invalid || selectedIconCreate==''">Toevoegen</button>
           <button mat-raised-button (click)="toggleCreate()">Annuleer</button>
         </div>
 
@@ -70,13 +63,6 @@
     <mat-card class="graph matcardNoPaddingTop" *ngIf='showEdit'>
       <p class='tab'>Categorie wijzigen</p>
       <form [formGroup]='edit' (ngSubmit)='onSubmitEdit()' class="form">
-        <mat-radio-group aria-label="Select an option" formControlName="type">
-          <mat-radio-button value="inkomen" class="radio">Inkomen</mat-radio-button>
-          <mat-radio-button value="uitgave">Uitgave</mat-radio-button>
-          <mat-error *ngIf="edit.get('type').invalid" class="own-mat-errors">
-            {{getErrorMessageEdit("type")}}
-          </mat-error>
-        </mat-radio-group>
         <mat-form-field>
           <input matInput placeholder="Naam categorie" formControlName="name">
           <mat-error *ngIf="edit.get('name').invalid">
@@ -96,7 +82,7 @@
         </div>
         <div class="buttons">
           <button class="toevoegen" mat-raised-button mat-primary type="submit"
-            [disabled]="edit.get('color').invalid || edit.get('name').invalid || edit.get('type').invalid || selectedIconEdit==''">Wijzig</button>
+            [disabled]="edit.get('color').invalid || edit.get('name').invalid || selectedIconEdit==''">Wijzig</button>
           <button mat-raised-button (click)="toggleEdit()">Annuleer</button>
         </div>
 
@@ -119,8 +105,7 @@
               class=" {{category.icon}} icon">
             </i>
             <p class="name">{{category.name}}</p>
-            <p class="type">{{category.type}}</p>
-            <button mat-icon-button class="clear" (click)="deleteCategory(category)">
+            <button mat-icon-button class="clear" (click)="confirmDelete(category)">
               <i class="fas fa-times"></i>
             </button>
             <button mat-icon-button class="edit" (click)="editCategory(category)">
@@ -160,7 +145,6 @@
                 class=" {{category.icon}} icon">
               </i>
               <p class="name">{{category.name}}</p>
-              <p class="type">{{category.type}}</p>
               <button mat-icon-button class="clear" (click)="deleteCategory(category)">
                 <i class="fas fa-times"></i>
               </button>
@@ -175,13 +159,6 @@
       <mat-card class="matcardNoPaddingTop list" *ngIf='showCreateCategory()'>
         <p class='tab'>Categorie aanmaken</p>
         <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
-          <mat-radio-group aria-label="Select an option" formControlName="type">
-            <mat-radio-button value="inkomen" class="radio">Inkomen</mat-radio-button>
-            <mat-radio-button value="uitgave">Uitgave</mat-radio-button>
-            <mat-error *ngIf="form.get('type').invalid" class="own-mat-errors">
-              {{getErrorMessage("type")}}
-            </mat-error>
-          </mat-radio-group>
           <mat-form-field>
             <input matInput placeholder="Naam categorie" formControlName="name">
             <mat-error *ngIf="form.get('name').invalid">
@@ -201,7 +178,7 @@
           </div>
           <div class="buttons">
             <button class='toevoegen' mat-raised-button mat-primary type="submit"
-              [disabled]="form.get('color').invalid || form.get('name').invalid || form.get('type').invalid || selectedIconCreate==''">Toevoegen</button>
+              [disabled]="form.get('color').invalid || form.get('name').invalid || selectedIconCreate==''">Toevoegen</button>
             <button mat-raised-button (click)="toggleCreate()">Annuleer</button>
           </div>
 
@@ -212,13 +189,6 @@
       <div class="list matcardNoPaddingTop" *ngIf='showEdit'>
         <p class='tab'>Categorie wijzigen</p>
         <form [formGroup]='edit' (ngSubmit)='onSubmitEdit()' class="form">
-          <mat-radio-group aria-label="Select an option" formControlName="type">
-            <mat-radio-button value="inkomen" class="radio">Inkomen</mat-radio-button>
-            <mat-radio-button value="uitgave">Uitgave</mat-radio-button>
-            <mat-error *ngIf="edit.get('type').invalid" class="own-mat-errors">
-              {{getErrorMessageEdit("type")}}
-            </mat-error>
-          </mat-radio-group>
           <mat-form-field>
             <input matInput placeholder="Naam categorie" formControlName="name">
             <mat-error *ngIf="edit.get('name').invalid">
@@ -239,7 +209,7 @@
           </div>
           <div class="buttons">
             <button class="toevoegen" mat-raised-button mat-primary type=" submit"
-              [disabled]="edit.get('color').invalid || edit.get('name').invalid || edit.get('type').invalid || selectedIconEdit==''">Wijzig</button>
+              [disabled]="edit.get('color').invalid || edit.get('name').invalid || selectedIconEdit==''">Wijzig</button>
             <button mat-raised-button (click)="toggleEdit()">Annuleer</button>
           </div>
 

@@ -1,23 +1,11 @@
 export class BankAccount {
+  public id:string;
   constructor(
-    private _accountNumber: string,
-    private _balance: number,
-    private _bank: string,
-    private _type: string
+    public accountNumber: string,
+    public balance: number,
+    public bank: string,
+    public type: string
   ) {}
-
-  get accountNumber() {
-    return this._accountNumber;
-  }
-  get balance(): number {
-    return this._balance;
-  }
-  get bank(): string {
-    return this._bank;
-  }
-  get type(): string {
-    return this._type;
-  }
 
   public static fromJSON(json: any): BankAccount {
     return new BankAccount(
@@ -29,9 +17,9 @@ export class BankAccount {
   }
 
   public increaseBalance(amount: number) {
-    this._balance += amount;
+    this.balance += amount;
   }
   public decreaseBalance(amount: number) {
-    this._balance -= amount;
+    this.balance -= amount;
   }
 }

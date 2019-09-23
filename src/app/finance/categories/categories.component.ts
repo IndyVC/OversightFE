@@ -5,6 +5,11 @@ import { HostListener } from "@angular/core";
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { CategoryService } from "src/app/services/category/category.service";
 import { UserService } from "src/app/services/user/user.service";
+import { MatDialogConfig, MatDialog } from "@angular/material";
+import { UsedByTransactionsComponent } from "../dialogs/used-by-transactions/used-by-transactions.component";
+import { Income } from "src/app/domain/income";
+import { Outcome } from "src/app/domain/outcome";
+import { TransactionService } from "src/app/services/transaction/transaction.service";
 
 @Component({
   selector: "app-categories",
@@ -138,7 +143,9 @@ export class CategoriesComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private categoryService: CategoryService,
-    private userService: UserService
+    private userService: UserService,
+    private transactionService: TransactionService,
+    private dialog: MatDialog
   ) {
     this.onResize();
   }
@@ -154,14 +161,12 @@ export class CategoriesComponent implements OnInit {
     this.fillGraph(new Date());
     this.form = this.fb.group({
       name: ["", [Validators.required]],
-      type: ["", [Validators.required]],
       icon: ["", [Validators.required]],
       color: ["", [Validators.required]]
     });
     this.edit = this.fb.group({
       id: ["", [Validators.required]],
       name: ["", [Validators.required]],
-      type: ["", [Validators.required]],
       icon: ["", [Validators.required]],
       color: ["", [Validators.required]]
     });
@@ -237,8 +242,7 @@ export class CategoriesComponent implements OnInit {
     const name = this.form.get("name").value;
     const icon = this.selectedIconCreate;
     const color = this.form.get("color").value;
-    const type = this.form.get("type").value;
-    const category = new Category(name, icon, color, type);
+    const category = new Category(name, icon, color);
     this.categoryService.createCategory(category);
     this.categories.push(category);
     this.showCreate = false;
@@ -248,9 +252,8 @@ export class CategoriesComponent implements OnInit {
     const name = this.edit.get("name").value;
     const icon = this.selectedIconEdit;
     const color = this.edit.get("color").value;
-    const type = this.edit.get("type").value;
     const id = this.edit.get("id").value;
-    const category = new Category(name, icon, color, type);
+    const category = new Category(name, icon, color);
     const index = this.categories.findIndex(cat => cat.id === id);
     this.categories[index] = category;
     this.categoryService.updateCategory(id, category);
@@ -301,17 +304,50 @@ export class CategoriesComponent implements OnInit {
   deleteCategory(category) {
     this.showEdit = false;
     this.categoryService.deleteCategory(category.id);
+    this.deleteTransactionsFromBankaccount(category);
     const index = this.categories.findIndex(cat => cat.id === category.id);
     this.categories.splice(index, 1);
     this.currentCategory = this.categories[0];
+  }
+  deleteTransactionsFromBankaccount(category) {
+    this.user.getAllTransactions().forEach(transaction => {
+      if (transaction.category.id === category.id) {
+        if (transaction instanceof Income) {
+          this.transactionService.deleteIncome(transaction.id);
+          this.userService.user.deleteLocalIncome(transaction);
+        } else if (transaction instanceof Outcome) {
+          this.transactionService.deleteOutcome(transaction.id);
+          this.userService.user.deleteLocalOutcome(transaction);
+        } else {
+          console.log("Something went wrong");
+        }
+      }
+    });
   }
   editCategory(category: Category) {
     this.edit.get("name").setValue(category.name);
     this.selectedIconEdit = category.icon;
     this.edit.get("color").setValue(category.color);
-    this.edit.get("type").setValue(category.type);
     this.edit.get("id").setValue(category.id);
     this.toggleEdit();
+  }
+
+  confirmDelete(category) {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    const dialogRef = this.dialog.open(
+      UsedByTransactionsComponent,
+      dialogConfig
+    );
+
+    dialogRef.afterClosed().subscribe(data => {
+      if (data === "confirmed") {
+        this.deleteCategory(category);
+      }
+    });
   }
 
   changeColor(event) {
@@ -339,10 +375,6 @@ export class CategoriesComponent implements OnInit {
       if (this.form.get("name").hasError("required")) {
         return "Naam is verplicht.";
       }
-    } else if (field === "type") {
-      if (this.form.get("type").hasError("required")) {
-        return "Type is verplicht.";
-      }
     } else if (field === "color") {
       if (this.form.get("color").hasError("required")) {
         return "Kleur is verplicht.";
@@ -354,10 +386,6 @@ export class CategoriesComponent implements OnInit {
     if (field === "name") {
       if (this.edit.get("name").hasError("required")) {
         return "Naam is verplicht.";
-      }
-    } else if (field === "type") {
-      if (this.edit.get("type").hasError("required")) {
-        return "Type is verplicht.";
       }
     } else if (field === "color") {
       if (this.edit.get("color").hasError("required")) {

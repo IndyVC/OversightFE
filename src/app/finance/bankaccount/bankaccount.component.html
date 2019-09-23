@@ -1,46 +1,304 @@
 <div class="container">
   <div class="tabletContainer">
-    <!--MAT-CARD current category-->
-    <mat-card class="">
+    <!--MAT-CARD current bankaccount-->
+    <mat-card class="graph" *ngIf="currentBankaccount != null">
       <div class="bankCard">
         <div class="section">
           <p class="title">Naam</p>
-          <p class="content">Indy Van Canegem</p>
+          <p class="content">{{user.firstname}} {{user.lastname}}</p>
         </div>
         <div class="section">
           <p class="title">Kaart</p>
-          <p class="content">BE90 0016 0504 2832</p>
+          <p class="content">{{currentBankaccount.accountNumber}}</p>
         </div>
       </div>
-      <div class="balance">
-        <p>Balans: € 8.000,65</p>
+      <div class="metadata">
+        <p>Balans</p>
+        <p>€ {{currentBankaccount.balance}}</p>
       </div>
-      <div class="history">
-        <div class="transactions" *ngIf="transactions.length > 0">
-          <div *ngFor="let transaction of getTransactions(); index as i">
-            <div
-              class="transaction"
-              [ngStyle]="{
+      <div class="history graph" *ngIf="showHistory(); else geenGeschiedenis">
+        <p class="tab">Geschiedenis:</p>
+        <div class="transactions">
+          <div *ngFor='let transaction of getTransactions(); index as i'>
+            <div class="transaction" [ngStyle]="{
                 'background-color': i % 2 == 0 ? '#f6f5f6' : 'white'
-              }"
-            >
-              <i
-                [ngStyle]="{
+              }">
+              <i [ngStyle]="{
                   color: transaction.category.color,
                   'background-color': i % 2 == 0 ? 'white' : '#f6f5f6'
-                }"
-                class="icon {{ transaction.category.icon }}"
-              >
+                }" class="icon {{transaction.category.icon}}">
               </i>
-              <p class="name">{{ transaction.name }}</p>
-              <p class="amount">€ {{ transaction.amount }}</p>
-              <p class="date">
-                {{ transaction.date.toLocaleDateString() }}
-              </p>
+              <p class="name">{{transaction.name}}</p>
+              <p class="amount">{{transaction.amount}}</p>
+              <p class="date">{{transaction.date.toLocaleDateString()}}</p>
             </div>
           </div>
         </div>
       </div>
+      <ng-template #geenGeschiedenis>
+        <div class="history">
+          <p>Geen geschiedenis</p>
+        </div>
+      </ng-template>
     </mat-card>
+
+    <!--MAT-CARD creation categorie-->
+    <mat-card *ngIf='showCreateBankaccount()' class="graph matcardNoPaddingTop">
+      <p class='tab'>Bankrekening aanmaken</p>
+      <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
+        <mat-radio-group aria-label="Select an option" formControlName="type">
+          <mat-radio-button value="zichtrekening" class="radio">Zichtrekening</mat-radio-button>
+          <mat-radio-button value="spaarrekening">Spaarrekening</mat-radio-button>
+          <mat-error *ngIf="form.get('type').invalid" class="own-mat-errors">
+            {{getErrorMessage("type")}}
+          </mat-error>
+        </mat-radio-group>
+        <mat-form-field>
+          <input matInput placeholder="Rekening nummer" formControlName="accountNumber">
+          <mat-error *ngIf="form.get('accountNumber').invalid">
+            {{getErrorMessage("accountNumber")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Balans" formControlName="balance">
+          <mat-error *ngIf="form.get('balance').invalid">
+            {{getErrorMessage("balance")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Bank" formControlName="bank">
+          <mat-error *ngIf="form.get('bank').invalid">
+            {{getErrorMessage("bank")}}
+          </mat-error>
+        </mat-form-field>
+        <div class="buttons">
+          <button class="toevoegen" mat-raised-button mat-primary type="submit"
+            [disabled]="form.get('type').invalid || form.get('accountNumber').invalid || form.get('balance').invalid || form.get('bank').invalid">Toevoegen</button>
+          <button mat-raised-button (click)="toggleCreate()">Annuleer</button>
+        </div>
+      </form>
+    </mat-card>
+
+    <!--MAT-CARD edit categorie-->
+    <mat-card class="graph matcardNoPaddingTop" *ngIf='showEdit'>
+      <p class='tab'>Bankrekening wijzigen</p>
+      <form [formGroup]='edit' (ngSubmit)='onSubmitEdit()' class="form">
+        <mat-radio-group aria-label="Select an option" formControlName="type">
+          <mat-radio-button value="zichtrekening" class="radio">Zichtrekening</mat-radio-button>
+          <mat-radio-button value="spaarrekening">Spaarrekening</mat-radio-button>
+          <mat-error *ngIf="edit.get('type').invalid" class="own-mat-errors">
+            {{getErrorMessageEdit("type")}}
+          </mat-error>
+        </mat-radio-group>
+        <mat-form-field>
+          <input matInput placeholder="Rekening nummer" formControlName="accountNumber">
+          <mat-error *ngIf="edit.get('accountNumber').invalid">
+            {{getErrorMessageEdit("accountNumber")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Balans" formControlName="balance">
+          <mat-error *ngIf="edit.get('balance').invalid">
+            {{getErrorMessageEdit("balance")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Bank" formControlName="bank">
+          <mat-error *ngIf="edit.get('bank').invalid">
+            {{getErrorMessageEdit("bank")}}
+          </mat-error>
+        </mat-form-field>
+        <div class="buttons">
+          <button class="toevoegen" mat-raised-button mat-primary type="submit"
+            [disabled]="edit.get('type').invalid || edit.get('accountNumber').invalid || edit.get('balance').invalid || edit.get('bank').invalid">Wijzig</button>
+          <button mat-raised-button (click)="toggleEdit()">Annuleer</button>
+        </div>
+      </form>
+    </mat-card>
+
+    <!--MAT-CARD lijst bankaccounts-->
+    <mat-card class="matcardNoPadding" *ngIf="showListBankaccounts()">
+      <p class="tab">Bankrekeningen</p>
+      <div class="metadata">
+        <p>Oversight</p>
+        <p> € {{calculateShortOversight()}}</p>
+        <button class="addBankaccount" (click)='showBankaccount()'>Voeg een bankrekening toe</button>
+      </div>
+      <div class="accounts">
+        <div *ngFor="let account of getBankaccounts(); index as i">
+          <div class="account {{currentBankaccount && currentBankaccount.id===account.id?'currentBankaccount':''}}"
+            [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}" (click)="setBankaccount(account)">
+            <i [ngStyle]="{'color':'#1A237E','background-color':i % 2 == 0?'white':'#f6f5f6'}"
+              class=" fas fa-credit-card icon">
+            </i>
+            <p class="name">{{account.accountNumber}}</p>
+            <p class="type">€ {{account.balance}}</p>
+            <button mat-icon-button class="clear" (click)="confirmDelete(account)">
+              <i class="fas fa-times"></i>
+            </button>
+            <button mat-icon-button class="edit" (click)="editBankaccount(account)">
+              <i class="fas fa-edit"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+  <!--MENU-->
+  <app-menu></app-menu>
+</div>
+
+<div class="container_lg">
+  <div class="container_left">
+    <div class="content_left">
+      <!--MENU-->
+      <app-menu></app-menu>
+      <!--MAT-CARD lijst bankaccounts-->
+      <mat-card class="matcardNoPaddingTop list" *ngIf="!showEdit && !showCreateBankaccount()">
+        <p class="tab">Bankrekeningen</p>
+        <div class="metadata">
+          <p>Oversight</p>
+          <p> € {{calculateShortOversight()}}</p>
+          <button class="addBankaccount" (click)='showBankaccount()'>Voeg een bankrekening toe</button>
+        </div>
+        <div class="accounts">
+          <div *ngFor="let account of getBankaccounts(); index as i">
+            <div class="account {{currentBankaccount && currentBankaccount.id===account.id?'currentBankaccount':''}}"
+              [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}" (click)="setBankaccount(account)">
+              <i [ngStyle]="{'color':'#1A237E','background-color':i % 2 == 0?'white':'#f6f5f6'}"
+                class=" fas fa-credit-card icon">
+              </i>
+              <p class="name">{{account.accountNumber}}</p>
+              <p class="type">€ {{account.balance}}</p>
+              <button mat-icon-button class="clear" (click)="confirmDelete(account)">
+                <i class="fas fa-times"></i>
+              </button>
+              <button mat-icon-button class="edit" (click)="editBankaccount(account)">
+                <i class="fas fa-edit"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+
+      <!--MAT-CARD creation categorie-->
+      <mat-card *ngIf='showCreateBankaccount()' class="matcardNoPaddingTop list">
+        <p class='tab'>Bankrekening aanmaken</p>
+        <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
+          <mat-radio-group aria-label="Select an option" formControlName="type">
+            <mat-radio-button value="zichtrekening" class="radio">Zichtrekening</mat-radio-button>
+            <mat-radio-button value="spaarrekening">Spaarrekening</mat-radio-button>
+            <mat-error *ngIf="form.get('type').invalid" class="own-mat-errors">
+              {{getErrorMessage("type")}}
+            </mat-error>
+          </mat-radio-group>
+          <mat-form-field>
+            <input matInput placeholder="Rekening nummer" formControlName="accountNumber">
+            <mat-error *ngIf="form.get('accountNumber').invalid">
+              {{getErrorMessage("accountNumber")}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Balans" formControlName="balance">
+            <mat-error *ngIf="form.get('balance').invalid">
+              {{getErrorMessage("balance")}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Bank" formControlName="bank">
+            <mat-error *ngIf="form.get('bank').invalid">
+              {{getErrorMessage("bank")}}
+            </mat-error>
+          </mat-form-field>
+          <div class="buttons">
+            <button class="toevoegen" mat-raised-button mat-primary type="submit"
+              [disabled]="form.get('type').invalid || form.get('accountNumber').invalid || form.get('balance').invalid || form.get('bank').invalid">Toevoegen</button>
+            <button mat-raised-button (click)="toggleCreate()">Annuleer</button>
+          </div>
+        </form>
+      </mat-card>
+
+      <!--MAT-CARD edit categorie-->
+      <mat-card class="matcardNoPaddingTop list" *ngIf='showEdit'>
+        <p class='tab'>Bankrekening wijzigen</p>
+        <form [formGroup]='edit' (ngSubmit)='onSubmitEdit()' class="form">
+          <mat-radio-group aria-label="Select an option" formControlName="type">
+            <mat-radio-button value="zichtrekening" class="radio">Zichtrekening</mat-radio-button>
+            <mat-radio-button value="spaarrekening">Spaarrekening</mat-radio-button>
+            <mat-error *ngIf="edit.get('type').invalid" class="own-mat-errors">
+              {{getErrorMessageEdit("type")}}
+            </mat-error>
+          </mat-radio-group>
+          <mat-form-field>
+            <input matInput placeholder="Rekening nummer" formControlName="accountNumber">
+            <mat-error *ngIf="edit.get('accountNumber').invalid">
+              {{getErrorMessageEdit("accountNumber")}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Balans" formControlName="balance">
+            <mat-error *ngIf="edit.get('balance').invalid">
+              {{getErrorMessageEdit("balance")}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Bank" formControlName="bank">
+            <mat-error *ngIf="edit.get('bank').invalid">
+              {{getErrorMessageEdit("bank")}}
+            </mat-error>
+          </mat-form-field>
+          <div class="buttons">
+            <button class="toevoegen" mat-raised-button mat-primary type="submit"
+              [disabled]="edit.get('type').invalid || edit.get('accountNumber').invalid || edit.get('balance').invalid || edit.get('bank').invalid">Wijzig</button>
+            <button mat-raised-button (click)="toggleEdit()">Annuleer</button>
+          </div>
+        </form>
+      </mat-card>
+    </div>
+  </div>
+  <div class="container_right">
+    <div class="content_right">
+      <!--MAT-CARD current bankaccount-->
+      <mat-card class="graph dash" *ngIf="currentBankaccount != null">
+        <div class="bankCard">
+          <div class="section">
+            <p class="title">Naam</p>
+            <p class="content">{{user.firstname}} {{user.lastname}}</p>
+          </div>
+          <div class="section">
+            <p class="title">Kaart</p>
+            <p class="content">{{currentBankaccount.accountNumber}}</p>
+          </div>
+        </div>
+        <div class="metadata">
+          <p>Balans</p>
+          <p>€ {{currentBankaccount.balance}}</p>
+        </div>
+        <div class="history graph dash" *ngIf="showHistory(); else geenGeschiedenis">
+          <p class="tab">Geschiedenis:</p>
+          <div class="transactions">
+            <div *ngFor='let transaction of getTransactions(); index as i'>
+              <div class="transaction" [ngStyle]="{
+              'background-color': i % 2 == 0 ? '#f6f5f6' : 'white'
+            }">
+                <i [ngStyle]="{
+                color: transaction.category.color,
+                'background-color': i % 2 == 0 ? 'white' : '#f6f5f6'
+              }" class="icon {{transaction.category.icon}}">
+                </i>
+                <p class="name">{{transaction.name}}</p>
+                <p class="amount">{{transaction.amount}}</p>
+                <p class="date">{{transaction.date.toLocaleDateString()}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #geenGeschiedenis>
+          <div class="history">
+            <p>Geen geschiedenis</p>
+          </div>
+        </ng-template>
+      </mat-card>
+    </div>
   </div>
 </div>

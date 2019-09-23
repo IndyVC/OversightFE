@@ -4,6 +4,7 @@ import { UserService } from "../user/user.service";
 import { Transaction } from "src/app/domain/transaction";
 import { map } from "rxjs/operators";
 import { CategoryService } from "../category/category.service";
+import { BankaccountService } from '../bankaccount/bankaccount.service';
 
 @Injectable({
   providedIn: "root"
@@ -12,7 +13,8 @@ export class TransactionService {
   constructor(
     private firestore: AngularFirestore,
     private userService: UserService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private bankaccountService:BankaccountService
   ) {}
 
   // INCOMES
@@ -21,15 +23,14 @@ export class TransactionService {
     const categoryReference: DocumentReference = this.categoryService.getCategoryReference(
       income.category.id
     );
+    const bankaccountReference:DocumentReference = this.bankaccountService.getBankaccountReference(income.account.id);
 
     const docData = {
       name: income.name,
       amount: income.amount,
       date: income.date,
       category: categoryReference,
-      account: {
-        accountNumber: income.account.accountNumber
-      }
+      account: bankaccountReference
     };
     this.firestore
       .collection("incomes")
@@ -55,14 +56,15 @@ export class TransactionService {
       income.category.id
     );
 
+    const bankaccountReference:DocumentReference = this.bankaccountService.getBankaccountReference(income.account.id);
+
+
     const docData = {
       name: income.name,
       amount: income.amount,
       date: income.date,
       category: categoryReference,
-      account: {
-        accountNumber: income.account.accountNumber
-      }
+      account: bankaccountReference
     };
     return this.firestore
       .collection("incomes")
@@ -92,15 +94,14 @@ export class TransactionService {
     const categoryReference: DocumentReference = this.categoryService.getCategoryReference(
       outcome.category.id
     );
+    const bankaccountReference:DocumentReference = this.bankaccountService.getBankaccountReference(outcome.account.id);
 
     const docData = {
       name: outcome.name,
       amount: outcome.amount,
       date: outcome.date,
       category: categoryReference,
-      account: {
-        accountNumber: outcome.account.accountNumber
-      }
+      account: bankaccountReference
     };
     this.firestore
       .collection("outcomes")
@@ -125,15 +126,14 @@ export class TransactionService {
     const categoryReference: DocumentReference = this.categoryService.getCategoryReference(
       outcome.category.id
     );
+    const bankaccountReference:DocumentReference = this.bankaccountService.getBankaccountReference(outcome.account.id);
 
     const docData = {
       name: outcome.name,
       amount: outcome.amount,
       date: outcome.date,
       category: categoryReference,
-      account: {
-        accountNumber: outcome.account.accountNumber
-      }
+      account: bankaccountReference
     };
     return this.firestore
       .collection("outcomes")
@@ -152,7 +152,7 @@ export class TransactionService {
     const document = this.firestore.collection("outcomes").doc(key);
     const reference = document.ref;
     return document.delete().then(() => {
-      this.userService.removeIncome(reference);
+      this.userService.removeOutcome(reference);
       console.log("deleted document transaction: ", document);
     });
   }

@@ -91,7 +91,7 @@
         <mat-form-field #cat1>
           <mat-label>Categorie</mat-label>
           <mat-select formControlName="category">
-            <mat-option *ngFor='let category of user.getAllCategories()' [value]='category'>
+            <mat-option *ngFor='let category of getUser().getAllCategories()' [value]='category'>
               {{category.name}}
             </mat-option>
           </mat-select>
@@ -151,7 +151,7 @@
         <mat-form-field #cat1>
           <mat-label>Categorie</mat-label>
           <mat-select formControlName="category">
-            <mat-option *ngFor='let category of user.getAllCategories()' [value]="category"
+            <mat-option *ngFor='let category of getUser().getAllCategories()' [value]="category"
               (value)="edit.get('category').value.name">
               {{category.name}}
             </mat-option>
@@ -245,24 +245,11 @@
             </mat-form-field>
           </div>
         </div>
-        <div class="incomeCategory" *ngIf=incomeActive>
-          <mat-form-field #cat1>
-            <mat-label>Categorie</mat-label>
-            <mat-select (selectionChange)=' updateIncomeCategory($event)' multiple>
-              <mat-option *ngFor='let category of getUser().getIncomeCategories()' [value]='category.name'>
-                {{category.name}}
-              </mat-option>
-              <mat-option value="all">
-                Allemaal
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="outcomeCategory" *ngIf=!incomeActive>
+        <div>
           <mat-form-field>
             <mat-label>Categorie</mat-label>
-            <mat-select (selectionChange)='updateOutcomeCategory($event)' multiple>
-              <mat-option *ngFor='let category of getUser().getOutcomeCategories()' [value]='category.name'>
+            <mat-select (selectionChange)=' updateCategory($event)' multiple>
+              <mat-option *ngFor='let category of getUser().getAllCategories()' [value]='category.name'>
                 {{category.name}}
               </mat-option>
               <mat-option value="all">
@@ -271,7 +258,6 @@
             </mat-select>
           </mat-form-field>
         </div>
-
       </div>
     </mat-card>
   </div>
@@ -288,7 +274,7 @@
       <!--MENU-->
       <app-menu></app-menu>
       <!--MAT-CARD creation transaction-->
-    <mat-card *ngIf='showCreate' class="matcardNoPaddingTop list">
+      <mat-card *ngIf='showCreate' class="matcardNoPaddingTop list">
         <p class='tab'>Transactie aanmaken</p>
         <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
           <mat-radio-group aria-label="Select an option" formControlName="type">
@@ -323,7 +309,7 @@
           <mat-form-field #cat1>
             <mat-label>Categorie</mat-label>
             <mat-select formControlName="category">
-              <mat-option *ngFor='let category of user.getAllCategories()' [value]='category'>
+              <mat-option *ngFor='let category of getUser().getAllCategories()' [value]='category'>
                 {{category.name}}
               </mat-option>
             </mat-select>
@@ -383,7 +369,7 @@
           <mat-form-field #cat1>
             <mat-label>Categorie</mat-label>
             <mat-select formControlName="category">
-              <mat-option *ngFor='let cat of user.getAllCategories()' [value]="cat">
+              <mat-option *ngFor='let cat of getUser().getAllCategories()' [value]="cat">
                 {{cat.name}}
               </mat-option>
             </mat-select>
@@ -474,24 +460,11 @@
               </mat-form-field>
             </div>
           </div>
-          <div class="incomeCategory" *ngIf=incomeActive>
-            <mat-form-field #cat1>
-              <mat-label>Categorie</mat-label>
-              <mat-select (selectionChange)=' updateIncomeCategory($event)' multiple>
-                <mat-option *ngFor='let category of getUser().getIncomeCategories()' [value]='category.name'>
-                  {{category.name}}
-                </mat-option>
-                <mat-option value="all">
-                  Allemaal
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <div class="outcomeCategory" *ngIf=!incomeActive>
+          <div>
             <mat-form-field>
               <mat-label>Categorie</mat-label>
-              <mat-select (selectionChange)='updateOutcomeCategory($event)' multiple>
-                <mat-option *ngFor='let category of getUser().getOutcomeCategories()' [value]='category.name'>
+              <mat-select (selectionChange)=' updateCategory($event)' multiple>
+                <mat-option *ngFor='let category of getUser().getAllCategories()' [value]='category.name'>
                   {{category.name}}
                 </mat-option>
                 <mat-option value="all">

@@ -84,6 +84,31 @@ export class User {
     return shortOversight as number;
   }
 
+  calculateTotalSpendOnCategory(category: Category) {
+    const date: Date = new Date();
+    if (this.getAllTransactions()) {
+      const transactions: Transaction[] = this.getAllTransactions().filter(
+        t => t.category.id === category.id
+      );
+      let sum = 0;
+      transactions.forEach(e => (sum += e.amount));
+      return sum;
+    }
+  }
+
+  deleteLocalIncome(transaction: Transaction) {
+    const index = this.incomes.findIndex(
+      income => income.id === transaction.id
+    );
+    this.incomes.splice(index, 1);
+  }
+  deleteLocalOutcome(transaction: Transaction) {
+    const index = this.outcomes.findIndex(
+      outcome => outcome.id === transaction.id
+    );
+    this.outcomes.splice(index, 1);
+  }
+
   getAllTransactions(): Transaction[] {
     this.transactions = [...this.incomes, ...this.outcomes];
     if (this.transactions) {
@@ -152,26 +177,8 @@ export class User {
     }
   }
 
-  calculateTotalSpendOnCategory(category: Category) {
-    const date: Date = new Date();
-    if (this.getAllTransactions()) {
-      const transactions: Transaction[] = this.getAllTransactions().filter(
-        t => t.category.id === category.id
-      );
-      let sum = 0;
-      transactions.forEach(e => (sum += e.amount));
-      return sum;
-    }
-  }
-
   getAllCategories(): Category[] {
     return this.categories;
-  }
-  getIncomeCategories(): Category[] {
-    return this.categories.filter(cat => cat.type === "income");
-  }
-  getOutcomeCategories(): Category[] {
-    return this.categories.filter(cat => cat.type === "outcome");
   }
 
   getCategoryByName(name: string): Category {

@@ -43,7 +43,7 @@ export class CategoryService {
   deleteCategory(key: string) {
     console.log("key: ", key);
     const document = this.firestore.collection("categories").doc(key);
-    const reference = document.ref;
+    const reference = this.getCategoryReference(key);
     return document.delete().then(() => {
       this.userService.removeCategory(reference);
       console.log("deleted document category: ", document);
@@ -55,5 +55,4 @@ export class CategoryService {
     return document.ref;
   }
 
-  getCategory
 }

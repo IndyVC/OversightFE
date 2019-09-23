@@ -1,0 +1,15 @@
+  <h2 mat-dialog-title>Bevestig verwijderen</h2>
+
+  <mat-dialog-content>
+    <div class="container">
+      <p>
+        Indien u dit item verwijderd, worden alle transacties die aan dit item vasthangen ook verwijderd.
+        Bevestig indien u wilt doorgaan.
+      </p>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button class="mat-raised-button" (click)="close()">Annuleer</button>
+    <button class="mat-raised-button mat-primary" (click)="submit()">Bevestig</button>
+  </mat-dialog-actions>

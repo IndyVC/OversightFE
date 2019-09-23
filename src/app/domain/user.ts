@@ -45,8 +45,8 @@ export class User {
     let debt: number = 0;
 
     this.loans.map(loan => {
-      debt += loan.loan as number;
-      debt -= loan.current as number;
+      debt += loan.totalAmount as number;
+      debt -= loan.currentAmount as number;
     });
 
     return debt;
@@ -198,12 +198,7 @@ export class User {
   getAllLoans(): Loan[] {
     return this.loans;
   }
-  getLoanById(ID: number): Loan {
-    return this.loans.find(loan => loan.ID === ID);
-  }
-  getLoanByName(name: string): Loan {
-    return this.loans.find(loan => loan.name === name);
-  }
+
   getAllYears(): number[] {
     let years = new Set<number>();
     if (this.getAllTransactions()) {

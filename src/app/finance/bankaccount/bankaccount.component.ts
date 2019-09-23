@@ -80,6 +80,7 @@ export class BankaccountComponent implements OnInit {
     this.bankaccountService.createBankaccount(bankaccount);
     this.accounts.push(bankaccount);
     this.setBankaccount(bankaccount);
+    this.resetForm();
     this.showCreate = false;
   }
 
@@ -137,6 +138,12 @@ export class BankaccountComponent implements OnInit {
     this.toggleEdit();
   }
 
+  resetForm() {
+    this.form.get("accountNumber").reset();
+    this.form.get("balance").reset();
+    this.form.get("bank").reset();
+    this.form.get("type").reset();
+  }
   getBankaccounts() {
     return this.user.accounts;
   }

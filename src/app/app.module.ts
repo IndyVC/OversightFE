@@ -27,6 +27,7 @@ import { ResetPasswordComponent } from './authenticatie/dialogs/reset-password/r
 import { CategoriesComponent } from './finance/categories/categories.component';
 import { BankaccountComponent } from './finance/bankaccount/bankaccount.component';
 import { UsedByTransactionsComponent } from './finance/dialogs/used-by-transactions/used-by-transactions.component';
+import { LoanComponent } from './finance/loan/loan.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +38,8 @@ import { UsedByTransactionsComponent } from './finance/dialogs/used-by-transacti
     TransactieComponent,
     CategoriesComponent,
     BankaccountComponent,
-    UsedByTransactionsComponent
+    UsedByTransactionsComponent,
+    LoanComponent
   ],
   imports: [
     BrowserModule,

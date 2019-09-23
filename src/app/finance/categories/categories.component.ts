@@ -244,6 +244,7 @@ export class CategoriesComponent implements OnInit {
     const color = this.form.get("color").value;
     const category = new Category(name, icon, color);
     this.categoryService.createCategory(category);
+    this.resetForm();
     this.categories.push(category);
     this.showCreate = false;
   }
@@ -259,6 +260,12 @@ export class CategoriesComponent implements OnInit {
     this.categoryService.updateCategory(id, category);
     this.setCategory(category);
     this.toggleEdit();
+  }
+
+  resetForm() {
+    this.form.get("name").reset();
+    this.form.get("color").reset();
+    this.selectedIconCreate = null;
   }
 
   toggleCreate() {

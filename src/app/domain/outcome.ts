@@ -7,7 +7,7 @@ export class Outcome extends Transaction {
       json.name,
       parseFloat(json.amount.toString()),
       json.date.toDate(),
-      new BankAccount(json.account, 200, "Forsti", "Zichtrekening")
+      json.account
     );
   }
 

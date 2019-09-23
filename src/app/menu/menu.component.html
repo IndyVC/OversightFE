@@ -1,31 +1,32 @@
 <div class="container">
   <div class="menubar">
-    <mat-icon class="menucollapse" (click)="toggleMenu()" href="#">list</mat-icon>
+    <i class="fas fa-list menucollapse" (click)="toggleMenu()" href="#"></i>
     <img src="../../assets/titelWhite2.png" class="titelMenubar">
   </div>
   <div class="menu" *ngIf=showMenu>
     <ul class="links">
       <li> <img src="../../assets/titelWhite2.png" class="titelMenu"></li>
-      <li class="line">
-        <mat-icon class="icon">account_circle</mat-icon><a href="#">Log uit</a>
-      </li>
+
       <li class="line">
         <mat-icon class="icon">timeline</mat-icon><a href="#" [routerLink]="['../transacties']">Transacties</a>
       </li>
-      <li class="line">
+      <!-- <li class="line">
         <mat-icon class="icon">account_balance</mat-icon><a href="#">Investeringen</a>
-      </li>
-      <li class="line">
-        <mat-icon class="icon">local_offer</mat-icon><a href="#">Leningen</a>
-      </li>
-      <li class="line">
+      </li> -->
+      <!-- <li class="line">
         <mat-icon class="icon">event_note</mat-icon><a href="#">Goals</a>
+      </li> -->
+      <li class="line">
+        <mat-icon class="icon">category</mat-icon><a href="#" [routerLink]="['../categorieën']">Categorieën</a>
       </li>
       <li class="line">
         <i class="icon fab fa-cc-visa"></i><a href="#" [routerLink]="['../bankrekeningen']">Bankrekening</a>
       </li>
       <li class="line">
-        <mat-icon class="icon">category</mat-icon><a href="#" [routerLink]="['../categorieën']">Categorieën</a>
+          <i class="icon fas fa-money-check-alt"></i><a href="#" [routerLink]="['../leningen']">Leningen</a>
+      </li>
+      <li class="line">
+        <mat-icon class="icon">account_circle</mat-icon><a href="#">Log uit</a>
       </li>
     </ul>
   </div>

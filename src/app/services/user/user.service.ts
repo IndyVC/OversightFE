@@ -10,6 +10,7 @@ import { Transaction } from "src/app/domain/transaction";
 import { Income } from "src/app/domain/income";
 import { Outcome } from "src/app/domain/outcome";
 import { BankAccount } from "src/app/domain/account";
+import { Loan } from "src/app/domain/loan";
 
 @Injectable({
   providedIn: "root"
@@ -217,6 +218,29 @@ export class UserService {
           return val;
         })
         .then(val => {
+          console.log("reading loans");
+          const realLoans: Loan[] = [];
+          this.user.loans = realLoans;
+          const promises = [];
+          if (val.data().loans) {
+            val.data().loans.forEach(loan => {
+              promises.push(
+                new Promise(() => {
+                  loan.get().then(loanDoc => {
+                    const loans: Loan = Loan.fromJSON(loanDoc.data());
+                    loans.id = loanDoc.id;
+                    realLoans.push(loans);
+                  });
+                })
+              );
+            });
+          }
+          console.log("promises :", promises);
+          Promise.all(promises);
+          console.log("alle promises zijn gedaan");
+          return val;
+        })
+        .then(val => {
           console.log("user is created", this.user);
           return val;
         })
@@ -300,6 +324,24 @@ export class UserService {
       .doc(this.uid)
       .update({
         bankaccounts: firebase.firestore.FieldValue.arrayRemove(reference)
+      });
+  }
+
+  addLoan(reference) {
+    this.firestore
+      .collection("users")
+      .doc(this.uid)
+      .update({
+        loans: firebase.firestore.FieldValue.arrayUnion(reference)
+      });
+  }
+
+  removeLoan(reference) {
+    this.firestore
+      .collection("users")
+      .doc(this.uid)
+      .update({
+        loans: firebase.firestore.FieldValue.arrayRemove(reference)
       });
   }
 }

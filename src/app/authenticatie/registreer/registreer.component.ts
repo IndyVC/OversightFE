@@ -47,7 +47,9 @@ export class RegistreerComponent implements OnInit {
       .SignUp(email, password, this.mapFormGroupToUser(this.register))
       .catch(e => {
         console.log(e);
-        this.openUsedEmailDialog();
+        if (e.code === "auth/email-already-in-use") {
+          this.openUsedEmailDialog();
+        }
       });
   }
 

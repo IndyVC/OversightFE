@@ -117,9 +117,9 @@
         <p> € {{calculateShortOversight()}}</p>
         <button class="addLoan" (click)='showLoan()'>Voeg een bankrekening toe</button>
       </div>
-      <div class="loans">
+      <div class="items">
         <div *ngFor="let loan of getLoans(); index as i">
-          <div class="loan {{currentLoan && currentLoan.id===loan.id?'currentLoan':''}}"
+          <div class="item {{currentLoan && currentLoan.id===loan.id?'currentLoan':''}}"
             [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}" (click)="setLoan(loan)">
             <i [ngStyle]="{'color':'#1A237E','background-color':i % 2 == 0?'white':'#f6f5f6'}"
               class=" fas fa-money-check-alt icon">
@@ -249,9 +249,9 @@
           <p> € {{calculateShortOversight()}}</p>
           <button class="addLoan" (click)='showLoan()'>Voeg een bankrekening toe</button>
         </div>
-        <div class="loans">
+        <div class="items">
           <div *ngFor="let loan of getLoans(); index as i">
-            <div class="loan {{currentLoan && currentLoan.id===loan.id?'currentLoan':''}}"
+            <div class="item {{currentLoan && currentLoan.id===loan.id?'currentLoan':''}}"
               [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}" (click)="setLoan(loan)">
               <i [ngStyle]="{'color':'#1A237E','background-color':i % 2 == 0?'white':'#f6f5f6'}"
                 class=" fas fa-money-check-alt icon">

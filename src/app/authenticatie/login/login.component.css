@@ -1,4 +1,4 @@
-.container {
+.container_login {
   width: 100vw;
   height: 100vh;
   background-color: #1a237e;
@@ -15,7 +15,7 @@ h1 {
   padding-top: 5vh;
 }
 
-.form {
+.form_login {
   display: flex;
   flex-direction: column;
   width: 100vw;
@@ -24,11 +24,11 @@ h1 {
   border-radius: 20px 20px 0 0;
 }
 
-.form .input {
+.form_login .input {
   width: 80vw;
   margin-left: 10vw;
 }
-.form .input:nth-child(1) {
+.form_login .input:nth-child(1) {
   margin-top: 20px;
 }
 .button_blue {
@@ -100,7 +100,7 @@ h1 {
     font-size: 30px;
   }
 
-  .form {
+  .form_login {
     display: flex;
     flex-direction: column;
     width: 80%;
@@ -110,11 +110,11 @@ h1 {
     background-color: unset;
     border-radius: 0px;
   }
-  .form .input {
+  .form_login .input {
     width: unset;
     margin-left: unset;
   }
-  .form .input:nth-child(1) {
+  .form_login .input:nth-child(1) {
     margin-top: unset;
   }
   .button_blue {

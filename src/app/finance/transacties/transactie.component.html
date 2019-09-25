@@ -194,9 +194,9 @@
         <button class="addTransaction" (click)='showTransaction()'>Voeg transactie toe</button>
       </div>
 
-      <div class="transactions" *ngIf="transactions.length>0">
+      <div class="items" *ngIf="transactions.length>0">
         <div *ngFor='let transaction of getTransactions(); index as i'>
-          <div class="transaction" [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}">
+          <div class="item" [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}">
             <i [ngStyle]="{'color': transaction.category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}"
               class="icon {{transaction.category.icon}}">
             </i>
@@ -409,9 +409,9 @@
           <button class="addTransaction" (click)='showTransaction()'>Voeg transactie toe</button>
         </div>
 
-        <div class="transactions" *ngIf="transactions.length>0">
+        <div class="items" *ngIf="transactions.length>0">
           <div *ngFor='let transaction of getTransactions(); index as i'>
-            <div class="transaction" [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}">
+            <div class="item" [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}">
               <i [ngStyle]="{'color': transaction.category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}"
                 class="icon {{transaction.category.icon}}">
               </i>

@@ -1,66 +1,3 @@
-.container {
-  background-color: #f6f5f6;
-  width: 100%;
-  height: 80vh;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
-  margin-top: 100px;
-}
-.container_lg{
-  display: none;
-}
-
-.container_white {
-  width: 100vw;
-  background-color: white;
-  border-radius: 20px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
-
-}
-
-.tabs {
-  width: 80%;
-  margin-left: 10%;
-}
-
-.tabButton {
-  width: 50%;
-  background-color: transparent;
-  border: 0;
-  border-top: 5px #e8e8e7 solid;
-  color: #e8e8e7;
-  font-weight: bold;
-}
-
-.tab {
-  width: 50%;
-  background-color: transparent;
-  border: 0;
-  border-top: 2px #e8e8e7 solid;
-  color: #e8e8e7;
-  font-weight: bold;
-  margin-left: 25%;
-  text-align: center;
-  color: #1f387e;
-  border-color: #1f387e;
-}
-
-.matcardNoPadding {
-  padding: 0px !important;
-}
-.matcardNoPaddingTop{
-  padding-top: 0px !important;
-}
-
-.graph {
-  background-color: white;
-  margin-bottom: 20px;
-}
-
-.selected {
-  color: #1f387e;
-  border-color: #1f387e;
-}
-
 .form {
   display: flex;
   flex-direction: column;
@@ -70,21 +7,6 @@
   height: unset;
   background-color: unset;
   border-radius: 0px;
-}
-.radio {
-  padding-right: 10px;
-}
-
-.metadata {
-  margin-left: 20px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.metadata p:nth-child(1) {
-  font-weight: bold;
-  color: #1f387e;
-  margin-bottom: 5px;
 }
 
 .addTransaction {
@@ -99,84 +21,21 @@
   padding: 0;
 }
 
-.transactions {
-  max-height: 50vh;
-  overflow-y: auto;
-}
-
-.transaction {
-  height: 80px;
-  position: relative;
-  background-color: white;
-}
-
-.icon {
-  background-color: #f6f5f6;
-  border-radius: 30px;
-  padding: 10px;
-  margin-top: 17.5px;
-  font-size: 25px;
-  margin-left: 5px;
-}
-
-.name {
-  position: absolute;
-  left: 70px;
-  font-weight: bold;
-  top: 20px;
-  color: #1f387e;
-}
-
-.amount {
-  position: absolute;
-  left: 70px;
-  top: 40px;
-  color: #1f387e;
-  font-family: 'Open Sans', Roboto, sans-serif;
-}
-
-.date {
-  position: absolute;
-  left: 70px;
-  bottom:5px;
-  font-size: 12px;
-  opacity: 0.5;
-}
-
-.clear {
-  position: absolute;
-  bottom: 5px;
-  right: 10px;
-  font-size: 18px;
-  color: #1f387e;
-}
-
-.edit {
-  position: absolute;
-  top: 5px;
-  right: 10px;
-  font-size: 18px;
-  color: #1f387e;
-}
-
 .error {
   margin-top: 15px;
 }
-.toevoegen {
-  margin-right: 10px;
-}
-.geenTransacties{
+
+.geenTransacties {
   margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color:#f6f5f6;
+  background-color: #f6f5f6;
   height: 60px;
-
 }
-.legeLijst{
+.legeLijst {
   text-align: center;
-  color:#1f387e;
+  color: #1f387e;
 }
 .options {
   width: 100%;
@@ -206,9 +65,6 @@
   padding: 50px;
   text-align: center;
 }
-.own-mat-errors {
-  font-size: 12px;
-}
 
 .updateTotalYear {
   display: inline-block;
@@ -217,93 +73,29 @@
   margin-left: 25%;
 }
 
-.mat-dialog-actions{
-  margin-top:10px;
+.mat-dialog-actions {
+  margin-top: 10px;
 }
-@media screen and (min-width:560px) {
-  .container {
-    margin-top: 20px;
-  }
 
-  .tabletContainer {
-    margin-left: 250px;
-  }
-}
 @media screen and (min-width: 1000px) {
-  .container {
-    display: none;
-  }
-
-  .tabletContainer {
-    margin-left: unset;
-  }
-
-  .container_lg {
-    display: block;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: row;
-    font-family: Roboto, "Open-sans", sans-serif;
-  }
-
-  .container_left {
-    width: 50vw;
-    height: 100vh;
-    background-color: #141B65;
-  }
-
-  .container_right {
-    width: 50vw;
-    height: 100vh;
-    background-color: #1A237E;
-  }
-
-  .content_left {
-    width: 40vw;
-    height: 80vh;
-    background-color: #FFFFFF;
-    margin-left: 10vw;
-    margin-top: 10vh;
-    border-radius: 20px 0 0 20px;
-    padding-right: 10px;
-  }
-
-  .content_right {
-    width:50vw;
-    height: 80vh;
-    background-color: #F6F5F6;
-    margin-right: 10vw;
-    margin-top: 10vh;
-  }
-
-  .list {
-    margin-left: 210px;
-    right: 10px;
-    top: 0.5vh;
-    max-height:79vh;
-    margin-bottom: 10px;
-  }
-
-  .transactions {
-    max-height: 50vh;
-    height:unset;
-  }
-  .grid{
+  .grid {
     flex-direction: column;
     display: flex;
     justify-content: space-around;
     align-content: space-around;
-    height:80vh;
+    height: 80vh;
   }
-  .graphRow{
+  .graphRow {
     display: flex;
     flex-direction: row;
-    width:50vw;
+    width: 50vw;
     justify-content: space-around;
   }
-  .graph{
-    width:24vw;
-    top:0.5vh;
+  .graph {
+    width: 24vw;
+    top: 0.5vh;
+  }
+  .content_right{
+    width:50vw !important;
   }
 }

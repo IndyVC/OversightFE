@@ -97,9 +97,9 @@
         <p> € {{calculateShortOversight()}}</p>
         <button class="addCategory" (click)='showCategory()'>Voeg een categorie toe</button>
       </div>
-      <div class="categories">
+      <div class="items">
         <div *ngFor="let category of getCategories(); index as i">
-          <div class="category {{currentCategory && category.id===currentCategory.id?'currentCategory':''}}"
+          <div class="item {{currentCategory && category.id===currentCategory.id?'currentCategory':''}}"
             [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}" (click)="setCategory(category)">
             <i [ngStyle]="{'color': category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}"
               class=" {{category.icon}} icon">
@@ -137,9 +137,9 @@
           <p> € {{calculateShortOversight()}}</p>
           <button class="addCategory" (click)='showCategory()'>Voeg een categorie toe</button>
         </div>
-        <div class="categories">
+        <div class="items">
           <div *ngFor="let category of getCategories(); index as i">
-            <div class="category {{currentCategory && category.id===currentCategory.id?'currentCategory':''}}"
+            <div class="item {{currentCategory && category.id===currentCategory.id?'currentCategory':''}}"
               [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}" (click)="setCategory(category)">
               <i [ngStyle]="{'color': category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}"
                 class=" {{category.icon}} icon">

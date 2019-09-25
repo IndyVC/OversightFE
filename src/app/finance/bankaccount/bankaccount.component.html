@@ -124,9 +124,9 @@
         <p> € {{calculateShortOversight()}}</p>
         <button class="addBankaccount" (click)='showBankaccount()'>Voeg een bankrekening toe</button>
       </div>
-      <div class="accounts">
+      <div class="items">
         <div *ngFor="let account of getBankaccounts(); index as i">
-          <div class="account {{currentBankaccount && currentBankaccount.id===account.id?'currentBankaccount':''}}"
+          <div class="item {{currentBankaccount && currentBankaccount.id===account.id?'currentBankaccount':''}}"
             [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}" (click)="setBankaccount(account)">
             <i [ngStyle]="{'color':'#1A237E','background-color':i % 2 == 0?'white':'#f6f5f6'}"
               class=" fas fa-credit-card icon">
@@ -161,9 +161,9 @@
           <p> € {{calculateShortOversight()}}</p>
           <button class="addBankaccount" (click)='showBankaccount()'>Voeg een bankrekening toe</button>
         </div>
-        <div class="accounts">
+        <div class="items">
           <div *ngFor="let account of getBankaccounts(); index as i">
-            <div class="account {{currentBankaccount && currentBankaccount.id===account.id?'currentBankaccount':''}}"
+            <div class="item {{currentBankaccount && currentBankaccount.id===account.id?'currentBankaccount':''}}"
               [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}" (click)="setBankaccount(account)">
               <i [ngStyle]="{'color':'#1A237E','background-color':i % 2 == 0?'white':'#f6f5f6'}"
                 class=" fas fa-credit-card icon">
@@ -274,7 +274,7 @@
           <p>Balans</p>
           <p>€ {{currentBankaccount.balance}}</p>
         </div>
-        <div class="history graph dash" *ngIf="showHistory(); else geenGeschiedenis">
+        <div class="history" *ngIf="showHistory(); else geenGeschiedenis">
           <p class="tab">Geschiedenis:</p>
           <div class="transactions">
             <div *ngFor='let transaction of getTransactions(); index as i'>

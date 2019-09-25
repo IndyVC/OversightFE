@@ -1,7 +1,7 @@
 <!--small screen-->
-<div class="container">
+<div class="container_login">
   <h1>Log in</h1>
-  <form class="form" [formGroup]="login" (ngSubmit)="onSubmit()">
+  <form class="form_login" [formGroup]="login" (ngSubmit)="onSubmit()">
     <mat-form-field class="input">
       <input matInput placeholder="Email" formControlName="email" />
       <mat-error *ngIf="login.get('email').invalid">{{
@@ -29,7 +29,7 @@
   <div class="container_left">
     <div class="content_left">
       <h1>Log in</h1>
-      <form class="form" [formGroup]="login" (ngSubmit)="onSubmit()">
+      <form class="form_login" [formGroup]="login" (ngSubmit)="onSubmit()">
         <mat-form-field class="input">
           <input matInput placeholder="Email" formControlName="email" />
           <mat-error *ngIf="login.get('email').invalid">{{

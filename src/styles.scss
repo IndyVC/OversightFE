@@ -5,7 +5,9 @@
 @import 'theme.scss';
 @include angular-material-theme($my-theme);
 @import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto&display=swap');
-
+:root{
+  --primaryColor: #1f387e;
+}
 html,
 body {}
 
@@ -16,8 +18,220 @@ body {
 }
 
 /*OWN STYLING*/
+.container {
+  background-color: #f6f5f6;
+  width: 100%;
+  height: 80vh;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin-top: 100px;
+}
+.container_lg {
+  display: none;
+}
+.container_white {
+  width: 100vw;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+
+}
+.matcardNoPadding {
+  padding: 0px !important;
+}
+
+.matcardNoPaddingTop {
+  padding-top: 0px !important;
+}
+.section {
+  width: 100%;
+  margin-bottom: 15px;
+  margin-left: 20px;
+  color: white;
+}
+
+.title {
+  margin-bottom: 5px;
+}
+
+.content {
+  font-size: 24px;
+  text-transform: uppercase;
+}
+
+.own-mat-errors {
+  font-size: 12px;
+}
+
+.tab {
+  width: 50%;
+  background-color: transparent;
+  border: 0;
+  border-top: 2px #e8e8e7 solid;
+  color: #e8e8e7;
+  font-weight: bold;
+  margin-left: 25%;
+  text-align: center;
+  color: var(--primaryColor);
+  border-color: var(--primaryColor);
+}
+.tabs {
+  width: 80%;
+  margin-left: 10%;
+}
+.selected {
+  color: var(--primaryColor) !important;
+  border-color: var(--primaryColor) !important;
+}
+.tabButton {
+  width: 50%;
+  background-color: transparent;
+  border: 0;
+  border-top: 5px #e8e8e7 solid;
+  color: #e8e8e7;
+  font-weight: bold;
+}
 
 
+
+
+.balance {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.history {
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.transactions {
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+.transaction {
+  height: 80px;
+  position: relative;
+  background-color: white;
+  border-left: 2px solid rgba(31, 56, 126, 0.8);
+}
+
+
+
+
+.underline {
+  border-bottom: 2px solid rgba(31, 56, 126, 0.8);
+}
+
+.icon {
+  background-color: #f6f5f6;
+  border-radius: 30px;
+  padding: 10px;
+  margin-top: 17.5px;
+  font-size: 25px;
+  margin-left: 5px;
+}
+
+
+.name {
+  position: absolute;
+  left: 70px;
+  font-weight: bold;
+  top: 20px;
+  color: var(--primaryColor);
+}
+
+.amount {
+  position: absolute;
+  left: 70px;
+  top: 40px;
+  color: var(--primaryColor);
+  font-family: 'Open Sans', Roboto, sans-serif;
+}
+
+.date {
+  position: absolute;
+  left: 70px;
+  bottom: 5px;
+  font-size: 12px;
+  opacity: 0.5;
+}
+
+.dash {
+  left: 1vw;
+  top: 0.5vh;
+  width: 30vw;
+}
+
+.graph {
+  background-color: white;
+  margin-bottom: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin-top: 20px;
+  margin-left: 10%;
+  height: unset;
+  background-color: unset;
+  border-radius: 0px;
+}
+
+.type {
+  position: absolute;
+  left: 70px;
+  top: 40px;
+  color: var(--primaryColor);
+  font-family: 'Open Sans', Roboto, sans-serif;
+}
+
+.clear {
+  position: absolute !important;
+  bottom: 5px;
+  right: 10px;
+  font-size: 18px;
+  color: var(--primaryColor);
+}
+
+.edit {
+  position: absolute !important;
+  top: 5px;
+  right: 10px;
+  font-size: 18px;
+  color: var(--primaryColor);
+}
+
+.toevoegen {
+  margin-right: 10px;
+}
+
+
+.metadata {
+  margin-left: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.metadata p:nth-child(1) {
+  font-weight: bold;
+  color: var(--primaryColor);
+  margin-bottom: 5px;
+}
+
+.radio {
+  padding-right: 10px;
+}
+
+
+
+.list {
+  margin-left: 210px;
+  right: 10px;
+  top: 0.5vh;
+}
 
 .button_blue {
   background-color: #283593;
@@ -41,6 +255,99 @@ body {
 
 .buttons{
   margin-top:15px;
+}
+.items {
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+.item,
+.categoryShowbox {
+  height: 80px;
+  position: relative;
+  background-color: white;
+}
+
+
+@media screen and (min-width:560px) {
+  .container {
+    margin-top: 20px;
+  }
+
+  .tabletContainer {
+    margin-left: 250px;
+  }
+
+
+}
+
+@media screen and (min-width: 1000px) {
+  .container {
+    display: none;
+  }
+
+  .tabletContainer {
+    margin-left: unset;
+  }
+
+  .container_lg {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    font-family: Roboto, "Open-sans", sans-serif;
+  }
+
+  .container_left {
+    width: 50vw;
+    height: 100vh;
+    background-color: #141B65;
+  }
+
+  .container_right {
+    width: 50vw;
+    height: 100vh;
+    background-color: #1A237E;
+  }
+
+  .content_left {
+    width: 40vw;
+    height: 80vh;
+    background-color: #FFFFFF;
+    margin-left: 10vw;
+    margin-top: 10vh;
+    border-radius: 20px 0 0 20px;
+    padding-right: 10px;
+  }
+
+  .content_right {
+    width: 40vw;
+    height: 80vh;
+    background-color: #F6F5F6;
+    margin-right: 10vw;
+    margin-top: 10vh;
+    border-radius: 0 20px 20px 0;
+
+  }
+
+  .history {
+    width: 28vw;
+  }
+  .dash {
+    left: 1vw;
+    top: 0.5vh;
+    width: 30vw;
+  }
+  .list {
+    margin-left: 210px;
+    right: 10px;
+    top: 0.5vh;
+  }
+  .items {
+    max-height: 60vh;
+  }
+
 }
 /*RESET CSS*/
 html,

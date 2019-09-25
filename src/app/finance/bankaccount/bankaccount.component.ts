@@ -67,7 +67,7 @@ export class BankaccountComponent implements OnInit {
 
   onSubmit() {
     const accountNumber = this.form.get("accountNumber").value;
-    let balance = this.form.get("balance").value;
+    let balance = this.form.get("balance").value.toString();
     const bank = this.form.get("bank").value;
     const type = this.form.get("type").value;
     balance = balance.replace(",", ".");

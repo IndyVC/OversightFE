@@ -1,4 +1,4 @@
-.container {
+.container_registreer {
   width: 100vw;
   height: 100vh;
   background-color: #1a237e;
@@ -22,7 +22,7 @@ h1 {
   width:100%;
   text-align: center;
 }
-.form {
+.form_registreer {
   display: flex;
   flex-direction: column;
   width: 100vw;
@@ -31,12 +31,12 @@ h1 {
   height: 90vh;
 }
 
-.form .input {
+.form_registreer .input {
   width: 80vw;
   margin-left: 10vw;
   margin-bottom: 5px;
 }
-.form .input:nth-child(1){
+.form_registreer .input:nth-child(1){
   margin-top:20px;
 }
 
@@ -52,7 +52,7 @@ h1 {
 
 
 @media screen and (min-width: 1000px) {
-  .container {
+  .container_registreer {
     display: none;
   }
   .container_lg {
@@ -106,7 +106,7 @@ h1 {
     font-size: 30px;
   }
 
-  .form {
+  .form_registreer {
     display: flex;
     flex-direction: column;
     width: 80%;
@@ -116,11 +116,11 @@ h1 {
     background-color: unset;
     border-radius: 0px;
   }
-  .form .input {
+  .form_registreer .input {
     width: unset;
     margin-left: unset;
   }
-  .form .input:nth-child(1) {
+  .form_registreer .input:nth-child(1) {
     margin-top: unset;
   }
   .button_blue {

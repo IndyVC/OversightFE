@@ -8,7 +8,7 @@
 .menubar {
   width: 100vw;
   height: 80px;
-  background-color: #283593;
+  background-color: var(--primaryColor);
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -38,7 +38,8 @@
   width: 30vw;
   min-width: 116px;
   height: 90vh;
-  background-color: #1A237E;
+  background-color: var(--primaryColor);
+  opacity: 0.7;
   color: white;
   border-radius: 0 10px 10px 0;
   position: fixed;
@@ -83,6 +84,7 @@
     top: 0;
     height: 100vh;
     width: 240px;
+    opacity:unset;
   }
 
   .links {
@@ -116,14 +118,18 @@
   .line a:hover {
     color: #283593;
   }
+
+  .menucollapse{
+    display: none;
+  }
 }
 
 @media screen and (min-width:1000px) {
   .menu {
     width: 18vw;
     max-width:200px;
-    height: 80vh;
-    margin-top: 10vh;
+    height: 96vh;
+    margin-top: 2vh;
     border-radius: 15px;
   }
   .line {

@@ -22,38 +22,30 @@
     </div>
   </form>
   <app-menu></app-menu>
-
 </div>
 <!--large screen-->
 <div class="container_lg">
-  <div class="container_left">
-    <div class="content_left">
-      <h1>Log in</h1>
-      <form class="form_login" [formGroup]="login" (ngSubmit)="onSubmit()">
-        <mat-form-field class="input">
-          <input matInput placeholder="Email" formControlName="email" />
-          <mat-error *ngIf="login.get('email').invalid">{{
+  <div class="content_left">
+    <h1>Log in</h1>
+    <form class="form_login" [formGroup]="login" (ngSubmit)="onSubmit()">
+      <mat-form-field class="input">
+        <input matInput placeholder="Email" formControlName="email" />
+        <mat-error *ngIf="login.get('email').invalid">{{
               getErrorMessage("email")
             }}</mat-error>
-        </mat-form-field>
-        <mat-form-field class="input">
-          <input matInput placeholder="Wachtwoord" formControlName="password" type="password" />
-          <mat-error *ngIf="login.get('password').invalid">{{
+      </mat-form-field>
+      <mat-form-field class="input">
+        <input matInput placeholder="Wachtwoord" formControlName="password" type="password" />
+        <mat-error *ngIf="login.get('password').invalid">{{
               getErrorMessage("password")
             }}</mat-error>
-        </mat-form-field>
-        <button mat-raised-button class="button_blue" type="submit">Log in</button>
-      </form>
-      <button mat-raised-button class="button_white" (click)="resetPassword()">
-        Wachtwoord vergeten
-      </button>
-    </div>
+      </mat-form-field>
+      <button mat-raised-button class="button_blue" type="submit">Log in</button>
+    </form>
+    <button mat-raised-button class="button_white" (click)="resetPassword()">
+      Wachtwoord vergeten
+    </button>
   </div>
-  <div class="container_right">
-    <div class="content_right">
-    </div>
+  <div class="content_right">
   </div>
-
-  <app-menu></app-menu>
-
 </div>

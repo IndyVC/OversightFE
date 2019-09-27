@@ -6,7 +6,9 @@
 @include angular-material-theme($my-theme);
 @import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto&display=swap');
 :root{
-  --primaryColor: #1f387e;
+  --primaryColor: #067BBC;
+  --secondaryColor: #3EA4DD;
+  --greyColor:#493C3F;
 }
 html,
 body {}
@@ -71,17 +73,14 @@ body {
   font-weight: bold;
   margin-left: 25%;
   text-align: center;
-  color: var(--primaryColor);
-  border-color: var(--primaryColor);
+  color: var(--greyColor);
+  border-color: var(--greyColor);
 }
 .tabs {
   width: 80%;
   margin-left: 10%;
 }
-.selected {
-  color: var(--primaryColor) !important;
-  border-color: var(--primaryColor) !important;
-}
+
 .tabButton {
   width: 50%;
   background-color: transparent;
@@ -139,14 +138,14 @@ body {
   left: 70px;
   font-weight: bold;
   top: 20px;
-  color: var(--primaryColor);
+  color: var(--greyColor);
 }
 
 .amount {
   position: absolute;
   left: 70px;
   top: 40px;
-  color: var(--primaryColor);
+  color: var(--greyColor);
   font-family: 'Open Sans', Roboto, sans-serif;
 }
 
@@ -184,7 +183,7 @@ body {
   position: absolute;
   left: 70px;
   top: 40px;
-  color: var(--primaryColor);
+  color: var(--greyColor);
   font-family: 'Open Sans', Roboto, sans-serif;
 }
 
@@ -193,7 +192,7 @@ body {
   bottom: 5px;
   right: 10px;
   font-size: 18px;
-  color: var(--primaryColor);
+  color: var(--greyColor);
 }
 
 .edit {
@@ -201,7 +200,7 @@ body {
   top: 5px;
   right: 10px;
   font-size: 18px;
-  color: var(--primaryColor);
+  color: var(--greyColor);
 }
 
 .toevoegen {
@@ -217,7 +216,7 @@ body {
 
 .metadata p:nth-child(1) {
   font-weight: bold;
-  color: var(--primaryColor);
+  color: var(--greyColor);
   margin-bottom: 5px;
 }
 
@@ -234,7 +233,7 @@ body {
 }
 
 .button_blue {
-  background-color: #283593;
+  background-color: var(--primaryColor);
   color: white;
   padding: 20px;
   font-weight: bolder;
@@ -245,7 +244,7 @@ body {
 
 .button_white {
   background-color: white;
-  color: #1A237E;
+  color: var(--primaryColor);
   padding: 20px;
   font-weight: bolder;
   width: 45vw;
@@ -297,36 +296,28 @@ body {
     display: flex;
     flex-direction: row;
     font-family: Roboto, "Open-sans", sans-serif;
-  }
-
-  .container_left {
-    width: 50vw;
-    height: 100vh;
-    background-color: #141B65;
-  }
-
-  .container_right {
-    width: 50vw;
-    height: 100vh;
-    background-color: #1A237E;
+    background-image: url(assets/bg.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
   }
 
   .content_left {
-    width: 40vw;
-    height: 80vh;
-    background-color: #FFFFFF;
-    margin-left: 10vw;
-    margin-top: 10vh;
+    width: 48vw;
+    height:96vh;
+    background-color: #F6F5F6;
+    margin-left: 2vw;
+    margin-top: 2vh;
     border-radius: 20px 0 0 20px;
     padding-right: 10px;
   }
 
   .content_right {
-    width: 40vw;
-    height: 80vh;
+    width:48vw;
+    height: 96vh;
     background-color: #F6F5F6;
-    margin-right: 10vw;
-    margin-top: 10vh;
+    margin-right:2vw;
+    margin-top: 2vh;
     border-radius: 0 20px 20px 0;
 
   }

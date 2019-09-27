@@ -33,10 +33,12 @@
   background-color: #f6f5f6;
   height: 60px;
 }
+
 .legeLijst {
   text-align: center;
   color: #1f387e;
 }
+
 .options {
   width: 100%;
   background-color: #e8e8e7;
@@ -77,6 +79,11 @@
   margin-top: 10px;
 }
 
+#selected {
+  color: var(--greyColor);
+  border-top: 5px solid var(--greyColor);
+}
+
 @media screen and (min-width: 1000px) {
   .grid {
     flex-direction: column;
@@ -85,17 +92,19 @@
     align-content: space-around;
     height: 80vh;
   }
+
   .graphRow {
     display: flex;
     flex-direction: row;
-    width: 50vw;
     justify-content: space-around;
   }
+
   .graph {
     width: 24vw;
     top: 0.5vh;
   }
-  .content_right{
-    width:50vw !important;
+
+  .content_right {
+    width: 50vw !important;
   }
 }

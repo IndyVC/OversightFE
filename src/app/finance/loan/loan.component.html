@@ -141,148 +141,144 @@
 </div>
 
 <div class="container_lg">
-  <div class="container_left">
-    <div class="content_left">
-      <!--MENU-->
-      <app-menu></app-menu>
-      <!--MAT-CARD creation categorie-->
-      <mat-card class="matcardNoPaddingTop list" *ngIf="showCreateLoan()">
-        <p class='tab'>Bankrekening aanmaken</p>
-        <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
-          <mat-form-field>
-            <input matInput placeholder="Naam" formControlName="name">
-            <mat-error *ngIf="form.get('name').invalid">
-              {{getErrorMessage("name")}}
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Totaal af te betalen" formControlName="totalAmount">
-            <mat-error *ngIf="form.get('totalAmount').invalid">
-              {{getErrorMessage("totalAmount")}}
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Reeds afbetaald" formControlName="currentAmount">
-            <mat-error *ngIf="form.get('currentAmount').invalid">
-              {{getErrorMessage("currentAmount")}}
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput [matDatepicker]="picker1" placeholder="Start datum" formControlName="dateStart">
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <mat-datepicker #picker1>
-            </mat-datepicker>
-            <mat-error *ngIf="form.get('dateStart').invalid">
-              {{getErrorMessage("dateStart")}}
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput [matDatepicker]="picker2" placeholder="Eind datum" formControlName="dateEnd">
-            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-            <mat-datepicker #picker2>
-            </mat-datepicker>
-            <mat-error *ngIf="form.get('dateEnd').invalid">
-              {{getErrorMessage("dateEnd")}}
-            </mat-error>
-          </mat-form-field>
-          <div class="buttons">
-            <button class="toevoegen" mat-raised-button mat-primary type="submit"
-              [disabled]="form.get('name').invalid || form.get('totalAmount').invalid || form.get('currentAmount').invalid || form.get('dateStart').invalid || form.get('dateEnd').invalid">Toevoegen</button>
-            <button mat-raised-button (click)="toggleCreate()">Annuleer</button>
-          </div>
-        </form>
-      </mat-card>
-
-      <!--MAT-CARD edit categorie-->
-      <mat-card class="matcardNoPaddingTop list" *ngIf='showEdit'>
-        <p class='tab'>Categorie wijzigen</p>
-        <form [formGroup]='edit' (ngSubmit)='onSubmitEdit()' class="form">
-          <mat-form-field>
-            <input matInput placeholder="Naam" formControlName="name">
-            <mat-error *ngIf="edit.get('name').invalid">
-              {{getErrorMessage("name")}}
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Totaal af te betalen" formControlName="totalAmount">
-            <mat-error *ngIf="edit.get('totalAmount').invalid">
-              {{getErrorMessage("totalAmount")}}
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput placeholder="Reeds afbetaald" formControlName="currentAmount">
-            <mat-error *ngIf="edit.get('currentAmount').invalid">
-              {{getErrorMessage("currentAmount")}}
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput [matDatepicker]="picker1" placeholder="Start datum" formControlName="dateStart">
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <mat-datepicker #picker1>
-            </mat-datepicker>
-            <mat-error *ngIf="edit.get('dateStart').invalid">
-              {{getErrorMessage("dateStart")}}
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput [matDatepicker]="picker2" placeholder="Eind datum" formControlName="dateEnd">
-            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-            <mat-datepicker #picker2>
-            </mat-datepicker>
-            <mat-error *ngIf="edit.get('dateEnd').invalid">
-              {{getErrorMessage("dateEnd")}}
-            </mat-error>
-          </mat-form-field>
-          <div class="buttons">
-            <button class="toevoegen" mat-raised-button mat-primary type="submit"
-              [disabled]="edit.get('name').invalid || edit.get('totalAmount').invalid || edit.get('currentAmount').invalid || edit.get('dateStart').invalid || edit.get('dateEnd').invalid">Wijzig</button>
-            <button mat-raised-button (click)="toggleEdit()">Annuleer</button>
-          </div>
-        </form>
-      </mat-card>
-
-      <!--MAT-CARD lijst bankaccounts-->
-      <mat-card class="matcardNoPadding list" *ngIf="!showEdit && !showCreateLoan()">
-        <p class="tab">Leningen</p>
-        <div class="metadata">
-          <p>Oversight</p>
-          <p> € {{calculateShortOversight()}}</p>
-          <button class="addLoan" (click)='showLoan()'>Voeg een bankrekening toe</button>
+  <div class="content_left">
+    <!--MENU-->
+    <app-menu></app-menu>
+    <!--MAT-CARD creation categorie-->
+    <mat-card class="matcardNoPaddingTop list" *ngIf="showCreateLoan()">
+      <p class='tab'>Bankrekening aanmaken</p>
+      <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
+        <mat-form-field>
+          <input matInput placeholder="Naam" formControlName="name">
+          <mat-error *ngIf="form.get('name').invalid">
+            {{getErrorMessage("name")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Totaal af te betalen" formControlName="totalAmount">
+          <mat-error *ngIf="form.get('totalAmount').invalid">
+            {{getErrorMessage("totalAmount")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Reeds afbetaald" formControlName="currentAmount">
+          <mat-error *ngIf="form.get('currentAmount').invalid">
+            {{getErrorMessage("currentAmount")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker1" placeholder="Start datum" formControlName="dateStart">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1>
+          </mat-datepicker>
+          <mat-error *ngIf="form.get('dateStart').invalid">
+            {{getErrorMessage("dateStart")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker2" placeholder="Eind datum" formControlName="dateEnd">
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2>
+          </mat-datepicker>
+          <mat-error *ngIf="form.get('dateEnd').invalid">
+            {{getErrorMessage("dateEnd")}}
+          </mat-error>
+        </mat-form-field>
+        <div class="buttons">
+          <button class="toevoegen" mat-raised-button mat-primary type="submit"
+            [disabled]="form.get('name').invalid || form.get('totalAmount').invalid || form.get('currentAmount').invalid || form.get('dateStart').invalid || form.get('dateEnd').invalid">Toevoegen</button>
+          <button mat-raised-button (click)="toggleCreate()">Annuleer</button>
         </div>
-        <div class="items">
-          <div *ngFor="let loan of getLoans(); index as i">
-            <div class="item {{currentLoan && currentLoan.id===loan.id?'currentLoan':''}}"
-              [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}" (click)="setLoan(loan)">
-              <i [ngStyle]="{'color':'#1A237E','background-color':i % 2 == 0?'white':'#f6f5f6'}"
-                class=" fas fa-money-check-alt icon">
-              </i>
-              <p class="name">{{loan.name}}</p>
-              <button mat-icon-button class="clear" (click)="deleteLoan(loan)">
-                <i class="fas fa-times"></i>
-              </button>
-              <button mat-icon-button class="edit" (click)="editLoan(loan)">
-                <i class="fas fa-edit"></i>
-              </button>
-            </div>
+      </form>
+    </mat-card>
+
+    <!--MAT-CARD edit categorie-->
+    <mat-card class="matcardNoPaddingTop list" *ngIf='showEdit'>
+      <p class='tab'>Categorie wijzigen</p>
+      <form [formGroup]='edit' (ngSubmit)='onSubmitEdit()' class="form">
+        <mat-form-field>
+          <input matInput placeholder="Naam" formControlName="name">
+          <mat-error *ngIf="edit.get('name').invalid">
+            {{getErrorMessage("name")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Totaal af te betalen" formControlName="totalAmount">
+          <mat-error *ngIf="edit.get('totalAmount').invalid">
+            {{getErrorMessage("totalAmount")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput placeholder="Reeds afbetaald" formControlName="currentAmount">
+          <mat-error *ngIf="edit.get('currentAmount').invalid">
+            {{getErrorMessage("currentAmount")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker1" placeholder="Start datum" formControlName="dateStart">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1>
+          </mat-datepicker>
+          <mat-error *ngIf="edit.get('dateStart').invalid">
+            {{getErrorMessage("dateStart")}}
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker2" placeholder="Eind datum" formControlName="dateEnd">
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2>
+          </mat-datepicker>
+          <mat-error *ngIf="edit.get('dateEnd').invalid">
+            {{getErrorMessage("dateEnd")}}
+          </mat-error>
+        </mat-form-field>
+        <div class="buttons">
+          <button class="toevoegen" mat-raised-button mat-primary type="submit"
+            [disabled]="edit.get('name').invalid || edit.get('totalAmount').invalid || edit.get('currentAmount').invalid || edit.get('dateStart').invalid || edit.get('dateEnd').invalid">Wijzig</button>
+          <button mat-raised-button (click)="toggleEdit()">Annuleer</button>
+        </div>
+      </form>
+    </mat-card>
+
+    <!--MAT-CARD lijst bankaccounts-->
+    <mat-card class="matcardNoPadding list" *ngIf="!showEdit && !showCreateLoan()">
+      <p class="tab">Leningen</p>
+      <div class="metadata">
+        <p>Oversight</p>
+        <p> € {{calculateShortOversight()}}</p>
+        <button class="addLoan" (click)='showLoan()'>Voeg een bankrekening toe</button>
+      </div>
+      <div class="items">
+        <div *ngFor="let loan of getLoans(); index as i">
+          <div class="item {{currentLoan && currentLoan.id===loan.id?'currentLoan':''}}"
+            [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}" (click)="setLoan(loan)">
+            <i [ngStyle]="{'color':'#1A237E','background-color':i % 2 == 0?'white':'#f6f5f6'}"
+              class=" fas fa-money-check-alt icon">
+            </i>
+            <p class="name">{{loan.name}}</p>
+            <button mat-icon-button class="clear" (click)="deleteLoan(loan)">
+              <i class="fas fa-times"></i>
+            </button>
+            <button mat-icon-button class="edit" (click)="editLoan(loan)">
+              <i class="fas fa-edit"></i>
+            </button>
           </div>
         </div>
-      </mat-card>
-    </div>
+      </div>
+    </mat-card>
   </div>
-  <div class="container_right">
-    <div class="content_right">
-      <!--MAT-CARD current loan-->
-      <mat-card class="graph matcardNoPaddingTop dash" *ngIf="currentLoan">
-        <canvas baseChart [datasets]="data" [labels]="labels" [options]="options" [legend]="legend" [chartType]="type"
-          [colors]="colors">
-        </canvas>
-        <div class="metadata">
-          <p>Naam</p>
-          <p>{{currentLoan.name}}</p>
-          <p>{{currentLoan.dateStart.toLocaleDateString()}} - {{currentLoan.dateEnd.toLocaleDateString()}}
-          </p>
-        </div>
-      </mat-card>
-    </div>
+  <div class="content_right">
+    <!--MAT-CARD current loan-->
+    <mat-card class="graph matcardNoPaddingTop dash" *ngIf="currentLoan">
+      <canvas baseChart [datasets]="data" [labels]="labels" [options]="options" [legend]="legend" [chartType]="type"
+        [colors]="colors">
+      </canvas>
+      <div class="metadata">
+        <p>Naam</p>
+        <p>{{currentLoan.name}}</p>
+        <p>{{currentLoan.dateStart.toLocaleDateString()}} - {{currentLoan.dateEnd.toLocaleDateString()}}
+        </p>
+      </div>
+    </mat-card>
   </div>
 </div>

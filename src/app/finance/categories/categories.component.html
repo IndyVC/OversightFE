@@ -125,127 +125,120 @@
 
 <!--large screen-->
 <div class="container_lg">
-  <div class="container_left">
-    <div class="content_left">
-      <!--MENU-->
-      <app-menu></app-menu>
-      <!--MAT-CARD lijst categorieën-->
-      <mat-card class="matcardNoPaddingTop list" *ngIf="!showEdit && !showCreateCategory() ">
-        <p class="tab">Categorieën</p>
-        <div class="metadata">
-          <p>Oversight</p>
-          <p> € {{calculateShortOversight()}}</p>
-          <button class="addCategory" (click)='showCategory()'>Voeg een categorie toe</button>
-        </div>
-        <div class="items">
-          <div *ngFor="let category of getCategories(); index as i">
-            <div class="item {{currentCategory && category.id===currentCategory.id?'currentCategory':''}}"
-              [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}" (click)="setCategory(category)">
-              <i [ngStyle]="{'color': category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}"
-                class=" {{category.icon}} icon">
-              </i>
-              <p class="name">{{category.name}}</p>
-              <button mat-icon-button class="clear" (click)="deleteCategory(category)">
-                <i class="fas fa-times"></i>
-              </button>
-              <button mat-icon-button class="edit" (click)="editCategory(category)">
-                <i class="fas fa-edit"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </mat-card>
-      <!--MAT-CARD creation categorie-->
-      <mat-card class="matcardNoPaddingTop list" *ngIf='showCreateCategory()'>
-        <p class='tab'>Categorie aanmaken</p>
-        <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
-          <mat-form-field>
-            <input matInput placeholder="Naam categorie" formControlName="name">
-            <mat-error *ngIf="form.get('name').invalid">
-              {{getErrorMessage("name")}}
-            </mat-error>
-          </mat-form-field>
-          <span [style.color]="color" [cpPosition]="'bottom'" [cpPositionOffset]="'0%'"
-            [cpPositionRelativeToArrow]="true" [(colorPicker)]="color" (colorPickerChange)="changeColor($event)"
-            id="colorpicker">Kies kleur!</span>
-          <mat-error *ngIf="form.get('color').invalid" class="own-mat-errors">
-            {{getErrorMessage("color")}}
-          </mat-error>
-          <div class="icons">
-            <i class="{{icon}} icon {{icon===selectedIconCreate?'selectedIcon':''}}"
-              *ngFor="let icon of fixedCategoriesIcons"
-              [ngStyle]="{'color':form.get('color').value,'background-color':'white'}" (click)="changeIcon(icon)"></i>
-          </div>
-          <div class="buttons">
-            <button class='toevoegen' mat-raised-button mat-primary type="submit"
-              [disabled]="form.get('color').invalid || form.get('name').invalid || selectedIconCreate==''">Toevoegen</button>
-            <button mat-raised-button (click)="toggleCreate()">Annuleer</button>
-          </div>
-
-        </form>
-      </mat-card>
-
-      <!--MAT-CARD edit categorie-->
-      <div class="list matcardNoPaddingTop" *ngIf='showEdit'>
-        <p class='tab'>Categorie wijzigen</p>
-        <form [formGroup]='edit' (ngSubmit)='onSubmitEdit()' class="form">
-          <mat-form-field>
-            <input matInput placeholder="Naam categorie" formControlName="name">
-            <mat-error *ngIf="edit.get('name').invalid">
-              {{getErrorMessageEdit("name")}}
-            </mat-error>
-          </mat-form-field>
-          <span [style.color]="edit.get('color').value" [cpPosition]="'bottom'" [cpPositionOffset]="'0%'"
-            [cpPositionRelativeToArrow]="true" [(colorPicker)]="edit.get('color').value"
-            (colorPickerChange)="changeColor($event)" id="colorpicker">Kies kleur!</span>
-          <mat-error *ngIf="edit.get('color').invalid" class="own-mat-errors">
-            {{getErrorMessageEdit("color")}}
-          </mat-error>
-          <div class="icons">
-            <i class="{{icon}} icon {{icon===selectedIconEdit?'selectedIcon':''}}"
-              *ngFor="let icon of fixedCategoriesIcons"
-              [ngStyle]="{'color':form.get('color').value,'background-color':'white'}"
-              (click)="changeIconEdit(icon)"></i>
-          </div>
-          <div class="buttons">
-            <button class="toevoegen" mat-raised-button mat-primary type=" submit"
-              [disabled]="edit.get('color').invalid || edit.get('name').invalid || selectedIconEdit==''">Wijzig</button>
-            <button mat-raised-button (click)="toggleEdit()">Annuleer</button>
-          </div>
-
-        </form>
+  <div class="content_left">
+    <!--MENU-->
+    <app-menu></app-menu>
+    <!--MAT-CARD lijst categorieën-->
+    <mat-card class="matcardNoPaddingTop list" *ngIf="!showEdit && !showCreateCategory() ">
+      <p class="tab">Categorieën</p>
+      <div class="metadata">
+        <p>Oversight</p>
+        <p> € {{calculateShortOversight()}}</p>
+        <button class="addCategory" (click)='showCategory()'>Voeg een categorie toe</button>
       </div>
+      <div class="items">
+        <div *ngFor="let category of getCategories(); index as i">
+          <div class="item {{currentCategory && category.id===currentCategory.id?'currentCategory':''}}"
+            [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}" (click)="setCategory(category)">
+            <i [ngStyle]="{'color': category.color, 'background-color':i % 2 == 0?'white':'#f6f5f6'}"
+              class=" {{category.icon}} icon">
+            </i>
+            <p class="name">{{category.name}}</p>
+            <button mat-icon-button class="clear" (click)="deleteCategory(category)">
+              <i class="fas fa-times"></i>
+            </button>
+            <button mat-icon-button class="edit" (click)="editCategory(category)">
+              <i class="fas fa-edit"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+    <!--MAT-CARD creation categorie-->
+    <mat-card class="matcardNoPaddingTop list" *ngIf='showCreateCategory()'>
+      <p class='tab'>Categorie aanmaken</p>
+      <form [formGroup]='form' (ngSubmit)='onSubmit()' class="form">
+        <mat-form-field>
+          <input matInput placeholder="Naam categorie" formControlName="name">
+          <mat-error *ngIf="form.get('name').invalid">
+            {{getErrorMessage("name")}}
+          </mat-error>
+        </mat-form-field>
+        <span [style.color]="color" [cpPosition]="'bottom'" [cpPositionOffset]="'0%'" [cpPositionRelativeToArrow]="true"
+          [(colorPicker)]="color" (colorPickerChange)="changeColor($event)" id="colorpicker">Kies kleur!</span>
+        <mat-error *ngIf="form.get('color').invalid" class="own-mat-errors">
+          {{getErrorMessage("color")}}
+        </mat-error>
+        <div class="icons">
+          <i class="{{icon}} icon {{icon===selectedIconCreate?'selectedIcon':''}}"
+            *ngFor="let icon of fixedCategoriesIcons"
+            [ngStyle]="{'color':form.get('color').value,'background-color':'white'}" (click)="changeIcon(icon)"></i>
+        </div>
+        <div class="buttons">
+          <button class='toevoegen' mat-raised-button mat-primary type="submit"
+            [disabled]="form.get('color').invalid || form.get('name').invalid || selectedIconCreate==''">Toevoegen</button>
+          <button mat-raised-button (click)="toggleCreate()">Annuleer</button>
+        </div>
+
+      </form>
+    </mat-card>
+
+    <!--MAT-CARD edit categorie-->
+    <div class="list matcardNoPaddingTop" *ngIf='showEdit'>
+      <p class='tab'>Categorie wijzigen</p>
+      <form [formGroup]='edit' (ngSubmit)='onSubmitEdit()' class="form">
+        <mat-form-field>
+          <input matInput placeholder="Naam categorie" formControlName="name">
+          <mat-error *ngIf="edit.get('name').invalid">
+            {{getErrorMessageEdit("name")}}
+          </mat-error>
+        </mat-form-field>
+        <span [style.color]="edit.get('color').value" [cpPosition]="'bottom'" [cpPositionOffset]="'0%'"
+          [cpPositionRelativeToArrow]="true" [(colorPicker)]="edit.get('color').value"
+          (colorPickerChange)="changeColor($event)" id="colorpicker">Kies kleur!</span>
+        <mat-error *ngIf="edit.get('color').invalid" class="own-mat-errors">
+          {{getErrorMessageEdit("color")}}
+        </mat-error>
+        <div class="icons">
+          <i class="{{icon}} icon {{icon===selectedIconEdit?'selectedIcon':''}}"
+            *ngFor="let icon of fixedCategoriesIcons"
+            [ngStyle]="{'color':form.get('color').value,'background-color':'white'}" (click)="changeIconEdit(icon)"></i>
+        </div>
+        <div class="buttons">
+          <button class="toevoegen" mat-raised-button mat-primary type=" submit"
+            [disabled]="edit.get('color').invalid || edit.get('name').invalid || selectedIconEdit==''">Wijzig</button>
+          <button mat-raised-button (click)="toggleEdit()">Annuleer</button>
+        </div>
+
+      </form>
     </div>
   </div>
 
-  <div class="container_right">
-    <div class="content_right">
-      <!--MAT-CARD current category-->
-      <mat-card class="graph dash" *ngIf="currentCategory!=null">
-        <p class="name" id="name">{{currentCategory.name}}</p>
-        <i [ngStyle]="{'color': currentCategory.color, 'background-color':'#f6f5f6'}"
-          class="icon  {{currentCategory.icon}}">
-        </i>
-        <p class="type" id="type">Totaal uitgegeven deze maand: <br> € {{calculateTotalSpendOnCategory()}}</p>
-      </mat-card>
+  <div class="content_right">
+    <!--MAT-CARD current category-->
+    <mat-card class="graph dash" *ngIf="currentCategory!=null">
+      <p class="name" id="name">{{currentCategory.name}}</p>
+      <i [ngStyle]="{'color': currentCategory.color, 'background-color':'#f6f5f6'}"
+        class="icon  {{currentCategory.icon}}">
+      </i>
+      <p class="type" id="type">Totaal uitgegeven deze maand: <br> € {{calculateTotalSpendOnCategory()}}</p>
+    </mat-card>
 
-      <!--MAT-CARD jaar grafiek-->
-      <mat-card class="graph matcardNoPaddingTop dash" id="totalYearChart">
-        <p class="tab">Jaarlijks totaaloverzicht</p>
-        <mat-form-field class="updateTotalYear">
-          <mat-label>Jaartal</mat-label>
-          <mat-select (selectionChange)='updateTotalYear($event)'>
-            <mat-option *ngFor='let year of getUser().getAllYears()' [value]='year'>
-              {{year}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <canvas baseChart [datasets]="data" [labels]="labels" [options]="options" [legend]="legend" [chartType]="chart"
-          [colors]="chartColors" *ngIf="noError()">
-        </canvas>
-        <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
-      </mat-card>
-
-    </div>
+    <!--MAT-CARD jaar grafiek-->
+    <mat-card class="graph matcardNoPaddingTop dash" id="totalYearChart">
+      <p class="tab">Jaarlijks totaaloverzicht</p>
+      <mat-form-field class="updateTotalYear">
+        <mat-label>Jaartal</mat-label>
+        <mat-select (selectionChange)='updateTotalYear($event)'>
+          <mat-option *ngFor='let year of getUser().getAllYears()' [value]='year'>
+            {{year}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <canvas baseChart [datasets]="data" [labels]="labels" [options]="options" [legend]="legend" [chartType]="chart"
+        [colors]="chartColors" *ngIf="noError()">
+      </canvas>
+      <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
+    </mat-card>
   </div>
 </div>

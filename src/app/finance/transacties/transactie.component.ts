@@ -603,6 +603,8 @@ export class TransactieComponent implements OnInit {
     this.fillGraph4(new Date());
   }
   getIncomes() {
+    console.log("imcome!: ", this.user.incomes);
+
     if (this.categories == null && this.date.value == null) {
       this.transactions = this.user.getIncomesFromMonth(new Date());
     } else if (this.categories == null && this.date) {
@@ -636,7 +638,9 @@ export class TransactieComponent implements OnInit {
     return this.user;
   }
   getTransactions() {
-    return this.transactions.sort(transaction=>transaction.date.getTime()).reverse();
+    return this.transactions
+      .sort(transaction => transaction.date.getTime())
+      .reverse();
   }
 
   getErrorMessage(field: string) {
@@ -696,8 +700,8 @@ export class TransactieComponent implements OnInit {
   }
 
   switch(tab1, tab2) {
-    tab1.style.color = "#1F387E";
-    tab1.style.borderColor = "#1F387E";
+    tab1.style.color = "var(--greyColor)";
+    tab1.style.borderColor = "var(--greyColor)";
 
     tab2.style.color = "#E8E8E7";
     tab2.style.borderColor = "#E8E8E7";
@@ -709,8 +713,8 @@ export class TransactieComponent implements OnInit {
   }
 
   setTab1Active() {
-    this.tab1.nativeElement.style.color = "#1F387E";
-    this.tab1.nativeElement.style.borderColor = "#1F387E";
+    this.tab1.nativeElement.style.color = "var(--greyColor)";
+    this.tab1.nativeElement.style.borderColor = "var(--greyColor)";
 
     this.tab2.nativeElement.style.color = "#E8E8E7";
     this.tab2.nativeElement.style.borderColor = "#E8E8E7";
@@ -722,8 +726,8 @@ export class TransactieComponent implements OnInit {
     this.tab1.nativeElement.style.color = "#E8E8E7";
     this.tab1.nativeElement.style.borderColor = "#E8E8E7";
 
-    this.tab2.nativeElement.style.color = "#1F387E";
-    this.tab2.nativeElement.style.borderColor = "#1F387E";
+    this.tab2.nativeElement.style.color = "var(--greyColor)";
+    this.tab2.nativeElement.style.borderColor = "var(--greyColor)";
     this.categories = null;
     this.date.setValue(null);
   }

@@ -50,8 +50,14 @@ export class LoginComponent implements OnInit {
         ) {
           this.openEmailNotVerifiedDialog();
         } else {
-          this.userService
-            .createUserObject();
+          this.userService.createUserObject().then(() => {
+            this.userService.fullyLoaded.subscribe(bool => {
+              console.log("what is bool:", bool);
+              if (bool) {
+                this.router.navigate(["../transacties"]);
+              }
+            });
+          });
         }
       })
       .catch(e => {

@@ -1,7 +1,10 @@
 .container_registreer {
   width: 100vw;
   height: 100vh;
-  background-color: #1a237e;
+  background-image: url(../../../assets/bg.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   font-family: Roboto, 'Open-sans', sans-serif;
 }
 .container_lg{
@@ -62,19 +65,12 @@ h1 {
     display: flex;
     flex-direction: row;
     font-family: Roboto, "Open-sans", sans-serif;
+    background-image: url(../../../assets/bg.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 
-  .container_left {
-    width:50vw;
-    height:100vh;
-    background-color:#141B65;
-  }
-
-  .container_right{
-    width:50vw;
-    height:100vh;
-    background-color:#1A237E;
-  }
 
   .content_left{
     width:40vw;

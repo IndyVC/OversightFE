@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, EventEmitter } from "@angular/core";
 import { AngularFirestore } from "@angular/fire/firestore";
 import { User } from "src/app/domain/user";
 import { map } from "rxjs/operators";
@@ -11,12 +11,14 @@ import { Income } from "src/app/domain/income";
 import { Outcome } from "src/app/domain/outcome";
 import { BankAccount } from "src/app/domain/account";
 import { Loan } from "src/app/domain/loan";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root"
 })
 export class UserService {
   public user: User;
+  public fullyLoaded;
   public uid: string;
   constructor(
     private firestore: AngularFirestore,
@@ -73,7 +75,7 @@ export class UserService {
     this.uid = this.fireauth.auth.currentUser.uid;
   }
 
-  createUserObject() {
+  createUserObject(): Promise<any> {
     return (
       this.firestore
         .collection("users")
@@ -244,7 +246,11 @@ export class UserService {
           console.log("user is created", this.user);
           return val;
         })
-        .then(() => {})
+        .then(() => {
+          this.fullyLoaded = new Observable(observer => {
+            observer.next(true);
+          });
+        })
     );
   }
 

@@ -24,16 +24,15 @@
   left: 20px;
 }
 
-.titelMenubar {
-  height: 15px;
-  margin-top: 32.5px;
+.logoBar{
   display: none;
+  margin-top:15px;
+  width:250px;
+  height:50px;
 }
-
-.titelMenu {
-  display: none;
+.logoMenu{
+  display:none;
 }
-
 .menu {
   width: 30vw;
   min-width: 116px;
@@ -62,9 +61,8 @@
 
 
 @media screen and (min-width:370px) {
-  .titelMenubar {
+  .logoBar{
     display: block;
-
   }
 
   .menucollapse {
@@ -87,6 +85,11 @@
     opacity:unset;
   }
 
+  .logoMenu{
+    display: block;
+    width:200px;
+    height:40px;
+  }
   .links {
     display: flex;
     flex-direction: column;
@@ -110,10 +113,6 @@
     margin-right: 10px;
   }
 
-  .titelMenu {
-    display: block;
-    width: 100%;
-  }
 
   .line a:hover {
     color: #283593;
@@ -131,6 +130,12 @@
     height: 96vh;
     margin-top: 2vh;
     border-radius: 15px;
+  }
+
+  .logoMenu{
+    display: block;
+    max-width:160px;
+    height:32px;
   }
   .line {
     margin:0;

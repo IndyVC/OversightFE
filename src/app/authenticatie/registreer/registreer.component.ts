@@ -50,6 +50,7 @@ export class RegistreerComponent implements OnInit {
         if (e.code === "auth/email-already-in-use") {
           this.openUsedEmailDialog();
         }
+        console.log(e);
       });
   }
 

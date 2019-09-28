@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" *ngIf="this.getUser().incomes || this.getUser().outcomes;else loading">
   <div class="tabletContainer">
 
     <!--All graphs-->
@@ -189,7 +189,7 @@
       </div>
 
       <div class="metadata">
-        <p>Oversight</p>
+        <p>Oversight  huidige maand</p>
         <p> € {{getUser().calculateShortOversight()}}</p>
         <button class="addTransaction" (click)='showTransaction()'>Voeg transactie toe</button>
       </div>
@@ -268,7 +268,7 @@
 
 
 <!--large screen-->
-<div class="container_lg">
+<div class="container_lg" *ngIf="this.userService.getFullyloaded();else loading">
   <div class="content_left">
     <!--MENU-->
     <app-menu></app-menu>
@@ -403,7 +403,7 @@
       </div>
 
       <div class="metadata">
-        <p>Oversight</p>
+        <p>Oversight  huidige maand</p>
         <p> € {{getUser().calculateShortOversight()}}</p>
         <button class="addTransaction" (click)='showTransaction()'>Voeg transactie toe</button>
       </div>
@@ -479,7 +479,6 @@
   <div class="content_right">
     <div class="graphs">
       <div class="grid">
-        <div class="graphRow">
           <mat-card style="display: block" class="graph matcardNoPadding"
             *ngIf='chartActive===0 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft()
             (swiperight)=swipeRight()>
@@ -499,9 +498,7 @@
             </canvas>
             <p *ngIf='!noError()' class="noGraph">Geen grafiek mogelijk.</p>
           </mat-card>
-        </div>
 
-        <div class="graphRow">
           <mat-card style="display: block" class="graph matcardNoPadding"
             *ngIf='chartActive===2 && smallScreen() || !smallScreen()' (swipeleft)=swipeLeft()
             (swiperight)=swipeRight()>
@@ -535,7 +532,10 @@
               <p class="noGraph">Geen grafiek mogelijk.</p>
             </ng-template>
           </mat-card>
-        </div>
       </div>
     </div>
   </div>
+
+  <ng-template #loading>
+    <p>LOADING</p>
+  </ng-template>

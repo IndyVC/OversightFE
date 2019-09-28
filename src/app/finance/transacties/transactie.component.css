@@ -88,16 +88,10 @@
   .grid {
     flex-direction: column;
     display: flex;
-    justify-content: space-around;
-    align-content: space-around;
-    height: 80vh;
+    height: 90vh;
+    overflow-y: scroll;
   }
 
-  .graphRow {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-  }
 
   .graph {
     width: 24vw;

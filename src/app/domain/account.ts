@@ -17,9 +17,11 @@ export class BankAccount {
   }
 
   public increaseBalance(amount: number) {
+    console.log("called");
     this.balance += amount;
   }
   public decreaseBalance(amount: number) {
+    console.log("called");
     this.balance -= amount;
   }
 }

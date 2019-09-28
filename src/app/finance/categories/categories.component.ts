@@ -21,7 +21,10 @@ export class CategoriesComponent implements OnInit {
   currentCategory: Category;
   categories: Category[];
   fixedCategoriesIcons: string[] = [
-    "fas fa-cat",
+    "fas fa-money-bill-wave",
+    "fas fa-chart-line",
+    "fas fa-coins",
+    "fas fa-credit-card",
     "fas fa-shopping-cart",
     "fas fa-car",
     "fas fa-ambulance",
@@ -36,6 +39,7 @@ export class CategoriesComponent implements OnInit {
     "fas fa-broom",
     "fas fa-bus",
     "fas fa-burn",
+    "fas fa-cat",
     "fas fa-cookie-bite",
     "fas fa-campground",
     "fas fa-carrot",
@@ -78,11 +82,8 @@ export class CategoriesComponent implements OnInit {
     "fas fa-briefcase",
     "fab fa-bitcoin",
     "fas fa-blind",
-    "fas fa-gem",
-    "fas fa-money-bill-wave",
-    "fas fa-chart-line",
-    "fas fa-coins",
-    "fas fa-credit-card"
+    "fas fa-gem"
+
   ];
   public form: FormGroup;
   public edit: FormGroup;

@@ -166,7 +166,7 @@ export class TransactieComponent implements OnInit {
   // tslint:disable-next-line: variable-name
   constructor(
     private adapter: DateAdapter<any>,
-    private userService: UserService,
+    public userService: UserService,
     private transactionService: TransactionService,
     private fb: FormBuilder
   ) {
@@ -603,7 +603,7 @@ export class TransactieComponent implements OnInit {
     this.fillGraph4(new Date());
   }
   getIncomes() {
-    console.log("imcome!: ", this.user.incomes);
+    console.log("imcome!: ", this.userService.user.incomes);
 
     if (this.categories == null && this.date.value == null) {
       this.transactions = this.user.getIncomesFromMonth(new Date());

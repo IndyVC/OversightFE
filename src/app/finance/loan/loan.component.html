@@ -113,7 +113,7 @@
     <mat-card class="matcardNoPadding" *ngIf="showListLoans()">
       <p class="tab">Leningen</p>
       <div class="metadata">
-        <p>Oversight</p>
+        <p>Oversight  huidige maand</p>
         <p> € {{calculateShortOversight()}}</p>
         <button class="addLoan" (click)='showLoan()'>Voeg een bankrekening toe</button>
       </div>
@@ -244,7 +244,7 @@
     <mat-card class="matcardNoPadding list" *ngIf="!showEdit && !showCreateLoan()">
       <p class="tab">Leningen</p>
       <div class="metadata">
-        <p>Oversight</p>
+        <p>Oversight  huidige maand</p>
         <p> € {{calculateShortOversight()}}</p>
         <button class="addLoan" (click)='showLoan()'>Voeg een bankrekening toe</button>
       </div>

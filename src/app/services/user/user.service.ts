@@ -18,7 +18,18 @@ import { Observable } from "rxjs";
 })
 export class UserService {
   public user: User;
-  public fullyLoaded;
+  public fullyLoaded: boolean[] = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
   public uid: string;
   constructor(
     private firestore: AngularFirestore,
@@ -85,11 +96,14 @@ export class UserService {
         .then(val => {
           console.log("reading all data");
           // Collections are filled with references
+          //bool 0
           this.user = User.fromJSON(val.data());
+          this.fullyLoaded[0] = true;
           return val;
         })
         // References are translated to the real categories by getting the documents in firestore
         // Category
+        //bool 1
         .then(val => {
           console.log("reading bankaccounts");
           const realBankaccounts: BankAccount[] = [];
@@ -105,6 +119,7 @@ export class UserService {
                     );
                     accs.id = accDoc.id;
                     realBankaccounts.push(accs);
+                    this.fullyLoaded[1] = true;
                   });
                 })
               );
@@ -116,6 +131,7 @@ export class UserService {
           return val;
         })
         .then(val => {
+          //bool 2
           console.log("reading categories");
           const realCategories: Category[] = [];
           this.user.categories = realCategories;
@@ -128,6 +144,7 @@ export class UserService {
                     const cats: Category = Category.fromJSON(catDoc.data());
                     cats.id = catDoc.id;
                     realCategories.push(cats);
+                    this.fullyLoaded[2] = true;
                   });
                 })
               )
@@ -140,6 +157,7 @@ export class UserService {
           return val;
         })
         .then(val => {
+          //bool 3
           console.log("reading incomes");
           const realIncomes: Transaction[] = [];
           this.user.incomes = realIncomes;
@@ -150,6 +168,7 @@ export class UserService {
                 new Promise(() => {
                   income.get().then(incomeDoc => {
                     const trans: Income = Income.fromJSON(incomeDoc.data());
+                    //bool 4
                     incomeDoc
                       .data()
                       .category.get()
@@ -157,7 +176,9 @@ export class UserService {
                         console.log(categoryDoc.data());
                         trans.category = Category.fromJSON(categoryDoc.data());
                         trans.category.id = categoryDoc.id;
+                        this.fullyLoaded[4] = true;
                       });
+                    //bool 5
                     incomeDoc
                       .data()
                       .account.get()
@@ -165,10 +186,12 @@ export class UserService {
                         console.log(accountDoc.data());
                         trans.account = BankAccount.fromJSON(accountDoc.data());
                         trans.account.id = accountDoc.id;
+                        this.fullyLoaded[5] = true;
                       });
 
                     trans.id = incomeDoc.id;
                     realIncomes.push(trans);
+                    this.fullyLoaded[3] = true;
                   });
                 })
               )
@@ -180,6 +203,7 @@ export class UserService {
           return val;
         })
         .then(val => {
+          //bool 6
           console.log("reading outcomes");
           const realOutcomes: Transaction[] = [];
           this.user.outcomes = realOutcomes;
@@ -190,6 +214,7 @@ export class UserService {
                 new Promise(() => {
                   outcome.get().then(outcomeDoc => {
                     const trans: Income = Outcome.fromJSON(outcomeDoc.data());
+                    //bool 7
                     outcomeDoc
                       .data()
                       .category.get()
@@ -197,8 +222,10 @@ export class UserService {
                         console.log(categoryDoc.data());
                         trans.category = Category.fromJSON(categoryDoc.data());
                         trans.category.id = categoryDoc.id;
+                        this.fullyLoaded[7] = true;
                       });
                     console.log("outcomedoc :", outcomeDoc);
+                    //bool 8
                     outcomeDoc
                       .data()
                       .account.get()
@@ -206,9 +233,11 @@ export class UserService {
                         console.log(accountDoc.data());
                         trans.account = BankAccount.fromJSON(accountDoc.data());
                         trans.account.id = accountDoc.id;
+                        this.fullyLoaded[8] = true;
                       });
                     trans.id = outcomeDoc.id;
                     realOutcomes.push(trans);
+                    this.fullyLoaded[6] = true;
                   });
                 })
               )
@@ -220,6 +249,7 @@ export class UserService {
           return val;
         })
         .then(val => {
+          //bool 9
           console.log("reading loans");
           const realLoans: Loan[] = [];
           this.user.loans = realLoans;
@@ -232,6 +262,7 @@ export class UserService {
                     const loans: Loan = Loan.fromJSON(loanDoc.data());
                     loans.id = loanDoc.id;
                     realLoans.push(loans);
+                    this.fullyLoaded[9] = true;
                   });
                 })
               );
@@ -245,11 +276,6 @@ export class UserService {
         .then(val => {
           console.log("user is created", this.user);
           return val;
-        })
-        .then(() => {
-          this.fullyLoaded = new Observable(observer => {
-            observer.next(true);
-          });
         })
     );
   }
@@ -349,5 +375,14 @@ export class UserService {
       .update({
         loans: firebase.firestore.FieldValue.arrayRemove(reference)
       });
+  }
+
+  getFullyloaded() {
+    this.fullyLoaded.forEach(bool => {
+      if (!bool) {
+        return false;
+      }
+    });
+    return true;
   }
 }

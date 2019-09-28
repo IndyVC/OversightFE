@@ -93,7 +93,7 @@
     <mat-card class="matcardNoPadding" *ngIf="showListCategories()">
       <p class="tab">Categorieën</p>
       <div class="metadata">
-        <p>Oversight</p>
+        <p>Oversight  huidige maand</p>
         <p> € {{calculateShortOversight()}}</p>
         <button class="addCategory" (click)='showCategory()'>Voeg een categorie toe</button>
       </div>
@@ -132,7 +132,7 @@
     <mat-card class="matcardNoPaddingTop list" *ngIf="!showEdit && !showCreateCategory() ">
       <p class="tab">Categorieën</p>
       <div class="metadata">
-        <p>Oversight</p>
+        <p>Oversight  huidige maand</p>
         <p> € {{calculateShortOversight()}}</p>
         <button class="addCategory" (click)='showCategory()'>Voeg een categorie toe</button>
       </div>

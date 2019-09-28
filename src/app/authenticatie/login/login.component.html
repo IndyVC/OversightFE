@@ -21,7 +21,6 @@
       </button>
     </div>
   </form>
-  <app-menu></app-menu>
 </div>
 <!--large screen-->
 <div class="container_lg">
@@ -45,7 +44,9 @@
     <button mat-raised-button class="button_white" (click)="resetPassword()">
       Wachtwoord vergeten
     </button>
+    <button mat-raised-button class="button_white" [routerLink]="['../register']">Registreer</button>
   </div>
   <div class="content_right">
+    <img src="../../../assets/budgify_blue.png" class="logo">
   </div>
 </div>

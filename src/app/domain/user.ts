@@ -67,7 +67,7 @@ export class User {
     return oversight - this.debt;
   }
 
-  public calculateShortOversight(): number {
+  public calculateShortOversight() {
     let shortOversight: number = 0;
     if (this.getIncomesFromMonth(new Date())) {
       this.getIncomesFromMonth(new Date()).forEach(income => {
@@ -81,7 +81,28 @@ export class User {
         shortOversight -= forcedNumber as number;
       });
     }
-    return shortOversight as number;
+    return parseFloat(shortOversight.toString()).toFixed(2);
+    // let oversight: number = 0;
+    // this.accounts.forEach(account => {
+    //   oversight += account.balance;
+    //   this.incomes.filter(income => {
+    //     let incomeAccount:number=0;
+    //     if (income.account.id === account.id) {
+    //       oversight += income.amount;
+    //       incomeAccount+=income.amount;
+    //     }
+    //     account.balance+=incomeAccount;
+    //   });
+    //   this.outcomes.filter(outcome=>{
+    //     let outcomeAccount:number = 0;
+    //     if(outcome.account.id === account.id){
+    //       oversight -= outcome.amount;
+    //       outcomeAccount+=outcome.amount;
+    //     }
+    //     account.balance-=outcomeAccount;
+    //   });
+    // });
+    // return oversight;
   }
 
   calculateTotalSpendOnCategory(category: Category) {

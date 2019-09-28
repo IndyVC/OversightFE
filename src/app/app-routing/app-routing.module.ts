@@ -22,7 +22,7 @@ const routes: Routes = [
   { path: "categorieën", component: CategoriesComponent },
   { path: "bankrekeningen", component: BankaccountComponent },
   { path: "leningen", component: LoanComponent },
-  { path: "", pathMatch: "full", redirectTo: "landingpage" }
+  { path: "", pathMatch: "full", redirectTo: "login" }
 ];
 @NgModule({
   declarations: [],

@@ -1,67 +1,116 @@
 <div class="container_registreer">
   <h1>Registreer</h1>
-  <form class="form_registreer" [formGroup]='register' (ngSubmit)="onSubmit()">
-    <mat-error class="error_email" *ngIf='!uniqueEmail'>{{getErrorMessage("uniqueEmail")}}</mat-error>
+  <form class="form_registreer" [formGroup]="register" (ngSubmit)="onSubmit()">
+    <mat-error class="error_email" *ngIf="!uniqueEmail">{{
+      getErrorMessage("uniqueEmail")
+    }}</mat-error>
     <mat-form-field class="input">
-      <input matInput placeholder="Email" formControlName='email'>
-      <mat-error *ngIf='register.get("email").invalid'>{{getErrorMessage("email")}}</mat-error>
+      <input matInput placeholder="Email" formControlName="email" />
+      <mat-error *ngIf="register.get('email').invalid">{{
+        getErrorMessage("email")
+      }}</mat-error>
     </mat-form-field>
     <mat-form-field class="input">
-      <input matInput placeholder="Wachtwoord" formControlName='password' type="password">
-      <mat-error *ngIf='register.get("password").invalid'>{{getErrorMessage("password")}}</mat-error>
+      <input
+        matInput
+        placeholder="Wachtwoord"
+        formControlName="password"
+        type="password"
+      />
+      <mat-error *ngIf="register.get('password').invalid">{{
+        getErrorMessage("password")
+      }}</mat-error>
     </mat-form-field>
     <mat-form-field class="input">
-      <input matInput placeholder="Voornaam" formControlName='firstname'>
-      <mat-error *ngIf='register.get("firstname").invalid'>{{getErrorMessage("firstname")}}</mat-error>
+      <input matInput placeholder="Voornaam" formControlName="firstname" />
+      <mat-error *ngIf="register.get('firstname').invalid">{{
+        getErrorMessage("firstname")
+      }}</mat-error>
     </mat-form-field>
     <mat-form-field class="input">
-      <input matInput placeholder="Familienaam" formControlName='lastname'>
-      <mat-error *ngIf='register.get("lastname").invalid'>{{getErrorMessage("lastname")}}</mat-error>
+      <input matInput placeholder="Familienaam" formControlName="lastname" />
+      <mat-error *ngIf="register.get('lastname').invalid">{{
+        getErrorMessage("lastname")
+      }}</mat-error>
     </mat-form-field>
     <mat-form-field class="input">
-      <input matInput [matDatepicker]="picker" placeholder="Leeftijd" formControlName="age">
+      <input
+        matInput
+        [matDatepicker]="picker"
+        placeholder="Leeftijd"
+        formControlName="age"
+      />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker></mat-datepicker>
-      <mat-error *ngIf='register.get("age").invalid'>{{getErrorMessage("age")}}</mat-error>
+      <mat-error *ngIf="register.get('age').invalid">{{
+        getErrorMessage("age")
+      }}</mat-error>
     </mat-form-field>
     <button class="button_blue" type="submit">REGISTREER</button>
   </form>
-  <app-menu></app-menu>
-
 </div>
 <!--large screen-->
 <div class="container_lg">
   <div class="content_left">
     <h1>Registreer</h1>
-    <form class="form_registreer" [formGroup]='register' (ngSubmit)="onSubmit()">
-      <mat-error class="error_email" *ngIf='!uniqueEmail'>{{getErrorMessage("uniqueEmail")}}</mat-error>
+    <form
+      class="form_registreer"
+      [formGroup]="register"
+      (ngSubmit)="onSubmit()"
+    >
+      <mat-error class="error_email" *ngIf="!uniqueEmail">{{
+        getErrorMessage("uniqueEmail")
+      }}</mat-error>
       <mat-form-field class="input">
-        <input matInput placeholder="Email" formControlName='email'>
-        <mat-error *ngIf='register.get("email").invalid'>{{getErrorMessage("email")}}</mat-error>
+        <input matInput placeholder="Email" formControlName="email" />
+        <mat-error *ngIf="register.get('email').invalid">{{
+          getErrorMessage("email")
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field class="input">
-        <input matInput placeholder="Wachtwoord" formControlName='password' type="password">
-        <mat-error *ngIf='register.get("password").invalid'>{{getErrorMessage("password")}}</mat-error>
+        <input
+          matInput
+          placeholder="Wachtwoord"
+          formControlName="password"
+          type="password"
+        />
+        <mat-error *ngIf="register.get('password').invalid">{{
+          getErrorMessage("password")
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field class="input">
-        <input matInput placeholder="Voornaam" formControlName='firstname'>
-        <mat-error *ngIf='register.get("firstname").invalid'>{{getErrorMessage("firstname")}}</mat-error>
+        <input matInput placeholder="Voornaam" formControlName="firstname" />
+        <mat-error *ngIf="register.get('firstname').invalid">{{
+          getErrorMessage("firstname")
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field class="input">
-        <input matInput placeholder="Familienaam" formControlName='lastname'>
-        <mat-error *ngIf='register.get("lastname").invalid'>{{getErrorMessage("lastname")}}</mat-error>
+        <input matInput placeholder="Familienaam" formControlName="lastname" />
+        <mat-error *ngIf="register.get('lastname').invalid">{{
+          getErrorMessage("lastname")
+        }}</mat-error>
       </mat-form-field>
       <mat-form-field class="input">
-        <input matInput [matDatepicker]="picker2" placeholder="Leeftijd" formControlName="age">
-        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <input
+          matInput
+          [matDatepicker]="picker2"
+          placeholder="Leeftijd"
+          formControlName="age"
+        />
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="picker2"
+        ></mat-datepicker-toggle>
         <mat-datepicker #picker2></mat-datepicker>
-        <mat-error *ngIf='register.get("age").invalid'>{{getErrorMessage("age")}}</mat-error>
+        <mat-error *ngIf="register.get('age').invalid">{{
+          getErrorMessage("age")
+        }}</mat-error>
       </mat-form-field>
-      <button class="button_blue" type="submit">REGISTREER</button>
+      <button mat-raised-button class="button_blue" type="submit">Registreer</button>
+      <button mat-raised-button class="button_white" [routerLink]="['../login']">Log in</button>
     </form>
   </div>
   <div class="content_right">
+    <img src="../../../assets/budgify_blue.png" class="logo" />
   </div>
-  <app-menu></app-menu>
-
 </div>

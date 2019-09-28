@@ -1,7 +1,5 @@
-
-
 .bankCard {
-  background-color: #283593;
+  background-color: var(--secondaryColor);
   height: 200px;
   margin: 10px;
   border-radius: 10px;
@@ -23,9 +21,6 @@
   padding: 0;
 }
 
-
-
 .currentBankaccount {
   border-left: 2px solid rgba(31, 56, 126, 0.8);
 }
-

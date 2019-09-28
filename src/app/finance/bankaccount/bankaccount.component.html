@@ -120,7 +120,7 @@
     <mat-card class="matcardNoPadding" *ngIf="showListBankaccounts()">
       <p class="tab">Bankrekeningen</p>
       <div class="metadata">
-        <p>Oversight</p>
+        <p>Oversight  huidige maand</p>
         <p> € {{calculateShortOversight()}}</p>
         <button class="addBankaccount" (click)='showBankaccount()'>Voeg een bankrekening toe</button>
       </div>
@@ -156,7 +156,7 @@
     <mat-card class="matcardNoPaddingTop list" *ngIf="!showEdit && !showCreateBankaccount()">
       <p class="tab">Bankrekeningen</p>
       <div class="metadata">
-        <p>Oversight</p>
+        <p>Oversight huidige maand</p>
         <p> € {{calculateShortOversight()}}</p>
         <button class="addBankaccount" (click)='showBankaccount()'>Voeg een bankrekening toe</button>
       </div>
@@ -164,7 +164,7 @@
         <div *ngFor="let account of getBankaccounts(); index as i">
           <div class="item {{currentBankaccount && currentBankaccount.id===account.id?'currentBankaccount':''}}"
             [ngStyle]="{'background-color':i % 2 == 0?'#f6f5f6':'white'}" (click)="setBankaccount(account)">
-            <i [ngStyle]="{'color':'#1A237E','background-color':i % 2 == 0?'white':'#f6f5f6'}"
+            <i [ngStyle]="{'color':'#067BBC','background-color':i % 2 == 0?'white':'#f6f5f6'}"
               class=" fas fa-credit-card icon">
             </i>
             <p class="name">{{account.accountNumber}}</p>

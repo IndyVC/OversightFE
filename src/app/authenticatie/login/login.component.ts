@@ -51,12 +51,11 @@ export class LoginComponent implements OnInit {
           this.openEmailNotVerifiedDialog();
         } else {
           this.userService.createUserObject().then(() => {
-            this.userService.fullyLoaded.subscribe(bool => {
-              console.log("what is bool:", bool);
-              if (bool) {
-                this.router.navigate(["../transacties"]);
-              }
-            });
+            if (this.userService.getFullyloaded()) {
+              console.log("DONE ######################")
+
+              this.router.navigate(["../transacties"]);
+            }
           });
         }
       })

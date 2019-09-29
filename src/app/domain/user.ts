@@ -18,17 +18,13 @@ export class User {
     public lastname: string,
     public email: string,
     public active: boolean,
-    public accounts?: BankAccount[],
+    public bankaccounts?: BankAccount[],
     public transactions?: Transaction[],
     public categories?: Category[],
     public goals?: Goal[],
     public investments?: Investment[],
     public loans?: Loan[]
   ) {
-    this.accounts = [];
-    this.accounts.push(
-      new BankAccount("BE 0000 0000 0000", 2000.65, "Fortis", "Zichtrekening")
-    );
   }
 
   public static fromJSON(json: any): User {
@@ -53,8 +49,8 @@ export class User {
   }
   public calculateOversight(): number {
     let oversight: number = 0;
-    if (this.accounts) {
-      this.accounts.map(account => {
+    if (this.bankaccounts) {
+      this.bankaccounts.map(account => {
         oversight += account.balance as number;
       });
     }

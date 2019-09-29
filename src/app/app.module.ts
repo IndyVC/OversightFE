@@ -28,6 +28,7 @@ import { CategoriesComponent } from './finance/categories/categories.component';
 import { BankaccountComponent } from './finance/bankaccount/bankaccount.component';
 import { UsedByTransactionsComponent } from './finance/dialogs/used-by-transactions/used-by-transactions.component';
 import { LoanComponent } from './finance/loan/loan.component';
+import { StepperComponent } from './authenticatie/stepper/stepper.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -39,7 +40,8 @@ import { LoanComponent } from './finance/loan/loan.component';
     CategoriesComponent,
     BankaccountComponent,
     UsedByTransactionsComponent,
-    LoanComponent
+    LoanComponent,
+    StepperComponent
   ],
   imports: [
     BrowserModule,

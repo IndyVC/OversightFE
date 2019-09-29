@@ -34,7 +34,7 @@ export class RegistreerComponent implements OnInit {
       email: ["", [Validators.required, Validators.email]],
       firstname: ["", Validators.required],
       lastname: ["", Validators.required],
-      password: ["", [Validators.required]],
+      password: ["", [Validators.required, Validators.pattern(".{6,}")]],
       age: ["", [Validators.required]]
     });
   }
@@ -70,6 +70,8 @@ export class RegistreerComponent implements OnInit {
     } else if (field === "password") {
       if (this.register.get("password").hasError("required")) {
         return "Pincode is verplicht.";
+      } else if (this.register.get("password").hasError("pattern")) {
+        return "Wachtwoord moet minstens 6 karakters lang zijn.";
       }
     } else if (field === "firstname") {
       if (this.register.get("firstname").hasError("required")) {

@@ -38,7 +38,8 @@ export class UserService {
   ) {}
 
   createUser(user: User) {
-    console.log(this.fireauth.auth.currentUser.uid + user);
+    console.log("CREATE USER");
+    console.log(this.fireauth.auth.currentUser.uid, user);
     this.firestore
       .collection("users")
       .doc(this.fireauth.auth.currentUser.uid)
@@ -107,7 +108,7 @@ export class UserService {
         .then(val => {
           console.log("reading bankaccounts");
           const realBankaccounts: BankAccount[] = [];
-          this.user.accounts = realBankaccounts;
+          this.user.bankaccounts = realBankaccounts;
           const promises = [];
           if (val.data().bankaccounts) {
             val.data().bankaccounts.forEach(acc => {

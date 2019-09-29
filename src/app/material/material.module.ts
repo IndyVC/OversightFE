@@ -13,7 +13,8 @@ import {
   MatNativeDateModule,
   MatCardModule,
   MatDialogModule,
-  MatRadioModule
+  MatRadioModule,
+  MatStepperModule
 } from "@angular/material";
 import { ColorPickerModule } from "ngx-color-picker";
 
@@ -34,7 +35,8 @@ import { ColorPickerModule } from "ngx-color-picker";
     MatDialogModule,
     MatRadioModule,
     MatCardModule,
-    ColorPickerModule
+    ColorPickerModule,
+    MatStepperModule
   ],
   exports: [
     CommonModule,
@@ -51,7 +53,8 @@ import { ColorPickerModule } from "ngx-color-picker";
     MatDialogModule,
     MatRadioModule,
     MatCardModule,
-    ColorPickerModule
+    ColorPickerModule,
+    MatStepperModule
   ]
 })
 export class MaterialModule {}

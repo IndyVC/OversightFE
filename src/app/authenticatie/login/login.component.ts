@@ -52,9 +52,14 @@ export class LoginComponent implements OnInit {
         } else {
           this.userService.createUserObject().then(() => {
             if (this.userService.getFullyloaded()) {
-              console.log("DONE ######################")
-
-              this.router.navigate(["../transacties"]);
+              if (
+                this.userService.user.bankaccounts.length === 0 ||
+                this.userService.user.categories.length === 0
+              ) {
+                this.router.navigate(["../stepper"]);
+              } else {
+                this.router.navigate(["../transacties"]);
+              }
             }
           });
         }

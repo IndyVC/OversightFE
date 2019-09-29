@@ -37,7 +37,7 @@ export class BankaccountComponent implements OnInit {
   ngOnInit() {
     this.user = this.userService.getUserObject();
     if (this.user) {
-      this.accounts = this.user.accounts;
+      this.accounts = this.user.bankaccounts;
       this.transactions = this.user.getAllTransactions();
       if (this.accounts) {
         this.currentBankaccount = this.accounts[0];
@@ -145,7 +145,7 @@ export class BankaccountComponent implements OnInit {
     this.form.get("type").reset();
   }
   getBankaccounts() {
-    return this.user.accounts;
+    return this.user.bankaccounts;
   }
 
   getTransactions() {

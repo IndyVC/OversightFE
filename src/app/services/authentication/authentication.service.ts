@@ -27,6 +27,7 @@ export class AuthenticationService {
   }
   // Sign up with email/password
   SignUp(email, password, user: User) {
+    console.log(email, password, user);
     return this.angularFireAuth.auth
       .createUserWithEmailAndPassword(email, password)
       .then(result => {
@@ -38,8 +39,10 @@ export class AuthenticationService {
 
   // Sign in with email/password
   SignIn(email, password) {
-    return this.angularFireAuth.auth
-      .signInWithEmailAndPassword(email, password);
+    return this.angularFireAuth.auth.signInWithEmailAndPassword(
+      email,
+      password
+    );
   }
 
   /* Sign out */
@@ -50,6 +53,7 @@ export class AuthenticationService {
   /*create firestore user*/
   createUserDoc(user: User) {
     const uid = this.angularFireAuth.auth.currentUser.uid;
+    console.log(user);
     this.userService.createUser(user);
   }
 

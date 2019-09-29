@@ -13,6 +13,7 @@ import { LandingPageComponent } from "../landing-page/landing-page.component";
 import { CategoriesComponent } from "../finance/categories/categories.component";
 import { BankaccountComponent } from "../finance/bankaccount/bankaccount.component";
 import { LoanComponent } from "../finance/loan/loan.component";
+import { StepperComponent } from "../authenticatie/stepper/stepper.component";
 
 const routes: Routes = [
   { path: "landingpage", component: LandingPageComponent },
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: "categorieën", component: CategoriesComponent },
   { path: "bankrekeningen", component: BankaccountComponent },
   { path: "leningen", component: LoanComponent },
+  { path: "stepper", component: StepperComponent },
   { path: "", pathMatch: "full", redirectTo: "login" }
 ];
 @NgModule({

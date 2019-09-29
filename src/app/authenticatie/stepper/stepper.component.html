@@ -1,0 +1,58 @@
+<mat-horizontal-stepper [linear]="true">
+  <mat-step label="Bankaccount" [stepControl]="bankaccount">
+      <form [formGroup]='bankaccount' class="form">
+          <mat-radio-group aria-label="Select an option" formControlName="type">
+            <mat-radio-button value="zichtrekening" class="radio">Zichtrekening</mat-radio-button>
+            <mat-radio-button value="spaarrekening">Spaarrekening</mat-radio-button>
+            <mat-error *ngIf="bankaccount.get('type').invalid" class="own-mat-errors">
+              {{getErrorBankaccount("type")}}
+            </mat-error>
+          </mat-radio-group>
+          <mat-form-field>
+            <input matInput placeholder="Rekening nummer" formControlName="accountNumber">
+            <mat-error *ngIf="bankaccount.get('accountNumber').invalid">
+              {{getErrorBankaccount("accountNumber")}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Balans" formControlName="balance">
+            <mat-error *ngIf="bankaccount.get('balance').invalid">
+              {{getErrorBankaccount("balance")}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder="Bank" formControlName="bank">
+            <mat-error *ngIf="bankaccount.get('bank').invalid">
+              {{getErrorBankaccount("bank")}}
+            </mat-error>
+          </mat-form-field>
+        </form>
+    <div>
+      <button mat-button matStepperNext (click)="submitBankaccount()">Volgende</button>
+    </div>
+  </mat-step>
+  <mat-step label="Categorieën" [stepControl]="category">
+      <form [formGroup]='category' class="form">
+          <mat-form-field>
+            <input matInput placeholder="Naam categorie" formControlName="name">
+            <mat-error *ngIf="category.get('name').invalid">
+              {{getErrorCategory("name")}}
+            </mat-error>
+          </mat-form-field>
+          <span [style.color]="color" [cpPosition]="'bottom'" [cpPositionOffset]="'0%'" [cpPositionRelativeToArrow]="true"
+            [(colorPicker)]="color" (colorPickerChange)="changeColor($event)" id="colorpicker">Kies kleur!</span>
+          <mat-error *ngIf="category.get('color').invalid" class="own-mat-errors">
+            {{getErrorCategory("color")}}
+          </mat-error>
+          <div class="icons">
+            <i class="{{icon}} icon {{icon===selectedIconCreate?'selectedIcon':''}}"
+              *ngFor="let icon of fixedCategoriesIcons"
+              [ngStyle]="{'color': category.get('color').value,'background-color':'white'}" (click)="changeIcon(icon)"></i>
+          </div>
+        </form>
+    <div>
+      <button mat-button matStepperPrevious>Terug</button>
+      <button mat-button matStepperNext (click)="submitCategory()">Voltooi</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>

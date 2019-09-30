@@ -51,11 +51,14 @@ export class LoginComponent implements OnInit {
           this.openEmailNotVerifiedDialog();
         } else {
           this.userService.createUserObject().then(() => {
-            if (this.userService.getFullyloaded()) {
+            if (this.userService.loaded) {
               if (
-                this.userService.user.bankaccounts.length === 0 ||
+                this.userService.user.bankaccounts.length === 0 &&
                 this.userService.user.categories.length === 0
               ) {
+                console.log(this.userService.user.bankaccounts);
+                console.log(this.userService.user.categories);
+
                 this.router.navigate(["../stepper"]);
               } else {
                 this.router.navigate(["../transacties"]);

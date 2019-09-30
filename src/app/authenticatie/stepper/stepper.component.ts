@@ -5,6 +5,7 @@ import { BankaccountService } from "src/app/services/bankaccount/bankaccount.ser
 import { CategoryService } from "src/app/services/category/category.service";
 import { Category } from "src/app/domain/category";
 import { Router } from "@angular/router";
+import { UserService } from "src/app/services/user/user.service";
 
 @Component({
   selector: "app-stepper",
@@ -85,6 +86,7 @@ export class StepperComponent implements OnInit {
     private fb: FormBuilder,
     private bankaccountService: BankaccountService,
     private categoryService: CategoryService,
+    private userService: UserService,
     private router: Router
   ) {}
 
@@ -122,6 +124,7 @@ export class StepperComponent implements OnInit {
       type
     );
     this.bankaccountService.createBankaccount(bankaccount);
+    this.userService.getUserObject().bankaccounts.push(bankaccount);
   }
 
   submitCategory() {
@@ -130,7 +133,8 @@ export class StepperComponent implements OnInit {
     const color = this.category.get("color").value;
     const category = new Category(name, icon, color);
     this.categoryService.createCategory(category);
-    this.router.navigate(['../transacties']);
+    this.userService.getUserObject().categories.push(category);
+    this.router.navigate(["../transacties"]);
   }
 
   getErrorBankaccount(field: string) {

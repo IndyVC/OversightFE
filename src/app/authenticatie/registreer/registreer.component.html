@@ -1,9 +1,6 @@
 <div class="container_registreer">
   <h1>Registreer</h1>
   <form class="form_registreer" [formGroup]="register" (ngSubmit)="onSubmit()">
-    <mat-error class="error_email" *ngIf="!uniqueEmail">{{
-      getErrorMessage("uniqueEmail")
-    }}</mat-error>
     <mat-form-field class="input">
       <input matInput placeholder="Email" formControlName="email" />
       <mat-error *ngIf="register.get('email').invalid">{{
@@ -60,9 +57,6 @@
       [formGroup]="register"
       (ngSubmit)="onSubmit()"
     >
-      <mat-error class="error_email" *ngIf="!uniqueEmail">{{
-        getErrorMessage("uniqueEmail")
-      }}</mat-error>
       <mat-form-field class="input">
         <input matInput placeholder="Email" formControlName="email" />
         <mat-error *ngIf="register.get('email').invalid">{{

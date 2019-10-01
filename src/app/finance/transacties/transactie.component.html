@@ -102,7 +102,7 @@
         <mat-form-field>
           <mat-label>Bankaccount</mat-label>
           <mat-select formControlName="account">
-            <mat-option *ngFor='let account of user.accounts' [value]='account'>
+            <mat-option *ngFor='let account of user.bankaccounts' [value]='account'>
               {{account.accountNumber}}
             </mat-option>
           </mat-select>
@@ -163,7 +163,7 @@
         <mat-form-field>
           <mat-label>Bankaccount</mat-label>
           <mat-select formControlName="account">
-            <mat-option *ngFor='let account of user.accounts' [value]="account"
+            <mat-option *ngFor='let account of user.bankaccounts' [value]="account"
               (value)="edit.get('account').value.accountNumber">
               {{account.accountNumber}}
             </mat-option>
@@ -268,7 +268,7 @@
 
 
 <!--large screen-->
-<div class="container_lg" *ngIf="this.userService.getFullyloaded();else loading">
+<div class="container_lg">
   <div class="content_left">
     <!--MENU-->
     <app-menu></app-menu>
@@ -319,7 +319,7 @@
         <mat-form-field>
           <mat-label>Bankaccount</mat-label>
           <mat-select formControlName="account">
-            <mat-option *ngFor='let account of user.accounts' [value]='account'>
+            <mat-option *ngFor='let account of user.bankaccounts' [value]='account'>
               {{account.accountNumber}}
             </mat-option>
           </mat-select>
@@ -379,7 +379,7 @@
         <mat-form-field>
           <mat-label>Bankaccount</mat-label>
           <mat-select formControlName="account">
-            <mat-option *ngFor='let account of user.accounts' [value]="account">
+            <mat-option *ngFor='let account of user.bankaccounts' [value]="account">
               {{account.accountNumber}}
             </mat-option>
           </mat-select>

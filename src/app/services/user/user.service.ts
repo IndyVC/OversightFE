@@ -132,7 +132,7 @@ export class UserService {
         incomePromises.push(income.get());
       });
     }
-    await Promise.all(incomePromises).then(async values => {
+    await Promise.all(incomePromises).then(values => {
       const incomes = [];
       this.user.incomes = incomes;
       values.forEach(val => {
@@ -156,156 +156,55 @@ export class UserService {
 
     console.log("After await 4");
 
-    console.log(this.user);
+    const outcomePromises = [];
+    if (data.outcomes) {
+      data.outcomes.forEach(outcome => {
+        outcomePromises.push(outcome.get());
+      });
+    }
+    await Promise.all(outcomePromises).then(values => {
+      const outcomes = [];
+      this.user.outcomes = outcomes;
+      values.forEach(val => {
+        const transaction = Outcome.fromJSON(val.data());
+        const categories = this.user.categories.filter(
+          cat => cat.id === val.data().category.id
+        );
+        const category = categories[0];
+        const accounts = this.user.bankaccounts.filter(
+          acc => acc.id === val.data().account.id
+        );
+        const account = accounts[0];
+        transaction.category = category;
+        transaction.category.id = category.id;
+        transaction.account = account;
+        transaction.account.id = account.id;
+        transaction.id = val.id;
+        outcomes.push(transaction);
+      });
+    });
 
-    //     .then(val => {
-    //       const promises = [];
-    //       if (val.data().incomes) {
-    //         val.data().incomes.forEach(income =>
-    //           promises.push(
-    //             new Promise(() => {
-    //               income.get().then(incomeDoc => {
-    //                 const trans:any = this.user.incomes.filter(tr=>tr.id === incomeDoc.id);
-    //                 incomeDoc
-    //                   .data()
-    //                   .category.get()
-    //                   .then(categoryDoc => {
-    //                     console.log(categoryDoc.data());
-    //                     trans.category = Category.fromJSON(categoryDoc.data());
-    //                     trans.category.id = categoryDoc.id;
-    //                   });
-    //               });
-    //             })
-    //           )
-    //         );
-    //       }
-    //       Promise.all(promises);
-    //       return val;
-    //     })
-    //     .then(val => {
-    //       const promises = [];
-    //       if (val.data().incomes) {
-    //         val.data().incomes.forEach(income =>
-    //           promises.push(
-    //             new Promise(() => {
-    //               income.get().then(incomeDoc => {
-    //                 const trans:any = this.user.incomes.filter(tr=>tr.id === incomeDoc.id);
-    //                 incomeDoc
-    //                 .data()
-    //                 .account.get()
-    //                 .then(accountDoc => {
-    //                   console.log(accountDoc.data());
-    //                   trans.account = BankAccount.fromJSON(accountDoc.data());
-    //                   trans.account.id = accountDoc.id;
-    //                 });
-    //               });
-    //             })
-    //           )
-    //         );
-    //       }
-    //       Promise.all(promises);
-    //       return val;
-    //     })
-    //     .then(val => {
-    //       console.log("reading outcomes");
-    //       const realOutcomes: Transaction[] = [];
-    //       this.user.outcomes = realOutcomes;
-    //       const promises = [];
-    //       if (val.data().outcomes) {
-    //         val.data().outcomes.forEach(outcome =>
-    //           promises.push(
-    //             new Promise(() => {
-    //               outcome.get().then(outcomeDoc => {
-    //                 const trans: Income = Outcome.fromJSON(outcomeDoc.data());
-    //                 trans.id = outcomeDoc.id;
-    //                 realOutcomes.push(trans);
-    //               });
-    //             })
-    //           )
-    //         );
-    //       }
-    //       console.log("uitgaves :", promises);
-    //       Promise.all(promises);
-    //       console.log("alle uitgaves zijn gedaan");
-    //       return val;
-    //     })
-    //     .then(val => {
-    //       const promises = [];
-    //       if (val.data().outcomes) {
-    //         val.data().outcomes.forEach(outcome =>
-    //           promises.push(
-    //             new Promise(() => {
-    //               outcome.get().then(outcomeDoc => {
-    //                 const trans:any = this.user.outcomes.filter(tr=>tr.id === outcomeDoc.id);
-    //                 outcomeDoc
-    //                 .data()
-    //                 .category.get()
-    //                 .then(categoryDoc => {
-    //                   console.log(categoryDoc.data());
-    //                   trans.category = Category.fromJSON(categoryDoc.data());
-    //                   trans.category.id = categoryDoc.id;
-    //                 });
-    //               });
-    //             })
-    //           )
-    //         );
-    //       }
-    //       Promise.all(promises);
-    //       return val;
-    //     })
-    //     .then(val => {
-    //       const promises = [];
-    //       if (val.data().outcomes) {
-    //         val.data().outcomes.forEach(outcome =>
-    //           promises.push(
-    //             new Promise(() => {
-    //               outcome.get().then(outcomeDoc => {
-    //                 const trans:any = this.user.outcomes.filter(tr=>tr.id === outcomeDoc.id);
-    //                 outcomeDoc
-    //                 .data()
-    //                 .account.get()
-    //                 .then(accountDoc => {
-    //                   console.log(accountDoc.data());
-    //                   trans.account = BankAccount.fromJSON(accountDoc.data());
-    //                   trans.account.id = accountDoc.id;
-    //                 });
-    //               });
-    //             })
-    //           )
-    //         );
-    //       }
-    //       Promise.all(promises);
-    //       return val;
-    //     })
-    //     .then(val => {
-    //       console.log("reading loans");
-    //       const realLoans: Loan[] = [];
-    //       this.user.loans = realLoans;
-    //       const promises = [];
-    //       if (val.data().loans) {
-    //         val.data().loans.forEach(loan => {
-    //           promises.push(
-    //             new Promise(() => {
-    //               loan.get().then(loanDoc => {
-    //                 const loans: Loan = Loan.fromJSON(loanDoc.data());
-    //                 loans.id = loanDoc.id;
-    //                 realLoans.push(loans);
-    //               });
-    //             })
-    //           );
-    //         });
-    //       }
-    //       console.log("promises :", promises);
-    //       Promise.all(promises);
-    //       console.log("alle promises zijn gedaan");
-    //       return val;
-    //     })
-    //     .then(val => {
-    //       console.log("user is created", this.user);
-    //       this.loaded = true;
-    //       return val;
-    //     })
-    // );
+    console.log("After await 5");
+
+    const loanPromises = [];
+    if (data.loans) {
+      data.loans.forEach(loan => {
+        loanPromises.push(loan.get());
+      });
+    }
+    await Promise.all(loanPromises).then(values => {
+      const loans = [];
+      this.user.loans = loans;
+      values.forEach(val => {
+        const loan: Loan = Loan.fromJSON(val.data());
+        loan.id = val.id;
+        loans.push(loan);
+      });
+    });
+
+    console.log("After await 6");
+    this.loaded = true;
+    console.log("Fully loaded: ", this.loaded);
   }
 
   getUserObject(): User {

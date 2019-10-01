@@ -44,12 +44,14 @@ h1 {
 }
 
 .button_blue {
-  width: 50vw;
-  margin-left: 25vw;
+  width: 80vw;
+  margin-left: 10vw;
 }
-.button_white{
-  width:40vw;
-  text-align: center;
+
+.button_white {
+  width: 80vw;
+  margin-left: 10vw;
+  margin-top: 20px;
 }
 
 
